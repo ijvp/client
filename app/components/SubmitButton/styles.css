@@ -1,0 +1,36 @@
+.submit-button span {
+	transform: translateX(0);
+	transition: transform 300ms;
+}
+
+.submit-button span:after {
+	content: "";
+	display: block;
+	position: absolute;
+	right: 10%;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 125%;
+	width: 1px;
+	background-color: var(--gray);
+}
+
+.submit-button .arrow-icon {
+	transform: translate(30px, -50%);
+	transition: transform 300ms;
+}
+
+.submit-button:hover span {
+	background-color: var(--dark-purple);
+	transform: translateX(-10px);
+	/* transition timing function and duration values copied from tailwind
+	because of parent button's hover:transition-colors 
+	see: https://tailwindcss.com/docs/transition-property
+	*/
+	transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 150ms, transform 300ms;
+}
+
+.submit-button:hover .arrow-icon {
+	transform: translate(40px, -50%);
+	transition: transform 300ms;
+}
