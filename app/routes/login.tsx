@@ -51,6 +51,7 @@ export default function Login() {
 		<div className="md:max-w-screen-md w-full p-4 md:p-0">
 			<form
 				className="
+					relative
 					flex flex-col items-center gap-16 
 					min-w-full
 					bg-white bg-white/[0.02]
@@ -61,6 +62,15 @@ export default function Login() {
 				"
 				onSubmit={handleSubmit}
 			>
+				<div className="
+					absolute
+					top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+					w-[350px]
+					aspect-square
+					bg-purple
+					blur-[331px]
+					rounded-full
+				" />
 				<div className="flex flex-col items-center">
 					<div className="flex items-center gap-2 mb-4">
 						<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
