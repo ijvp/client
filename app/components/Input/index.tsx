@@ -1,17 +1,32 @@
+import type { ChangeEvent } from "react";
+import { useCallback } from "react";
+import { debounce } from "lodash";
+
+type ChangeHandler = (event: ChangeEvent<HTMLInputElement>) => void;
+
 interface InputProps {
 	type: string;
 	placeholder: string;
 	value?: string;
 	autocomplete?: string;
+	onChange: ChangeHandler,
+	// debounceDelay?: number;
 };
 
-export default function Input({ type, placeholder, value, autocomplete }: InputProps) {
+export default function Input({ type, placeholder, value, autocomplete, onChange }: InputProps) {
+	// const debouncedOnChange = debounce(onChange, debounceDelay);
+
+	// const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+	// 	debouncedOnChange(event);
+	// };
+
 	return (
 		<input
 			type={type}
 			placeholder={placeholder}
 			value={value}
 			autoComplete={autocomplete}
+			onChange={onChange}
 			className="
 			w-full h-[60px]
 			bg-black-secondary 
