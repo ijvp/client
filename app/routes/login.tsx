@@ -48,7 +48,7 @@ export default function Login() {
 	}, [data, isLoading, error]);
 
 	return (
-		<div className="md:max-w-screen-md w-full p-4 md:p-0">
+		<div className="md:max-w-screen-md h-screen w-full p-4 md:p-0 m-auto flex items-center justify-center">
 			<form
 				className="
 					relative

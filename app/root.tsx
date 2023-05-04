@@ -28,7 +28,7 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body className="min-h-screen min-w-screen flex items-center justify-center">
+        <body className="min-h-screen min-w-screen">
           <Outlet />
           <ScrollRestoration />
           <Scripts />
