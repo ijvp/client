@@ -17,7 +17,7 @@ export default function SubmitButton({ label }: SubmitButtonProps) {
 		<button
 			type="submit"
 			className="
-				button submit-button
+				submit-button
 				relative
 				flex items-center justify-center
 				w-full h-[60px]

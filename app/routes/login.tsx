@@ -4,8 +4,8 @@ import type { LinksFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useQuery } from "@tanstack/react-query";
 import api from "~/utils/api";
-import SubmitButton, { links as submitButtonLinks } from "~/components/SubmitButton"
-import Input from "~/components/Input";
+import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
+import Input from "~/components/input";
 
 export const links: LinksFunction = () => [
 	...submitButtonLinks()

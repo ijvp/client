@@ -1,5 +1,5 @@
 import type { V2_MetaFunction, LinksFunction } from "@remix-run/node";
-import Sidebar, { links as sidebarLinks } from "~/components/Sidebar";
+import Sidebar, { links as sidebarLinks } from "~/components/sidebar";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Integrações" }];
@@ -12,7 +12,7 @@ export const links: LinksFunction = () => [
 export default function Integrations() {
 	return (
 		<>
-			<Sidebar />
+			This is the integrations page
 		</>
 	)
 }

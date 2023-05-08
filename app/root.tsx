@@ -8,12 +8,14 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Sidebar, { links as sidebarLinks } from "./components/sidebar";
 import globalStyles from "~/styles/global.css";
 import tailwind from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
-  { rel: "stylesheet", href: globalStyles }
+  { rel: "stylesheet", href: globalStyles },
+  ...sidebarLinks()
 ];
 
 const queryClient = new QueryClient();
@@ -28,8 +30,11 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body className="min-h-screen min-w-screen">
-          <Outlet />
+        <body className="min-h-screen min-w-screen text-white">
+          <div className="w-full flex items-center">
+            <Sidebar />
+            <Outlet />
+          </div>
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
