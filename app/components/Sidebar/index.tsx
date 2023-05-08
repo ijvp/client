@@ -1,9 +1,8 @@
-import type { MouseEvent } from "react";
 import { useState } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { NavLink, Link } from "@remix-run/react";
-import { links as toggleButtonLinks } from "../toggle-button";
-import StoreSelect, { links as storeSelectLinks } from "../store-select";
+import ToggleButton, { links as toggleButtonLinks } from "~/components/toggle-button";
+import StoreSelect, { links as storeSelectLinks } from "~/components/store-select";
 import styles from "./styles.css";
 
 export const links: LinksFunction = () => [
@@ -36,9 +35,18 @@ function SidebarLink({ label, link, src, alt }: LinkProps) {
 
 export default function Sidebar() {
 	const [open, setOpen] = useState(false);
+	const [profileTooltipOpen, setProfileTooltipOpen] = useState(true);
 
-	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+	const handleClick = () => {
 		setOpen(!open);
+	};
+
+	const handleToggleProfileTooltip = () => {
+		setProfileTooltipOpen(!profileTooltipOpen);
+	};
+
+	const handleLogout = () => {
+		console.log("Logging out...")
 	};
 
 	return (
@@ -46,7 +54,8 @@ export default function Sidebar() {
 			id="sidebar"
 			className="
 			relative
-			w-[280px] h-screen
+			min-w-[280px] max-w-[280px] h-screen
+			border-box
 			py-8 px-6
 			flex flex-col items-center justify-between
 			bg-black-bg
@@ -57,9 +66,9 @@ export default function Sidebar() {
 				w-full
 				flex flex-col items-center justify-start
 			">
-				{/* <div className="self-end mb-9">
+				<div className="self-end mb-9">
 					<ToggleButton open={open} onClick={handleClick} />
-				</div> */}
+				</div>
 
 				<div className="flex items-center gap-2 mb-8">
 					<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
@@ -92,16 +101,38 @@ export default function Sidebar() {
 				</div>
 			</div>
 			<div className="flex items-center justify-center gap-4">
-				<div className="
-				w-[60px] aspect-square
-				flex items-center justify-center
-				bg-yellow-500 rounded-md 
-				text-2xl font-semibold">P</div>
+				<div className="relative w-[60px]">
+					{profileTooltipOpen && (
+						<button
+							onClick={handleLogout}
+							className="
+							logout-button
+							absolute top-0 -translate-y-[125%]
+							w-full
+							py-2
+							bg-white 
+							text-black text-center 
+							rounded-md 
+						">
+							Sair
+						</button>
+					)}
+					<button
+						onClick={handleToggleProfileTooltip}
+						className="
+						w-[60px] aspect-square
+						flex items-center justify-center
+						bg-yellow-500 rounded-md 
+						text-2xl font-semibold"
+					>
+						P
+					</button>
+				</div>
 				<div className="
 				w-[60px] aspect-square 
 				flex items-center justify-center
 				bg-black-secondary rounded-md">
-					<Link to="/settings">
+					<Link to="/app/settings">
 						<img src="/icons/settings-icon.svg" alt="Configurações" />
 					</Link>
 				</div>

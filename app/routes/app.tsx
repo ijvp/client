@@ -12,7 +12,7 @@ export default function App() {
 	return (
 		<>
 			<Sidebar />
-			<div className="my-20 mx-24 h-full w-full">
+			<div className="py-20 px-24 h-full w-full">
 				<Outlet />
 			</div>
 		</>

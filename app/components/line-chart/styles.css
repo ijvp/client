@@ -1,0 +1,21 @@
+.nodge {
+	position: relative;
+}
+
+.nodge::after {
+	content: "";
+	position: absolute;
+	left: 1px;
+	top: 75%;
+	transform: translateY(-50%);
+	opacity: 0;
+	width: 1px;
+	height: 66%;
+	background: linear-gradient(transparent, var(--black-bg), var(--purple), var(--black-bg), transparent);
+	transition: top 300ms ease, opacity 300ms ease;
+}
+
+.nodge:hover::after {
+	top: 50%;
+	opacity: 1;
+}

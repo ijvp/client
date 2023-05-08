@@ -31,10 +31,10 @@
 }
 
 body {
-	font-family: "Graphik", sans-serif;
-	font-weight: normal;
-	font-size: 1rem;
-	background-color: var(--black);
+	font-family: "Graphik", sans-serif !important;
+	font-weight: normal !important;
+	font-size: 1rem !important;
+	background-color: var(--black) !important;
 }
 
 h1,

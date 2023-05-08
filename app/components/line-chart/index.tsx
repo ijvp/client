@@ -1,11 +1,16 @@
+import type { LinksFunction } from "@remix-run/node";
 import { useCallback, useEffect, useState } from "react";
 import { BarChart, SparkLineChart } from '@shopify/polaris-viz';
 import { Modal, SkeletonDisplayText } from '@shopify/polaris';
 import ordersData from "~/data/orders-line-data.json"
+import styles from "./styles.css";
 
-export function LineChart() {
+export const links: LinksFunction = () => [
+	{ rel: "stylesheet", href: styles }
+];
+
+export default function LineChart() {
 	const [render, setRender] = useState(false);
-	console.log([{ data: ordersData.lineData }]);
 
 	useEffect(() => {
 		if (navigator) {
@@ -16,6 +21,7 @@ export function LineChart() {
 	if (render) return (
 		<div
 			className="
+			nodge
 			max-w-[345px] h-[230px] w-full 
 			bg-black-secondary p-4 rounded-lg
 			flex flex-col gap-2

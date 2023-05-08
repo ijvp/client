@@ -1,0 +1,11 @@
+.logout-button::after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	width: 15px;
+	height: 15px;
+	background: #f2edf9;
+	bottom: -4px;
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+}
