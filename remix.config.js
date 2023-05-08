@@ -12,4 +12,18 @@ module.exports = {
     v2_routeConvention: true,
     unstable_tailwind: true
   },
+  serverDependenciesToBundle: [
+    "@shopify/polaris-viz",
+    "@shopify/polaris-viz-core",
+    "d3-array",
+    "d3-color",
+    "d3-format",
+    "d3-interpolate",
+    "d3-path",
+    "d3-shape",
+    "d3-scale",
+    "d3-time",
+    "d3-time-format",
+    "internmap"
+  ]
 };

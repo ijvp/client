@@ -2,7 +2,7 @@ import type { MouseEvent } from "react";
 import { useState } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { NavLink, Link } from "@remix-run/react";
-import ToggleButton, { links as toggleButtonLinks } from "../toggle-button";
+import { links as toggleButtonLinks } from "../toggle-button";
 import StoreSelect, { links as storeSelectLinks } from "../store-select";
 import styles from "./styles.css";
 
@@ -73,27 +73,24 @@ export default function Sidebar() {
 				<div className="flex flex-col w-full gap-6">
 					<SidebarLink
 						label="Análise"
-						link="/analysis"
+						link="/app/analysis"
 						src="/icons/analysis-icon.svg"
 						alt="Análise"
 					/>
 					<SidebarLink
 						label="Produtos"
-						link="/products"
+						link="/app/products"
 						src="/icons/products-icon.svg"
 						alt="Produtos"
 					/>
 					<SidebarLink
 						label="Integrações"
-						link="/integrations"
+						link="/app/integrations"
 						src="/icons/integrations-icon.svg"
 						alt="Integrações"
 					/>
-
 				</div>
 			</div>
-
-
 			<div className="flex items-center justify-center gap-4">
 				<div className="
 				w-[60px] aspect-square
