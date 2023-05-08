@@ -1,0 +1,11 @@
+/* .menu__contents {
+	opacity: 0;
+	transform: translateY(-100%);
+	transition: all ease 300ms;
+}
+
+.menu__contents--expanded {
+	opacity: 1;
+	transform: translateY(0);
+	transition: all ease 300ms;
+} */

@@ -1,0 +1,43 @@
+.button,
+.chevron {
+	display: inline-block;
+	margin: 1rem;
+	vertical-align: middle;
+	transform: rotate(90deg) scale(1.5);
+}
+
+.chevron {
+	width: 18px;
+	height: 15px;
+}
+
+.chevron__group {
+	transform: translateY(0);
+	transition: transform 0.1s linear;
+}
+
+.chevron__box--left,
+.chevron__box--right {
+	transform: rotate(0) translateY(0);
+	transition: transform 0.1s linear;
+}
+
+.chevron__box--left {
+	transform-origin: 1px 1px;
+}
+
+.chevron__box--right {
+	transform-origin: 7px 1px;
+}
+
+.chevron--flip .chevron__box--left {
+	transform: rotate(-90deg) translateY(0);
+}
+
+.chevron--flip .chevron__box--right {
+	transform: rotate(90deg) translateY(0);
+}
+
+.chevron--flip .chevron__group {
+	transform: translateY(3px);
+}
