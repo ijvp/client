@@ -1,7 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
-import { useCallback, useEffect, useState } from "react";
-import { BarChart, SparkLineChart } from '@shopify/polaris-viz';
-import { Modal, SkeletonDisplayText } from '@shopify/polaris';
+import { useEffect, useState } from "react";
+import { SparkLineChart } from '@shopify/polaris-viz';
 import ordersData from "~/data/orders-line-data.json"
 import styles from "./styles.css";
 
