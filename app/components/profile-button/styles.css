@@ -1,4 +1,4 @@
-.logout-button::after {
+#logout-button::after {
 	content: "";
 	position: absolute;
 	z-index: -1;

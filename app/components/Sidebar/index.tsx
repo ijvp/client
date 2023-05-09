@@ -3,12 +3,12 @@ import type { LinksFunction } from "@remix-run/node";
 import { NavLink, Link } from "@remix-run/react";
 import ToggleButton, { links as toggleButtonLinks } from "~/components/toggle-button";
 import StoreSelect, { links as storeSelectLinks } from "~/components/store-select";
-import styles from "./styles.css";
+import ProfileButton, { links as profileButtonLinks } from "../profile-button";
 
 export const links: LinksFunction = () => [
-	{ rel: "stylesheet", href: styles },
 	...toggleButtonLinks(),
-	...storeSelectLinks()
+	...storeSelectLinks(),
+	...profileButtonLinks()
 ];
 
 interface LinkProps {
@@ -35,18 +35,10 @@ function SidebarLink({ label, link, src, alt }: LinkProps) {
 
 export default function Sidebar() {
 	const [open, setOpen] = useState(false);
-	const [profileTooltipOpen, setProfileTooltipOpen] = useState(true);
+
 
 	const handleClick = () => {
 		setOpen(!open);
-	};
-
-	const handleToggleProfileTooltip = () => {
-		setProfileTooltipOpen(!profileTooltipOpen);
-	};
-
-	const handleLogout = () => {
-		console.log("Logging out...")
 	};
 
 	return (
@@ -101,33 +93,7 @@ export default function Sidebar() {
 				</div>
 			</div>
 			<div className="flex items-center justify-center gap-4">
-				<div className="relative w-[60px]">
-					{profileTooltipOpen && (
-						<button
-							onClick={handleLogout}
-							className="
-							logout-button
-							absolute top-0 -translate-y-[125%]
-							w-full
-							py-2
-							bg-white 
-							text-black text-center 
-							rounded-md 
-						">
-							Sair
-						</button>
-					)}
-					<button
-						onClick={handleToggleProfileTooltip}
-						className="
-						w-[60px] aspect-square
-						flex items-center justify-center
-						bg-yellow-500 rounded-md 
-						text-2xl font-semibold"
-					>
-						P
-					</button>
-				</div>
+				<ProfileButton />
 				<div className="
 				w-[60px] aspect-square 
 				flex items-center justify-center
