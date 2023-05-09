@@ -58,9 +58,9 @@ export default function Sidebar() {
 				w-full
 				flex flex-col items-center justify-start
 			">
-				<div className="self-end mb-9">
+				{/* <div className="self-end mb-9">
 					<ToggleButton open={open} onClick={handleClick} />
-				</div>
+				</div> */}
 
 				<div className="flex items-center gap-2 mb-8">
 					<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>

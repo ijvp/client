@@ -18,7 +18,7 @@ export default function ToggleButton({ open, onClick }: ToggleButtonProps) {
 		<button
 			onClick={onClick}
 			className="
-			aspect-square w-11
+			h-11 w-11
 			bg-black-secondary
 			border border-solid border-black-secondary rounded
 			flex items-center justify-center
