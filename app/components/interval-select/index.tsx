@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays } from "date-fns";
-import { AppProvider, DatePicker } from "@shopify/polaris";
+import { DatePicker } from "@shopify/polaris";
 
 type ClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
@@ -45,7 +45,7 @@ export default function IntervalSelect() {
 		start: startOfToday(),
 		end: startOfToday(),
 	});
-	const [datePickerOpen, setDatePickerOpen] = useState(false);
+	const [datePickerOpen, setDatePickerOpen] = useState(true);
 	const [{ month, year }, setDate] = useState({ month: getMonth(new Date()), year: getYear(new Date()) });
 
 	const handleOptionSelect = (index: number) => {
@@ -93,8 +93,15 @@ export default function IntervalSelect() {
 				<IntervalOptionButton onClick={handleDatePickerToggle} selected={datePickerOpen}>
 					Escolher período
 				</IntervalOptionButton>
-				{/* {datePickerOpen && (
-					<AppProvider>
+				{datePickerOpen && (
+					<div
+						className="
+						absolute top-12 left-1/2 -translate-x-1/2
+						bg-black-bg
+						border border-solid border-black-border rounded-md
+						p-2
+						w-full min-w-fit
+						">
 						<DatePicker
 							month={month}
 							year={year}
@@ -103,8 +110,8 @@ export default function IntervalSelect() {
 							allowRange
 							disableDatesAfter={new Date()}
 						/>
-					</AppProvider>
-				)} */}
+					</div>
+				)}
 			</div>
 		</div>
 	)
