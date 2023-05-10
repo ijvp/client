@@ -10,12 +10,6 @@ export const links: LinksFunction = () => [
 export default function ProfileButton() {
 	const [profileTooltipOpen, setProfileTooltipOpen] = useState(false);
 
-	const handleCloseProfileTooltip = (event: MouseEvent<HTMLElement>) => {
-		if (event.currentTarget.id !== "logout-button") {
-			setProfileTooltipOpen(false);
-		}
-	};
-
 	const handleToggleProfileTooltip = () => {
 		setProfileTooltipOpen(!profileTooltipOpen);
 	};

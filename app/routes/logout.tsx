@@ -4,13 +4,10 @@ import api from "~/api";
 import { checkAuth } from "~/api/helpers";
 
 export const action = async ({ request }: ActionArgs) => {
-	console.log("action called");
-
 	const authenticated = await checkAuth(request);
 	const cookie = request.headers.get("Cookie");
 	try {
-		const response = await api.get("/auth/logout", { headers: { Cookie: cookie } });
-		console.log(response.data);
+		await api.get("/auth/logout", { headers: { Cookie: cookie } });
 		return redirect("/login");
 	} catch (error) {
 		console.log(error.response.data);
@@ -24,8 +21,6 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	console.log("loader called");
-
 	const authenticated = await checkAuth(request);
 	if (authenticated) {
 		return redirect("/analysis");

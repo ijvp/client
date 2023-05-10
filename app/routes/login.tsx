@@ -51,42 +51,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function Login() {
-	// useLoaderData();
-	// const [username, setUsername] = useState("");
-	// const [password, setPassword] = useState("");
-
-	// const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
-	// 	setUsername(event.target.value);
-	// };
-
-	// const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-	// 	setPassword(event.target.value);
-	// };
-
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		// refetch();
-	};
-
-	const loginUser = () => {
-		console.log("logging in...");
-		// console.log(api);
-		// api.post("/auth/login", {
-		// 	username,
-		// 	password
-		// }).then(response => response.data);
-	}
-
-	// const { data, isLoading, error, refetch } = useQuery({
-	// 	queryKey: ["user"],
-	// 	queryFn: loginUser,
-	// 	enabled: false
-	// });
-
-	// useEffect(() => {
-	// 	console.log(data, isLoading, error);
-	// }, [data, isLoading, error]);
-
 	return (
 		<div className="md:max-w-screen-md h-screen w-full p-4 md:p-0 m-auto flex items-center justify-center">
 			<form
