@@ -8,6 +8,12 @@ export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles }
 ];
 
+export function ErrorBoundary() {
+	return (
+		<div>Ocorreu um erro :</div>
+	);
+};
+
 export default function LineChart() {
 	const [render, setRender] = useState(false);
 
@@ -16,6 +22,8 @@ export default function LineChart() {
 			setRender(true);
 		}
 	}, []);
+
+	// throw new Error("Testing Error Boundary");
 
 	if (render) return (
 		<div
