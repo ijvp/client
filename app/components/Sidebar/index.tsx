@@ -58,9 +58,9 @@ export default function Sidebar() {
 				w-full
 				flex flex-col items-center justify-start
 			">
-				<div className="self-end mb-9">
+				{/* <div className="self-end mb-9">
 					<ToggleButton open={open} onClick={handleClick} />
-				</div>
+				</div> */}
 
 				<div className="flex items-center gap-2 mb-8">
 					<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
@@ -74,19 +74,19 @@ export default function Sidebar() {
 				<div className="flex flex-col w-full gap-6">
 					<SidebarLink
 						label="Análise"
-						link="/app/analysis"
+						link="/analysis"
 						src="/icons/analysis-icon.svg"
 						alt="Análise"
 					/>
 					<SidebarLink
 						label="Produtos"
-						link="/app/products"
+						link="/products"
 						src="/icons/products-icon.svg"
 						alt="Produtos"
 					/>
 					<SidebarLink
 						label="Integrações"
-						link="/app/integrations"
+						link="/integrations"
 						src="/icons/integrations-icon.svg"
 						alt="Integrações"
 					/>
@@ -98,7 +98,7 @@ export default function Sidebar() {
 				w-[60px] aspect-square 
 				flex items-center justify-center
 				bg-black-secondary rounded-md">
-					<Link to="/app/settings">
+					<Link to="/settings">
 						<img src="/icons/settings-icon.svg" alt="Configurações" />
 					</Link>
 				</div>

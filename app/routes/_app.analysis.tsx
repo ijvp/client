@@ -11,7 +11,15 @@ export const links: LinksFunction = () => [
 	...lineChartLinks()
 ];
 
+export function ErrorBoundary() {
+	return (
+		<div>Analysis page error boundary</div>
+	)
+};
+
 export default function Analysis() {
+	// throw new Error("Testing Error Boundary");
+
 	return (
 		<>
 			<h2 className="h2 border-b border-solid border-black-secondary">ShopCalê</h2>

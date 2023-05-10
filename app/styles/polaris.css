@@ -1,0 +1,24 @@
+/* <DatePicker> styles */
+.Polaris-DatePicker__Day {
+	color: var(--white) !important;
+	font-weight: bold !important;
+}
+
+.Polaris-DatePicker__Day:hover {
+	color: var(--white) !important;
+	background: var(--dark-purple) !important;
+}
+
+.Polaris-DatePicker__Day--disabled {
+	color: var(--gray) !important;
+	font-weight: regular !important;
+}
+
+.Polaris-DatePicker__Day--selected {
+	background: var(--purple) !important;
+}
+
+.Polaris-DatePicker__Day--inRange {
+	color: var(--purple) !important;
+}
+/* </DatePicker> */
