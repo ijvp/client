@@ -11,11 +11,11 @@ export const links: LinksFunction = () => [
 	...lineChartLinks()
 ];
 
-// export function ErrorBoundary() {
-// 	return (
-// 		<div>App error boundary </div>
-// 	)
-// };
+export function ErrorBoundary() {
+	return (
+		<div>Analysis page error boundary</div>
+	)
+};
 
 export default function Analysis() {
 	// throw new Error("Testing Error Boundary");
