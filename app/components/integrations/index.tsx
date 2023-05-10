@@ -2,90 +2,157 @@ import IntegrationBox from "../integration-box";
 import styles from "./styles.css";
 
 export default function Integration() {
-    const integrationsIds = [
+    interface IIntegrationsId {
+        id: string,
+        name: string,
+        type: string,
+        icon: {
+            url: string,
+            alt: string
+        },
+        active: boolean
+    }
+
+    const integrationsIds: IIntegrationsId[] = [
 		{
 			id: "shopify",
 			name: "Shopify",
             type: "ecommerce",
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=uSHYbs6PJfMT&format=png",
+                alt: "shpify icon"
+            },
             active: true
 		},
         {
 			id: "lojaIntegrada",
 			name: "Loja Integrada",
             type: "ecommerce",
-            active: false
+            icon: {
+                url: "",
+                alt: "loja integrada icon"
+            },
+            active: true
 		},
         {
 			id: "woocommerce",
 			name: "Woocommerce",
             type: "ecommerce",
-            active: false
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=115298&format=png",
+                alt: "woocommerce icon"
+            },
+            active: true
 		},
         {
 			id: "tray",
 			name: "Tray",
             type: "ecommerce",
-            active: false
+            icon: {
+                url: "",
+                alt: "tray icon"
+            },
+            active: true
 		},
         {
 			id: "googleAds",
 			name: "Google Ads",
             type: "anuncios",
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=ui4CTPMMDCFh&format=png",
+                alt: "google ads icon"
+            },
             active: true
 		},
         {
 			id: "facebookAds",
 			name: "Facebook Ads",
             type: "anuncios",
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=118497&format=png",
+                alt: "facebook ads icon"
+            },
             active: true
 		},
         {
 			id: "tiktokAds",
 			name: "Tiktok Ads",
             type: "anuncios",
-            active: false
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=118640&format=png",
+                alt: "tiktok ads icon"
+            },
+            active: true
 		},
         {
 			id: "pinterestAds",
 			name: "Pinterest Ads",
             type: "anuncios",
-            active: false
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=63676&format=png",
+                alt: "pinterest ads icon"
+            },
+            active: true
 		},
         {
 			id: "activeCampaing",
 			name: "Active Campaing",
             type: "eMailMarketing",
-            active: false
+            icon: {
+                url: "",
+                alt: "active campaing"
+            },
+            active: true
 		},
         {
 			id: "getResponse",
 			name: "Get Response",
             type: "eMailMarketing",
-            active: false
+            icon: {
+                url: "",
+                alt: "get response icon"
+            },
+            active: true
 		},
         {
 			id: "reportena",
 			name: "Reportena",
             type: "eMailMarketing",
-            active: false
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=uSHYbs6PJfMT&format=png",
+                alt: "reportena icon"
+            },
+            active: true
 		},
         {
 			id: "mailChimp",
 			name: "MailChimp",
             type: "eMailMarketing",
-            active: false
+            icon: {
+                url: "",
+                alt: "mailChimp icon"
+            },
+            active: true
 		},
         {
 			id: "arquivoCSV",
 			name: "Arquivo CSV",
             type: "planilhas",
-            active: false
+            icon: {
+                url: "",
+                alt: "arquivo CSV icon"
+            },
+            active: true
 		},
         {
 			id: "googleSheets",
 			name: "Google Sheets",
             type: "planilhas",
-            active: false
+            icon: {
+                url: "https://img.icons8.com/?size=512&id=30461&format=png",
+                alt: "google sheets icon"
+            },
+            active: true
 		}
 	]
 
@@ -109,6 +176,7 @@ export default function Integration() {
                                 key={integration.id} 
                                 name={integration.name} 
                                 connected={false}
+                                icon={integration.icon}
                             />
                         ))}
                     </div>
@@ -121,6 +189,7 @@ export default function Integration() {
                                 key={integration.id} 
                                 name={integration.name} 
                                 connected={false}
+                                icon={integration.icon}
                             />
                         ))}
                     </div>
@@ -133,6 +202,7 @@ export default function Integration() {
                                 key={integration.id} 
                                 name={integration.name} 
                                 connected={false}
+                                icon={integration.icon}
                             />
                         ))}
                     </div>
@@ -145,6 +215,7 @@ export default function Integration() {
                                 key={integration.id} 
                                 name={integration.name} 
                                 connected={false}
+                                icon={integration.icon}
                             />
                         ))}
                     </div>
