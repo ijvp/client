@@ -1,4 +1,5 @@
-import type { V2_MetaFunction, LinksFunction } from "@remix-run/node";
+import { V2_MetaFunction, LinksFunction, LoaderArgs, redirect } from "@remix-run/node";
+import { checkAuth } from "~/api/helpers";
 import Sidebar, { links as sidebarLinks } from "~/components/sidebar";
 
 export const meta: V2_MetaFunction = () => {
@@ -9,6 +10,14 @@ export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
+export const loader = async ({ request }: LoaderArgs) => {
+	const authenticated = await checkAuth(request);
+	if (!authenticated) {
+		return redirect("/login");
+	}
+
+	return null;
+};
 export default function Products() {
 	return (
 		<>

@@ -4,14 +4,15 @@ type ChangeHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 
 interface InputProps {
 	type: string;
+	name: string;
 	placeholder: string;
 	value?: string;
 	autocomplete?: string;
-	onChange: ChangeHandler,
+	onChange?: ChangeHandler,
 	// debounceDelay?: number;
 };
 
-export default function Input({ type, placeholder, value, autocomplete, onChange }: InputProps) {
+export default function Input({ type, name, placeholder, value, autocomplete, onChange }: InputProps) {
 	// const debouncedOnChange = debounce(onChange, debounceDelay);
 
 	// const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,6 +22,7 @@ export default function Input({ type, placeholder, value, autocomplete, onChange
 	return (
 		<input
 			type={type}
+			name={name}
 			placeholder={placeholder}
 			value={value}
 			autoComplete={autocomplete}

@@ -16,13 +16,11 @@ export default function ProfileButton() {
 		}
 	};
 
-	const handleLogout = () => {
-		console.log("Logging out...");
-		setProfileTooltipOpen(false);
+	const handleToggleProfileTooltip = () => {
+		setProfileTooltipOpen(!profileTooltipOpen);
 	};
 
 	useEffect(() => {
-		// Add event listener to close tooltip if the user clicks on the profile button again
 		const handleProfileButtonClicked = (event: MouseEvent<HTMLElement>) => {
 			event.stopPropagation();
 			if (event.currentTarget.id === "profile-button") {
@@ -31,40 +29,59 @@ export default function ProfileButton() {
 		};
 		document.getElementById("profile-button")?.addEventListener("click", handleProfileButtonClicked);
 
+		const handleCloseProfileTooltip = (event: MouseEvent<HTMLElement>) => {
+			event.stopPropagation();
+			if (
+				event.target instanceof HTMLElement &&
+				event.target.tagName.toLowerCase() !== "form" &&
+				event.target.tagName.toLowerCase() !== "button"
+			) {
+				setProfileTooltipOpen(false);
+			}
+		};
+
 		document.body.addEventListener("click", handleCloseProfileTooltip);
 		return () => {
 			document.getElementById("profile-button")?.removeEventListener("click", handleProfileButtonClicked);
 			document.body.removeEventListener("click", handleCloseProfileTooltip);
-		}
+		};
 	}, [profileTooltipOpen]);
 
 	return (
-		<div className="relative w-[60px]">
+		<form
+			className="relative w-[60px]"
+			method="post"
+			action="/logout"
+			id="logout-form"
+		>
 			{profileTooltipOpen && (
 				<button
-					onClick={handleLogout}
+					type="submit"
+					form="logout-form"
 					id="logout-button"
 					className="
-							absolute top-0 -translate-y-[125%]
-							w-full
-							py-2
-							bg-white 
-							text-black text-center 
-							rounded-md 
-						">
+					absolute top-0 -translate-y-[125%]
+					w-full
+					py-2
+					bg-white 
+					text-black text-center 
+					rounded-md 
+				">
 					Sair
 				</button>
 			)}
 			<button
+				onClick={handleToggleProfileTooltip}
 				id="profile-button"
+				type="button"
 				className="
-						w-[60px] aspect-square
-						flex items-center justify-center
-						bg-yellow-500 rounded-md 
-						text-2xl font-semibold"
-			>
+				w-[60px] aspect-square
+				flex items-center justify-center
+				bg-yellow-500 rounded-md 
+				text-2xl font-semibold
+			">
 				P
 			</button>
-		</div>
+		</form>
 	)
 }
