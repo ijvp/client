@@ -13,12 +13,14 @@ import globalStyles from "~/styles/global.css";
 import tailwind from "~/styles/tailwind.css";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css";
 import polarisVizStyles from "@shopify/polaris-viz/build/esm/styles.css";
+import polarisOverwriteStyles from "~/styles/polaris.css"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
   { rel: "stylesheet", href: globalStyles },
   { rel: "stylesheet", href: polarisVizStyles },
-  { rel: "stylesheet", href: polarisStyles }
+  { rel: "stylesheet", href: polarisStyles },
+  { rel: "stylesheet", href: polarisOverwriteStyles }
 ];
 
 const queryClient = new QueryClient();
