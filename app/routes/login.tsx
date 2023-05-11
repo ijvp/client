@@ -69,6 +69,7 @@ export default function Login() {
 			>
 				<div className="
 					absolute
+					z-0
 					top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
 					w-[350px]
 					aspect-square
@@ -82,7 +83,7 @@ export default function Login() {
 					</div>
 					<h1 className="h3">Acesse sua conta</h1>
 				</div>
-				<div className="flex flex-col items-center gap-6 w-full">
+				<div className="flex flex-col items-center gap-6 w-full relative z-10">
 					<Input
 						type="text"
 						name="username"

@@ -1,13 +1,15 @@
 import type { LinksFunction } from "@remix-run/node";
-import { NavLink, Link } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 import ToggleButton, { links as toggleButtonLinks } from "~/components/toggle-button";
 import StoreSelect, { links as storeSelectLinks } from "~/components/store-select";
 import ProfileButton, { links as profileButtonLinks } from "../profile-button";
+import SettingsButton, { links as settingsButtonLinks } from "../settings-button";
 
 export const links: LinksFunction = () => [
 	...toggleButtonLinks(),
 	...storeSelectLinks(),
-	...profileButtonLinks()
+	...profileButtonLinks(),
+	...settingsButtonLinks()
 ];
 
 interface LinkProps {
@@ -86,15 +88,8 @@ export default function Sidebar() {
 			</div>
 			<div className="flex items-center justify-center gap-4">
 				<ProfileButton />
-				<div className="
-				w-[60px] aspect-square 
-				flex items-center justify-center
-				bg-black-secondary rounded-md">
-					<Link to="/settings">
-						<img src="/icons/settings-icon.svg" alt="Configurações" />
-					</Link>
-				</div>
+				<SettingsButton />
 			</div>
 		</nav>
-	)
+	);
 };
