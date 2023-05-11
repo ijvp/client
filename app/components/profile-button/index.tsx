@@ -10,19 +10,11 @@ export const links: LinksFunction = () => [
 export default function ProfileButton() {
 	const [profileTooltipOpen, setProfileTooltipOpen] = useState(false);
 
-	const handleCloseProfileTooltip = (event: MouseEvent<HTMLElement>) => {
-		if (event.currentTarget.id !== "logout-button") {
-			setProfileTooltipOpen(false);
-		}
-	};
-
-	const handleLogout = () => {
-		console.log("Logging out...");
-		setProfileTooltipOpen(false);
+	const handleToggleProfileTooltip = () => {
+		setProfileTooltipOpen(!profileTooltipOpen);
 	};
 
 	useEffect(() => {
-		// Add event listener to close tooltip if the user clicks on the profile button again
 		const handleProfileButtonClicked = (event: MouseEvent<HTMLElement>) => {
 			event.stopPropagation();
 			if (event.currentTarget.id === "profile-button") {
@@ -31,40 +23,63 @@ export default function ProfileButton() {
 		};
 		document.getElementById("profile-button")?.addEventListener("click", handleProfileButtonClicked);
 
+		const handleCloseProfileTooltip = (event: MouseEvent<HTMLElement>) => {
+			const profileButtonElement = document.getElementById("profile-button");
+			const logoutButtonElement = document.getElementById("logout-button");
+			if (
+				profileButtonElement &&
+				logoutButtonElement &&
+				(profileButtonElement.contains(event.target) || logoutButtonElement.contains(event.target))
+			) {
+				// Do nothing if the click event is within the profile button or the logout button
+				return;
+			}
+
+			setProfileTooltipOpen(false);
+		};
+
 		document.body.addEventListener("click", handleCloseProfileTooltip);
 		return () => {
 			document.getElementById("profile-button")?.removeEventListener("click", handleProfileButtonClicked);
 			document.body.removeEventListener("click", handleCloseProfileTooltip);
-		}
+		};
 	}, [profileTooltipOpen]);
 
 	return (
-		<div className="relative w-[60px]">
+		<form
+			className="relative w-[60px]"
+			method="post"
+			action="/logout"
+			id="logout-form"
+		>
 			{profileTooltipOpen && (
 				<button
-					onClick={handleLogout}
+					type="submit"
+					form="logout-form"
 					id="logout-button"
 					className="
-							absolute top-0 -translate-y-[125%]
-							w-full
-							py-2
-							bg-white 
-							text-black text-center 
-							rounded-md 
-						">
+					absolute top-0 -translate-y-[125%]
+					w-full
+					py-2
+					bg-white 
+					text-black text-center 
+					rounded-md 
+				">
 					Sair
 				</button>
 			)}
 			<button
+				onClick={handleToggleProfileTooltip}
 				id="profile-button"
+				type="button"
 				className="
-						w-[60px] aspect-square
-						flex items-center justify-center
-						bg-yellow-500 rounded-md 
-						text-2xl font-semibold"
-			>
+				w-[60px] aspect-square
+				flex items-center justify-center
+				bg-yellow-500 rounded-md 
+				text-2xl font-semibold
+			">
 				P
 			</button>
-		</div>
+		</form>
 	)
 }

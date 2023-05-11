@@ -1,18 +1,19 @@
-import type { MouseEvent } from "react";
-import { useEffect, useRef, useState } from "react";
+import { MouseEvent, useEffect } from "react";
+import { useState } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import styles from "./styles.css";
+import { storesAtom, storeIndexAtom } from "~/utils/atoms";
+import { useAtom } from "jotai";
+import { formatStoreName } from "~/utils/store";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
 ];
 
 export default function StoreSelect() {
-	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [stores, setStores] = useAtom(storesAtom);
+	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 	const [open, setOpen] = useState(false);
-
-	// const menuTitleRef = useRef<HTMLDivElement | null>(null);
-	// const menuRef = useRef<HTMLDivElement | null>(null);
 
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		setOpen(!open);
@@ -23,74 +24,14 @@ export default function StoreSelect() {
 		console.log("opening modal...")
 	};
 
-	const stores = [
-		"Hevo Foods",
-		"Calê",
-		"ShopCão"
-	];
-
-	// const calculateCollapsedScale = () => {
-	// 	if (menuRef.current && menuTitleRef.current) {
-	// 		const collapsed = menuTitleRef.current.getBoundingClientRect();
-	// 		const expanded = menuRef.current.getBoundingClientRect();
-
-	// 		return {
-	// 			x: 1,
-	// 			y: collapsed.height / expanded.height
-	// 		};
-	// 	} else {
-	// 		return {
-	// 			x: 0, y: 0
-	// 		}
-	// 	};
-	// };
-
-	// const createKeyframeAnimation = () => {
-	// 	let { x, y } = calculateCollapsedScale();
-	// 	let animation = "";
-	// 	let inverseAnimation = "";
-
-	// 	for (let step = 0; step <= 100; step++) {
-	// 		let easedStep = ease(step / 100);
-
-	// 		const xScale = x + (1 - x) * easedStep;
-	// 		const yScale = y + (1 - y) * easedStep;
-	// 		const invXScale = 1 / xScale;
-	// 		const invYScale = 1 / yScale;
-
-	// 		animation += `${step}% {
-	//       transform: scale(${xScale}, ${yScale});
-	// 		}`;
-
-	// 		inverseAnimation += `${step}% {
-	// 				transform: scale(${invXScale}, ${invYScale});
-	// 		}`;
-	// 	}
-
-	// 	return `
-	// 	<style>
-	// 		@keyframes menuAnimation {
-	// 			${animation}
-	// 		}
-
-	// 		@keyframes menuContentsAnimation {
-	// 			${inverseAnimation}
-	// 		}
-	// 	</style>
-	//   `;
-	// };
-
-	// const ease = (v: number, pow = 4) => 1 - Math.pow(1 - v, pow);
-
 	const selectedStoreMarkdown = (
 		<div
-			// ref={menuTitleRef}
 			className={`
 			w-full 
 			flex items-center justify-between py-4 
 			${open ? "font-semibold" : ""}`
 			}>
-			{stores[selectedIndex]}
+			{formatStoreName(stores[selectedIndex].name)}
 			<img src="/icons/chevron-left.svg" alt="chevron-left" className={`transition-transform ${open ? "-rotate-90" : ""}`} />
 		</div>
 	);
@@ -106,7 +47,7 @@ export default function StoreSelect() {
 								className="w-full py-4 text-left"
 								onClick={() => setSelectedIndex(index)}
 							>
-								{store}
+								{formatStoreName(store.name)}
 							</button>
 						)
 					} else {
@@ -129,12 +70,6 @@ export default function StoreSelect() {
 			<img src="/icons/add.svg" alt="add-icon" />
 		</button>
 	);
-
-	// useEffect(() => {
-	// 	const style = document.createElement("style");
-	// 	document.head.appendChild(style);
-	// 	style.textContent = createKeyframeAnimation();
-	// }, []);
 
 	return (
 		//Tenho que usar uma div aqui pq nao posso colocar botões dentro

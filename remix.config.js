@@ -13,6 +13,7 @@ module.exports = {
     unstable_tailwind: true
   },
   serverDependenciesToBundle: [
+    "axios",
     "@shopify/polaris-viz",
     "@shopify/polaris-viz-core",
     "d3-array",
