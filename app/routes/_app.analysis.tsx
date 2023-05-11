@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
 import { Granularity } from "~/ts/enums";
+import PageTitle from "~/components/page-title";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -52,12 +53,9 @@ export default function Analysis() {
 
 	return (
 		<>
-			<h2 className="
-			h2 
-			border-b border-solid border-black-secondary
-			">
+			<PageTitle>
 				{formatStoreName(stores[selectedIndex].name)}
-			</h2>
+			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<div>loading</div>}>
 				<LineChart />

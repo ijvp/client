@@ -54,6 +54,7 @@ export default function Login() {
 	return (
 		<div className="md:max-w-screen-md h-screen w-full p-4 md:p-0 m-auto flex items-center justify-center">
 			<form
+				id="login-form"
 				method="post"
 				className="
 					relative
