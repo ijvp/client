@@ -1,7 +1,7 @@
 import type { FormEvent } from "react";
-import type { LinksFunction, ActionArgs, LoaderArgs } from "@remix-run/node";
+import { LinksFunction, ActionArgs, LoaderArgs, json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { useLoaderData, Link } from "@remix-run/react";
+import { useLoaderData, Link, useActionData } from "@remix-run/react";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
 import Input from "~/components/input";
 import api from "~/api";
@@ -15,6 +15,11 @@ export const action = async ({ request }: ActionArgs) => {
 	const form = await request.formData();
 	const username = form.get("username");
 	const password = form.get("password");
+
+	const fields = { username, password };
+	if (!Object.values(fields).some(Boolean)) {
+		return json({ success: false, message: "Por favor preencha todos os campos" });
+	};
 
 	try {
 		const response = await api.post("/auth/login",
@@ -31,11 +36,9 @@ export const action = async ({ request }: ActionArgs) => {
 			return redirect("/analysis", {
 				headers: response.headers
 			});
-		} else {
-			throw new Error(response.data.message);
 		}
 	} catch (error) {
-		console.log(error);
+		return json({ success: false, message: "Algo deu errado, verifique sua senha" });
 	}
 
 	return null;
@@ -51,12 +54,16 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function Login() {
+	const actionData = useActionData();
+	console.log(actionData);
+
 	return (
 		<div className="md:max-w-screen-md h-screen w-full p-4 md:p-0 m-auto flex items-center justify-center">
 			<form
 				id="login-form"
 				method="post"
 				className="
+					animated-form
 					relative
 					flex flex-col items-center gap-16 
 					min-w-full
@@ -66,7 +73,6 @@ export default function Login() {
 					px-10 py-12
 					md:px-20 md:py-24
 				"
-			// onSubmit={handleSubmit}
 			>
 				<div className="
 					absolute
@@ -82,7 +88,7 @@ export default function Login() {
 					<div className="flex items-center gap-2 mb-4">
 						<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
 					</div>
-					<h1 className="h3">Acesse sua conta</h1>
+					<h1 className="h3 font-bold">Acesse sua conta</h1>
 				</div>
 				<div className="flex flex-col items-center gap-6 w-full relative z-10">
 					<Input
@@ -90,23 +96,25 @@ export default function Login() {
 						name="username"
 						placeholder="Usuário"
 						autocomplete="username"
-					// value={username}
-					// onChange={handleUsernameChange}
 					/>
 					<Input
 						type="password"
 						name="password"
 						placeholder="Senha"
 						autocomplete="current-password"
-					// value={password}
-					// onChange={handlePasswordChange}
 					/>
-					<SubmitButton label="Acessar" />
+					<div className="w-full relative">
+						<SubmitButton label="Acessar" />
+						{actionData?.success ? null : (
+							<p className="absolute top-full left-1/2 -translate-x-1/2 text-red-500 my-4">
+								{actionData?.message}
+							</p>)}
+					</div>
 				</div>
 				<div className="flex">
 					<p>Ainda não tem uma conta?&nbsp;</p><Link to="/login">Registre aqui</Link>
 				</div>
-				{/* {!!error && (<p>Algo deu errado</p>)} */}
+
 			</form>
 		</div>
 	);

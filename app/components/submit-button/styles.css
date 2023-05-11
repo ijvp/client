@@ -25,7 +25,7 @@
 	transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 
-#login-form .submit-button:hover span {
+.animated-form .submit-button:hover span {
 	transform: translateX(-10px);
 	/* transition timing function and duration values copied from tailwind
 	because of parent button's hover:transition-colors 
