@@ -1,6 +1,7 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { checkAuth } from "~/api/helpers";
+import Integration from "~/components/integrations";
 import Sidebar, { links as sidebarLinks } from "~/components/sidebar";
 
 export const meta: V2_MetaFunction = () => {
