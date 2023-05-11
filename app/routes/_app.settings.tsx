@@ -72,7 +72,6 @@ export default function Settings() {
 	const user = useLoaderData();
 	const actionData = useActionData();
 
-	console.log(actionData?.fieldErrors);
 	return (
 		<>
 			<PageTitle>
