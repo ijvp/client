@@ -1,5 +1,7 @@
 import type { AxiosInstance } from "axios";
 import axios from "axios";
+import { Granularity } from "~/ts/enums";
+import { StoreIntervalQuery } from "~/ts/types";
 
 const api: AxiosInstance = axios.create({
 	baseURL: process.env.API_URL,
@@ -18,5 +20,34 @@ api.interceptors.response.use(
 	},
 	(error) => Promise.reject(error),
 );
+
+export const fetchShopifyOrders = async (params: StoreIntervalQuery, cookie: string) => {
+	console.log(params);
+	try {
+		const response = await api.post("/shopify/orders", {
+			store: params.store,
+			start: params.start,
+			end: params.end,
+			granularity: params.granularity
+		}, {
+			headers: {
+				Cookie: cookie
+			}
+		});
+		return response.data;
+	} catch (error) {
+		console.log(error.response.data);
+	}
+
+};
+
+export const fetchGoogleAdsInvestment = async (params: StoreIntervalQuery) => {
+	const response = await api.post("/google/ads", {
+		store: params.store,
+		start: params.start,
+		end: params.end
+	});
+	return response.data;
+};
 
 export default api;

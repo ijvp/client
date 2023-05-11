@@ -24,6 +24,20 @@ export default function StoreSelect() {
 		console.log("opening modal...")
 	};
 
+	const addStoreButtonMarkdown = (
+		<button
+			onClick={handleOpenStoreModal}
+			className="w-full
+			py-4
+			flex items-center justify-center gap-5
+		">
+			Adicionar loja
+			<img src="/icons/add.svg" alt="add-icon" />
+		</button>
+	);
+
+	if (!stores?.length) return addStoreButtonMarkdown;
+
 	const selectedStoreMarkdown = (
 		<div
 			className={`
@@ -58,18 +72,6 @@ export default function StoreSelect() {
 		</div>
 	);
 
-	const addStoreButtonMarkdown = (
-		<button
-			onClick={handleOpenStoreModal}
-			className="w-full
-			py-4
-			flex items-center justify-center gap-5 
-			border-t border-solid border-black-secondary 
-		">
-			Adicionar loja
-			<img src="/icons/add.svg" alt="add-icon" />
-		</button>
-	);
 
 	return (
 		//Tenho que usar uma div aqui pq nao posso colocar botões dentro

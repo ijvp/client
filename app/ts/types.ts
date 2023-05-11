@@ -1,3 +1,4 @@
+import { Granularity } from './enums';
 export interface FacebookBusiness {
 	business_id: string,
 	business_name: string
@@ -15,3 +16,9 @@ export interface Store {
 	facebook_business: FacebookBusiness
 };
 
+export interface StoreIntervalQuery {
+	store: string,
+	start: string,
+	end: string,
+	granularity?: Granularity
+}
