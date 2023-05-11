@@ -3,7 +3,7 @@
 	transition: transform 300ms;
 }
 
-.submit-button span:after {
+#login-form .submit-button span:after {
 	content: "";
 	display: block;
 	position: absolute;
@@ -22,6 +22,10 @@
 
 .submit-button:hover span {
 	background-color: var(--dark-purple);
+	transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 150ms;
+}
+
+#login-form .submit-button:hover span {
 	transform: translateX(-10px);
 	/* transition timing function and duration values copied from tailwind
 	because of parent button's hover:transition-colors 
