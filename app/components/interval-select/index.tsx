@@ -1,7 +1,10 @@
-import type { MouseEvent, ReactNode } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays } from "date-fns";
 import { DatePicker } from "@shopify/polaris";
+import { endDateAtom, startDateAtom } from "~/utils/atoms";
+import { useAtom } from "jotai";
+import { formatDate } from "~/utils/date";
 
 type ClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
@@ -45,8 +48,11 @@ export default function IntervalSelect() {
 		start: startOfToday(),
 		end: startOfToday(),
 	});
-	const [datePickerOpen, setDatePickerOpen] = useState(false);
 	const [{ month, year }, setDate] = useState({ month: getMonth(new Date()), year: getYear(new Date()) });
+	const [datePickerOpen, setDatePickerOpen] = useState(false);
+
+	const [start, setStart] = useAtom(startDateAtom);
+	const [end, setEnd] = useAtom(endDateAtom);
 
 	const handleOptionSelect = (index: number) => {
 		if (index < options.length) {
@@ -54,8 +60,8 @@ export default function IntervalSelect() {
 		}
 		setSelectedIndex(index);
 		setSelectedDateRange(options[index].value);
-		// setStart();
-		// setEnd();
+		setStart(options[index].value.start);
+		setEnd(options[index].value.end);
 	};
 
 	const handleMonthChange = useCallback(
@@ -68,8 +74,8 @@ export default function IntervalSelect() {
 	};
 
 	const handleDateRangeSubmit = () => {
-		// setStart(selectedDateRange.start);
-		// setEnd(selectedDateRange.end);
+		setStart(selectedDateRange.start);
+		setEnd(selectedDateRange.end);
 		setDatePickerOpen(false);
 	};
 
@@ -78,7 +84,7 @@ export default function IntervalSelect() {
 		setDatePickerOpen(!datePickerOpen);
 	};
 
-	const formatDate = (date: Date) => {
+	const formatDateLabel = (date: Date) => {
 		const year = String(date.getFullYear());
 		let month = String(date.getMonth() + 1);
 		let day = String(date.getDate());
@@ -96,7 +102,7 @@ export default function IntervalSelect() {
 	const dateRangeLabel =
 		selectedIndex === options.length ?
 			(
-				formatDate(selectedDateRange.start) + " - " + formatDate(selectedDateRange.end)
+				formatDateLabel(selectedDateRange.start) + " - " + formatDateLabel(selectedDateRange.end)
 			) : (
 				"Escolher período"
 			);
@@ -114,6 +120,10 @@ export default function IntervalSelect() {
 			</IntervalOptionButton>
 		)
 	});
+
+	useEffect(() => {
+		console.log(formatDate(String(start)), formatDate(String(end)));
+	}, [start, end]);
 
 	return (
 		<div className="flex gap-2 my-4">
