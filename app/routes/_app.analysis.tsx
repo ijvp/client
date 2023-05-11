@@ -29,7 +29,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	return checkAuth(request)
 		.then(authenticated => {
-			console.log("auth", authenticated)
 			if (!authenticated) {
 				return redirect("/login");
 			} else {

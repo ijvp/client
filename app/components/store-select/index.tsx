@@ -15,6 +15,7 @@ export default function StoreSelect() {
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 	const [open, setOpen] = useState(false);
 
+
 	const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		setOpen(!open);
 	};
@@ -36,7 +37,15 @@ export default function StoreSelect() {
 		</button>
 	);
 
-	if (!stores?.length) return addStoreButtonMarkdown;
+	if (!stores?.length) return (
+		<div
+			className="
+			border border-solid border-black-secondary
+			rounded-lg
+			">
+			{addStoreButtonMarkdown}
+		</div>
+	);
 
 	const selectedStoreMarkdown = (
 		<div
@@ -58,7 +67,7 @@ export default function StoreSelect() {
 						return (
 							<button
 								key={index}
-								className="w-full py-4 text-left"
+								className="w-full py-4 text-left last:border-b last:border-black-secondary"
 								onClick={() => setSelectedIndex(index)}
 							>
 								{formatStoreName(store.name)}
