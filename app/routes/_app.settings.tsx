@@ -1,6 +1,7 @@
 import { V2_MetaFunction, LinksFunction, LoaderArgs, ActionArgs, json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
+import api from "~/api";
 import { checkAuth } from "~/api/helpers";
 import Input from "~/components/input";
 import PageTitle from "~/components/page-title";
@@ -20,16 +21,20 @@ const validateUsername = (username: string) => {
 	};
 };
 
-const validatePassword = (password: string) => {
+const validatePasswordUpdate = (password: string, newPassword: string) => {
+	if (password === newPassword) {
+		return "Sua senha nova não pode ser igual a atual"
+	}
+
 	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-	const valid = regex.test(password);
+	const valid = regex.test(newPassword);
 	if (!valid) {
 		return "Sua senha deve conter pelo menos 8 caracteres, letras maiúsculas, letras minúsculas, caracteres especiais, e números"
 	};
 };
 
-const validatePasswordConfirm = (password: string, passwordConfirm: string) => {
-	if (password === passwordConfirm) {
+const validatePasswordComparision = (password: string, passwordConfirm: string) => {
+	if (password !== passwordConfirm) {
 		return "Senhas não são iguais";
 	};
 };
@@ -44,14 +49,28 @@ export const action = async ({ request }: ActionArgs) => {
 	const fields = { username, password, newPassword };
 	const fieldErrors = {
 		username: validateUsername(username),
-		newPassword: validatePassword(newPassword),
-		passwordConfirm: validatePasswordConfirm(newPassword, newPasswordConfirm)
+		newPassword: validatePasswordUpdate(password, newPassword),
+		passwordConfirm: validatePasswordComparision(newPassword, newPasswordConfirm)
 	};
+
+
 	if (Object.values(fieldErrors).some(Boolean)) {
 		return json({ fieldErrors, fields }, 400);
 	};
 
-	return redirect("/settings");
+	try {
+		const cookie = request.headers.get("Cookie");
+		const response = await api.post("/auth/update", {
+			...fields
+		},
+			{
+				headers: { Cookie: cookie }
+			}
+		);
+		return json({ ...response.data });
+	} catch (error) {
+		return json(error.response.data);
+	};
 };
 
 export const loader = ({ request }: LoaderArgs) => {
@@ -72,6 +91,7 @@ export default function Settings() {
 	const user = useLoaderData();
 	const actionData = useActionData();
 
+	console.log("actionData", actionData);
 	return (
 		<>
 			<PageTitle>
@@ -96,9 +116,9 @@ export default function Settings() {
 						icon="edit-icon.svg"
 					/>
 					{!!actionData?.fieldErrors?.username && (
-						<span className="text-red-500">
+						<p className="text-red-500">
 							{actionData.fieldErrors.username}
-						</span>
+						</p>
 					)}
 				</div>
 
@@ -117,9 +137,9 @@ export default function Settings() {
 						ariaErrorMessage={actionData?.fieldErrors?.password}
 					/>
 					{!!actionData?.fieldErrors?.newPassword && (
-						<span className="text-red-500">
+						<p className="text-red-500">
 							{actionData.fieldErrors.newPassword}
-						</span>
+						</p>
 					)}
 					<Input
 						type="password"
@@ -129,13 +149,22 @@ export default function Settings() {
 						ariaErrorMessage={actionData?.fieldErrors?.passwordConfirm}
 					/>
 					{!!actionData?.fieldErrors?.passwordConfirm && (
-						<span className="text-red-500">
+						<p className="text-red-500">
 							{actionData.fieldErrors.passwordConfirm}
-						</span>
+						</p>
 					)}
 				</div>
 				<div className="w-1/2 self-start">
 					<SubmitButton label="Salvar alterações" />
+					{actionData?.success ?
+						(
+							<p className="text-green-500 my-4">
+								Informações salvas com sucesso
+							</p>) : (
+							<p className="text-red-500 my-4">
+								{actionData?.message}
+							</p>
+						)}
 				</div>
 			</form >
 		</>
