@@ -115,12 +115,12 @@ export default function Integration() {
             active: true
 		},
         {
-			id: "reportena",
-			name: "Reportena",
+			id: "reportana",
+			name: "Reportana",
             type: "eMailMarketing",
             icon: {
                 url: "",
-                alt: "reportena icon"
+                alt: "reportana icon"
             },
             active: true
 		},
