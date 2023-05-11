@@ -24,14 +24,18 @@ export default function ProfileButton() {
 		document.getElementById("profile-button")?.addEventListener("click", handleProfileButtonClicked);
 
 		const handleCloseProfileTooltip = (event: MouseEvent<HTMLElement>) => {
-			event.stopPropagation();
+			const profileButtonElement = document.getElementById("profile-button");
+			const logoutButtonElement = document.getElementById("logout-button");
 			if (
-				event.target instanceof HTMLElement &&
-				event.target.tagName.toLowerCase() !== "form" &&
-				event.target.tagName.toLowerCase() !== "button"
+				profileButtonElement &&
+				logoutButtonElement &&
+				(profileButtonElement.contains(event.target) || logoutButtonElement.contains(event.target))
 			) {
-				setProfileTooltipOpen(false);
+				// Do nothing if the click event is within the profile button or the logout button
+				return;
 			}
+
+			setProfileTooltipOpen(false);
 		};
 
 		document.body.addEventListener("click", handleCloseProfileTooltip);
