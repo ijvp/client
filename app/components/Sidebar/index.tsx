@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { NavLink, Link } from "@remix-run/react";
 import ToggleButton, { links as toggleButtonLinks } from "~/components/toggle-button";
@@ -34,13 +33,6 @@ function SidebarLink({ label, link, src, alt }: LinkProps) {
 };
 
 export default function Sidebar() {
-	const [open, setOpen] = useState(false);
-
-
-	const handleClick = () => {
-		setOpen(!open);
-	};
-
 	return (
 		<nav
 			id="sidebar"

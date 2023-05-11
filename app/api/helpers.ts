@@ -4,8 +4,8 @@ export const checkAuth = async (request: Request) => {
 	const cookie = request.headers.get("Cookie");
 
 	try {
-		await api.get("/auth/me", { headers: { Cookie: cookie } });
-		return true;
+		const response = await api.get("/auth/me", { headers: { Cookie: cookie } });
+		return response.data;
 	} catch (error) {
 		console.log(error.response.data);
 		return false;
