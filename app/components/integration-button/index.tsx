@@ -18,9 +18,9 @@ export default function IntegrationButton({ connected, onConnectionChange }: { c
         setIsConnected(false)
         onConnectionChange(false)
     }
-    
+
     return (
-        <button onClick={isConnected === false ? doConnection : doDisconnection} className={`w-[200px] h-[60px] py-[18px] rounded-lg ${isConnected === false ? 'bg-purple hover:bg-dark-purple text-white border-0' : 'bg-transparent  text-purple border border-purple box-border'} hover:transition-colors ease-in-out duration-300`}>
+        <button onClick={isConnected === false ? doConnection : doDisconnection} className={`w-[200px] h-[60px] py-[18px] rounded-lg ${isConnected === false ? 'bg-purple hover:bg-dark-purple text-white border-0' : 'bg-transparent hover:bg-black-secondary text-purple border border-purple box-border'} hover:transition-colors ease-in-out duration-300`}>
             <span className="h text-base font-bold">{isConnected === true ? "Desconectar" : "Conectar"}</span>
         </button>
     )

@@ -1,6 +1,8 @@
-import { V2_MetaFunction, LinksFunction, LoaderArgs, redirect } from "@remix-run/node";
+import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { checkAuth } from "~/api/helpers";
-import Sidebar, { links as sidebarLinks } from "~/components/sidebar";
+import PageTitle from "~/components/page-title";
+import { links as sidebarLinks } from "~/components/sidebar";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Produtos" }];
@@ -21,7 +23,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function Products() {
 	return (
 		<>
-			This is the products page
+			<PageTitle>Produtos</PageTitle>
 		</>
 	)
 }
