@@ -12,8 +12,8 @@ module.exports = {
         "black-secondary": "#1f1c3c",
         "black-bg": "#0d0a1e",
         "black": "#080512",
-        "green": "#4FFC9E",
-        "red": "#FC594F"
+        "green-light": "#4FFC9E",
+        "red-light": "#FC594F"
       }
     },
   },
