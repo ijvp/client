@@ -11,6 +11,7 @@
 
 .Polaris-DatePicker__Day--disabled {
 	color: var(--gray) !important;
+	opacity: 0.66;
 	font-weight: regular !important;
 }
 
@@ -20,5 +21,21 @@
 
 .Polaris-DatePicker__Day--inRange {
 	color: var(--purple) !important;
+}
+
+.Polaris-DatePicker__Weekday {
+	color: var(--white) !important;
+}
+
+.Polaris-DatePicker__Weekday--current {
+	font-weight: bold !important;
+}
+
+.Polaris-DatePicker__Header {
+	top: 0 !important;
+}
+
+.Polaris-DatePicker__Header .Polaris-Button--plain.Polaris-Button--iconOnly svg {
+	fill: var(--white) !important;
 }
 /* </DatePicker> */
