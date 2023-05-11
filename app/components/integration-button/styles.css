@@ -1,0 +1,7 @@
+.connect-button {
+    background-color: red;
+}
+
+.connect-button:hover {
+    background-color: #3C368A;
+}
