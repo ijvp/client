@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import IntegrationButton from "../integration-button";
-import styles from "./styles.css";
 
 interface IIcon {
     url: string,

@@ -19,7 +19,7 @@ export default function Integration() {
 			name: "Shopify",
             type: "ecommerce",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=uSHYbs6PJfMT&format=png",
+                url: "/images/image1.png",
                 alt: "shpify icon"
             },
             active: true
@@ -29,7 +29,7 @@ export default function Integration() {
 			name: "Loja Integrada",
             type: "ecommerce",
             icon: {
-                url: "",
+                url: "/images/image2.png",
                 alt: "loja integrada icon"
             },
             active: true
@@ -39,7 +39,7 @@ export default function Integration() {
 			name: "Woocommerce",
             type: "ecommerce",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=115298&format=png",
+                url: "/images/image3.png",
                 alt: "woocommerce icon"
             },
             active: true
@@ -49,7 +49,7 @@ export default function Integration() {
 			name: "Tray",
             type: "ecommerce",
             icon: {
-                url: "",
+                url: "/images/image4.png",
                 alt: "tray icon"
             },
             active: true
@@ -59,7 +59,7 @@ export default function Integration() {
 			name: "Google Ads",
             type: "anuncios",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=ui4CTPMMDCFh&format=png",
+                url: "/images/image5.png",
                 alt: "google ads icon"
             },
             active: true
@@ -69,7 +69,7 @@ export default function Integration() {
 			name: "Facebook Ads",
             type: "anuncios",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=118497&format=png",
+                url: "/images/image6.png",
                 alt: "facebook ads icon"
             },
             active: true
@@ -79,7 +79,7 @@ export default function Integration() {
 			name: "Tiktok Ads",
             type: "anuncios",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=118640&format=png",
+                url: "/images/image7.png",
                 alt: "tiktok ads icon"
             },
             active: true
@@ -89,7 +89,7 @@ export default function Integration() {
 			name: "Pinterest Ads",
             type: "anuncios",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=63676&format=png",
+                url: "/images/image8.png",
                 alt: "pinterest ads icon"
             },
             active: true
@@ -99,7 +99,7 @@ export default function Integration() {
 			name: "Active Campaing",
             type: "eMailMarketing",
             icon: {
-                url: "",
+                url: "/images/image9.png",
                 alt: "active campaing"
             },
             active: true
@@ -109,7 +109,7 @@ export default function Integration() {
 			name: "Get Response",
             type: "eMailMarketing",
             icon: {
-                url: "",
+                url: "/images/image10.png",
                 alt: "get response icon"
             },
             active: true
@@ -119,7 +119,7 @@ export default function Integration() {
 			name: "Reportana",
             type: "eMailMarketing",
             icon: {
-                url: "",
+                url: "/images/image11.png",
                 alt: "reportana icon"
             },
             active: true
@@ -129,7 +129,7 @@ export default function Integration() {
 			name: "MailChimp",
             type: "eMailMarketing",
             icon: {
-                url: "",
+                url: "/images/image12.png",
                 alt: "mailChimp icon"
             },
             active: true
@@ -139,7 +139,7 @@ export default function Integration() {
 			name: "Arquivo CSV",
             type: "planilhas",
             icon: {
-                url: "",
+                url: "/images/image13.png",
                 alt: "arquivo CSV icon"
             },
             active: true
@@ -149,7 +149,7 @@ export default function Integration() {
 			name: "Google Sheets",
             type: "planilhas",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=30461&format=png",
+                url: "/images/image14.png",
                 alt: "google sheets icon"
             },
             active: true
@@ -161,7 +161,6 @@ export default function Integration() {
     const anunciosIntegrations = activeIntegrationsIds.filter(integration => integration.type === "anuncios");
     const emailIntegrations = activeIntegrationsIds.filter(integration => integration.type === "eMailMarketing");
     const planilhasIntegrations = activeIntegrationsIds.filter(integration => integration.type === "planilhas");
-
 
     return (
         
