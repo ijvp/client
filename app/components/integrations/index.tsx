@@ -119,7 +119,7 @@ export default function Integration() {
 			name: "Reportena",
             type: "eMailMarketing",
             icon: {
-                url: "https://img.icons8.com/?size=512&id=uSHYbs6PJfMT&format=png",
+                url: "",
                 alt: "reportena icon"
             },
             active: true
