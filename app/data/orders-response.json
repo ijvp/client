@@ -1,0 +1,30 @@
+{
+	"id": "shopify.order-metrics",
+	"metricsBreakdown": [
+		{
+			"date": "2023-05-11T22",
+			"count": 1,
+			"value": 174.41
+		},
+		{
+			"date": "2023-05-11T18",
+			"count": 1,
+			"value": 187.23
+		},
+		{
+			"date": "2023-05-11T17",
+			"count": 1,
+			"value": 136.7
+		},
+		{
+			"date": "2023-05-11T13",
+			"count": 1,
+			"value": 119.9
+		},
+		{
+			"date": "2023-05-11T08",
+			"count": 3,
+			"value": 576.35
+		}
+	]
+}

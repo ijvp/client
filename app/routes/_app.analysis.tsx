@@ -26,19 +26,13 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const cookie = request.headers.get("Cookie");
+	const authenticated = await checkAuth(request);
+	if (!authenticated) {
+		return redirect("/login");
+	};
 
-	return checkAuth(request)
-		.then(authenticated => {
-			if (!authenticated) {
-				return redirect("/login");
-			} else {
-				return null;
-			}
-		})
-		.catch(error => {
-			console.log(error);
-		});
+	// const orders = await api.post()
+	return null;
 };
 
 export default function Analysis() {
@@ -57,9 +51,7 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<Suspense fallback={<div>loading</div>}>
-				<LineChart />
-			</Suspense>
+			<LineChart />
 		</>
 	)
 }
