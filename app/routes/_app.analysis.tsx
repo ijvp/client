@@ -36,7 +36,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const ordersPromise = fetchShopifyOrders(request, user);
 	const googleAdsPromise = fetchGoogleAdsInvestment(request, user);
 	const facebookAdsPromise = fetchFacebookAdsInvestment(request, user);
-	return defer({ orders: ordersPromise, googleAds: googleAdsPromise, facebookAds: facebookAdsPromise });
+	return defer({ orders: ordersPromise });
 };
 
 export default function Analysis() {
