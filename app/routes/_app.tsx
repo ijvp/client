@@ -16,7 +16,6 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-	console.log("calling app loader");
 	const { shops } = await checkAuth(request);
 	return { stores: shops };
 };
