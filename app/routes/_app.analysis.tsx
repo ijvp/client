@@ -1,23 +1,24 @@
 import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import { Await, useLoaderData, useNavigation } from "@remix-run/react";
+import { Suspense } from "react";
+import { defer } from "react-router-dom";
+import PageTitle from "~/components/page-title";
 import IntervalSelect, { links as intervalSelectLinks } from "~/components/interval-select";
-import { links as lineChartLinks } from "~/components/line-chart/index";
-import api, { fetchShopifyOrders, fetchProfitData } from "~/api";
-import { checkAuth } from "~/api/helpers";
+import ChartsContainer from "~/components/charts-container";
 import { useAtom } from "jotai";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
-import { Granularity } from "~/ts/enums";
-import PageTitle from "~/components/page-title";
-import ChartsContainer from "~/components/charts-container";
+import { fetchShopifyOrders, fetchGoogleAdsInvestment, fetchFacebookAdsInvestment } from "~/api";
+import { checkAuth } from "~/api/helpers";
+
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
 };
 
 export const links: LinksFunction = () => [
-	...intervalSelectLinks(),
-	...lineChartLinks()
+	...intervalSelectLinks()
 ];
 
 export function ErrorBoundary() {
@@ -31,14 +32,18 @@ export const loader = async ({ request }: LoaderArgs) => {
 	if (!user) {
 		return redirect("/login");
 	};
-	const params = new URL(request.url).searchParams;
-	console.log("analysis loader params", params);
 
-	const profits = fetchProfitData(request);
-	return null;
+	const ordersPromise = fetchShopifyOrders(request, user);
+	const googleAdsPromise = fetchGoogleAdsInvestment(request, user);
+	const facebookAdsPromise = fetchFacebookAdsInvestment(request, user);
+	return defer({ orders: ordersPromise, googleAds: googleAdsPromise, facebookAds: facebookAdsPromise });
 };
 
 export default function Analysis() {
+	const loaderData = useLoaderData();
+	const navigation = useNavigation();
+	console.log(loaderData);
+
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
@@ -54,7 +59,16 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<ChartsContainer />
+			<Suspense fallback={<div>loading charts data...</div>}>
+				<Await resolve={loaderData}>
+					{({ orders, facebookAds, googleAds }) => (
+						<>
+							<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />
+							<p id="test-id">{orders?.data}</p>
+						</>
+					)}
+				</Await>
+			</Suspense >
 		</>
-	)
-}
+	);
+};

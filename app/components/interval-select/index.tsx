@@ -1,15 +1,15 @@
-import { MouseEvent, ReactNode, useEffect } from "react";
+import { MouseEvent, ReactNode, useEffect, useMemo } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { useCallback, useState } from "react";
-import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays, getDate } from "date-fns";
+import { endOfToday, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays, getDate } from "date-fns";
 import { DatePicker } from "@shopify/polaris";
 import { endDateAtom, startDateAtom } from "~/utils/atoms";
 import { useAtom } from "jotai";
-import { formatDate, parseDateString } from "~/utils/date";
+import { formatDate, formatDateLabel, parseDateString } from "~/utils/date";
 import { Link, useSearchParams } from "@remix-run/react";
 import styles from "./styles.css";
 
-type ClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
+type ClickHandler = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 
 interface IntervalOptionButtonProps {
 	selected: boolean,
@@ -33,6 +33,7 @@ function IntervalOptionButton({ selected, children, onClick, start, end }: Inter
 		return (
 			<Link to={{ search: new URLSearchParams(searchParamsObj).toString() }}>
 				<div
+					onClick={onClick}
 					className={`
 					px-4 py-2 min-w-[170px] w-fit
 					rounded-md border border-solid
@@ -60,7 +61,7 @@ function IntervalOptionButton({ selected, children, onClick, start, end }: Inter
 };
 
 const options = [
-	{ label: 'Hoje', value: { start: startOfToday(), end: startOfToday() } },
+	{ label: 'Hoje', value: { start: startOfToday(), end: endOfToday() } },
 	{ label: 'Ontem', value: { start: subDays(startOfToday(), 1), end: subDays(startOfToday(), 1) } },
 	{ label: 'Últimos 7 dias', value: { start: subWeeks(startOfToday(), 1), end: startOfToday() } },
 	{ label: 'Ultimos 14 dias', value: { start: subWeeks(startOfToday(), 2), end: startOfToday() } },
@@ -94,6 +95,11 @@ export default function IntervalSelect() {
 		[]
 	);
 
+	const handleOptionSelect = (index: number) => {
+		setSelectedIndex(index);
+		setDatePickerOpen(false);
+	};
+
 	const handleDateRangeChange = (dateRange: DateRange) => {
 		setSelectedDateRange(dateRange);
 	};
@@ -104,9 +110,6 @@ export default function IntervalSelect() {
 		queryParams.set("end", formatDate(selectedDateRange.end));
 		window.location = `${location.pathname}?${queryParams.toString()}`;
 		setDatePickerOpen(false);
-		// setStart(selectedDateRange.start);
-		// setEnd(selectedDateRange.end);
-		// setDatePickerOpen(false);
 	};
 
 	const handleDatePickerToggle = (event: MouseEvent) => {
@@ -115,23 +118,7 @@ export default function IntervalSelect() {
 		setDatePickerOpen(!datePickerOpen);
 	};
 
-	const formatDateLabel = (date: Date) => {
-		const year = String(date.getFullYear());
-		let month = String(date.getMonth() + 1);
-		let day = String(date.getDate());
-		if (month.length < 2) {
-			month = String(month).padStart(2, "0");
-		}
-
-		if (day.length < 2) {
-			day = String(day).padStart(2, "0");
-		}
-
-		return [day, month, year].join("/");
-	};
-
 	useEffect(() => {
-		setDatePickerOpen(false);
 		if (start && end) {
 			const index = options.findIndex(option =>
 				option.value.start.toLocaleString() === parseDateString(start).toLocaleString() &&
@@ -150,20 +137,21 @@ export default function IntervalSelect() {
 				"Escolher período"
 			);
 
-	const intervalPredeterminedOptions = options.map((option, index) => {
-		let selected = selectedIndex < options.length ? index === selectedIndex : false;
-
-		return (
-			<IntervalOptionButton
-				key={index}
-				selected={selected}
-				start={option.value.start}
-				end={option.value.end}
-			>
-				{option.label}
-			</IntervalOptionButton>
-		)
-	});
+	const intervalPredeterminedOptions = useMemo(
+		() =>
+			options.map((option, index) => (
+				<IntervalOptionButton
+					key={index}
+					onClick={() => handleOptionSelect(index)}
+					selected={selectedIndex < options.length ? index === selectedIndex : false}
+					start={option.value.start}
+					end={option.value.end}
+				>
+					{option.label}
+				</IntervalOptionButton>
+			)),
+		[selectedIndex]
+	);
 
 	return (
 		<div className="flex gap-4 my-6 interval-options">
@@ -191,7 +179,6 @@ export default function IntervalSelect() {
 							allowRange
 							disableDatesAfter={new Date()}
 						/>
-						{/* <Link to={{ search: handleDateRangeSubmit() }}>Aplicar</Link> */}
 						<button
 							onClick={handleDateRangeSubmit}
 							className="
