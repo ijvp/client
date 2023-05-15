@@ -1,21 +1,22 @@
-import type { ActionArgs, LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Suspense } from "react";
-import IntervalSelect from "~/components/interval-select";
-import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
-import api, { fetchShopifyOrders } from "~/api";
+import IntervalSelect, { links as intervalSelectLinks } from "~/components/interval-select";
+import { links as lineChartLinks } from "~/components/line-chart/index";
+import api, { fetchShopifyOrders, fetchProfitData } from "~/api";
 import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
 import { Granularity } from "~/ts/enums";
 import PageTitle from "~/components/page-title";
+import ChartsContainer from "~/components/charts-container";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
 };
 
 export const links: LinksFunction = () => [
+	...intervalSelectLinks(),
 	...lineChartLinks()
 ];
 
@@ -26,12 +27,14 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const authenticated = await checkAuth(request);
-	if (!authenticated) {
+	const user = await checkAuth(request);
+	if (!user) {
 		return redirect("/login");
 	};
+	const params = new URL(request.url).searchParams;
+	console.log("analysis loader params", params);
 
-	// const orders = await api.post()
+	const profits = fetchProfitData(request);
 	return null;
 };
 
@@ -51,7 +54,7 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<LineChart />
+			<ChartsContainer />
 		</>
 	)
 }

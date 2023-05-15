@@ -1,32 +1,63 @@
 import { MouseEvent, ReactNode, useEffect } from "react";
+import type { LinksFunction } from "@remix-run/node";
 import { useCallback, useState } from "react";
-import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays } from "date-fns";
+import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays, getDate } from "date-fns";
 import { DatePicker } from "@shopify/polaris";
 import { endDateAtom, startDateAtom } from "~/utils/atoms";
 import { useAtom } from "jotai";
-import { formatDate } from "~/utils/date";
+import { formatDate, parseDateString } from "~/utils/date";
+import { Link, useSearchParams } from "@remix-run/react";
+import styles from "./styles.css";
 
 type ClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
 interface IntervalOptionButtonProps {
 	selected: boolean,
-	onClick: ClickHandler,
-	children: ReactNode
+	children: ReactNode,
+	onClick?: ClickHandler,
+	start?: Date,
+	end?: Date
 };
 
-function IntervalOptionButton({ selected, onClick, children }: IntervalOptionButtonProps) {
-	return (
-		<button
-			onClick={onClick}
-			className={`
-			px-4 py-2 min-w-[170px] w-fit
-			rounded-md border border-solid
-			${selected ? "bg-purple border-purple" : "border-black-secondary"}
-			`}>
-			{children}
-		</button>
-	)
-}
+function IntervalOptionButton({ selected, children, onClick, start, end }: IntervalOptionButtonProps) {
+	const [searchParams] = useSearchParams();
+
+	// Convert searchParams to an object
+	const searchParamsObj = Object.fromEntries(searchParams);
+
+	// Add start and end parameters to the object
+	if (start && end) {
+		searchParamsObj.start = formatDate(start);
+		searchParamsObj.end = formatDate(end);
+
+		return (
+			<Link to={{ search: new URLSearchParams(searchParamsObj).toString() }}>
+				<div
+					className={`
+					px-4 py-2 min-w-[170px] w-fit
+					rounded-md border border-solid
+					text-white text-center
+					${selected ? "bg-purple border-purple" : "border-black-secondary"}
+				`}>
+					{children}
+				</div>
+			</Link>
+		)
+	} else {
+		return (
+			<div
+				onClick={onClick}
+				className={`
+					px-4 py-2 min-w-[170px] w-fit
+					rounded-md border border-solid
+					text-white text-center
+					${selected ? "bg-purple border-purple" : "border-black-secondary"}
+				`}>
+				{children}
+			</div>
+		)
+	}
+};
 
 const options = [
 	{ label: 'Hoje', value: { start: startOfToday(), end: startOfToday() } },
@@ -42,27 +73,21 @@ interface DateRange {
 	end: Date
 };
 
+export const links: LinksFunction = () => [
+	{ rel: "stylesheet", href: styles }
+];
+
 export default function IntervalSelect() {
+	const [searchParams] = useSearchParams();
+	const start = searchParams.get("start");
+	const end = searchParams.get("end");
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
-		start: startOfToday(),
-		end: startOfToday(),
+		start: start ? parseDateString(start) : startOfToday(),
+		end: end ? parseDateString(end) : startOfToday(),
 	});
 	const [{ month, year }, setDate] = useState({ month: getMonth(new Date()), year: getYear(new Date()) });
 	const [datePickerOpen, setDatePickerOpen] = useState(false);
-
-	const [start, setStart] = useAtom(startDateAtom);
-	const [end, setEnd] = useAtom(endDateAtom);
-
-	const handleOptionSelect = (index: number) => {
-		if (index < options.length) {
-			setDatePickerOpen(false);
-		}
-		setSelectedIndex(index);
-		setSelectedDateRange(options[index].value);
-		setStart(options[index].value.start);
-		setEnd(options[index].value.end);
-	};
 
 	const handleMonthChange = useCallback(
 		(month: number, year: number) => setDate({ month, year }),
@@ -74,12 +99,18 @@ export default function IntervalSelect() {
 	};
 
 	const handleDateRangeSubmit = () => {
-		setStart(selectedDateRange.start);
-		setEnd(selectedDateRange.end);
+		const queryParams = new URLSearchParams(searchParams);
+		queryParams.set("start", formatDate(selectedDateRange.start));
+		queryParams.set("end", formatDate(selectedDateRange.end));
+		window.location = `${location.pathname}?${queryParams.toString()}`;
 		setDatePickerOpen(false);
+		// setStart(selectedDateRange.start);
+		// setEnd(selectedDateRange.end);
+		// setDatePickerOpen(false);
 	};
 
 	const handleDatePickerToggle = (event: MouseEvent) => {
+		event.stopPropagation();
 		setSelectedIndex(options.length);
 		setDatePickerOpen(!datePickerOpen);
 	};
@@ -99,6 +130,18 @@ export default function IntervalSelect() {
 		return [day, month, year].join("/");
 	};
 
+	useEffect(() => {
+		setDatePickerOpen(false);
+		if (start && end) {
+			const index = options.findIndex(option =>
+				option.value.start.toLocaleString() === parseDateString(start).toLocaleString() &&
+				option.value.end.toLocaleString() === parseDateString(end).toLocaleString());
+			index > -1 ? setSelectedIndex(index) : setSelectedIndex(options.length);
+		} else {
+			setSelectedIndex(0);
+		}
+	}, [start, end]);
+
 	const dateRangeLabel =
 		selectedIndex === options.length ?
 			(
@@ -108,25 +151,22 @@ export default function IntervalSelect() {
 			);
 
 	const intervalPredeterminedOptions = options.map((option, index) => {
-		let selected = selectedIndex < options.length ? selectedIndex === index : false;
+		let selected = selectedIndex < options.length ? index === selectedIndex : false;
 
 		return (
 			<IntervalOptionButton
 				key={index}
 				selected={selected}
-				onClick={() => handleOptionSelect(index)}
+				start={option.value.start}
+				end={option.value.end}
 			>
 				{option.label}
 			</IntervalOptionButton>
 		)
 	});
 
-	useEffect(() => {
-		console.log(formatDate(String(start)), formatDate(String(end)));
-	}, [start, end]);
-
 	return (
-		<div className="flex gap-2 my-6">
+		<div className="flex gap-4 my-6 interval-options">
 			{intervalPredeterminedOptions}
 			<div className="relative">
 				<IntervalOptionButton onClick={handleDatePickerToggle} selected={selectedIndex === options.length}>
@@ -151,6 +191,7 @@ export default function IntervalSelect() {
 							allowRange
 							disableDatesAfter={new Date()}
 						/>
+						{/* <Link to={{ search: handleDateRangeSubmit() }}>Aplicar</Link> */}
 						<button
 							onClick={handleDateRangeSubmit}
 							className="

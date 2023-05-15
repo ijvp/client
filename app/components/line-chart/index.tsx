@@ -32,7 +32,6 @@ export default function LineChart() {
 	};
 
 	const profitData = calculateNetProfit(orders.metricsBreakdown, googleAds.metricsBreakdown);
-	console.log(profitData);
 
 	useEffect(() => {
 		if (navigator) {

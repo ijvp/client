@@ -9,20 +9,27 @@ import Sidebar, {
 import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
 import { storesAtom } from "~/utils/atoms";
+import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
+	console.log("calling app loader");
 	const { shops } = await checkAuth(request);
 	return { stores: shops };
 };
 
 export default function App() {
 	const data = useLoaderData();
-	const [stores, setStores] = useAtom(storesAtom);
-	setStores(data.stores);
+	const [, setStores] = useAtom(storesAtom);
+
+	useEffect(() => {
+		if (data.stores) {
+			setStores(data.stores);
+		}
+	}, [data.stores]);
 
 	return (
 		<AppProvider i18n={{ ...en, ...ptBR }}>

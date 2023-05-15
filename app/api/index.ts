@@ -50,4 +50,14 @@ export const fetchGoogleAdsInvestment = async (params: StoreIntervalQuery) => {
 	return response.data;
 };
 
+export const fetchProfitData = (request: Request) => {
+	const cookie = request.headers.get("cookie");
+	const url = new URL(request.url);
+	const searchParams = url.searchParams;
+	const store = searchParams.get("store");
+	const start = searchParams.get("start");
+	const end = searchParams.get("end");
+	return "no data";
+};
+
 export default api;
