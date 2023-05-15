@@ -1,7 +1,9 @@
 import type { AxiosInstance } from "axios";
 import axios from "axios";
+import { endOfToday, startOfToday } from "date-fns";
 import { Granularity } from "~/ts/enums";
 import { StoreIntervalQuery } from "~/ts/types";
+import { parseDateString } from "~/utils/date";
 
 const api: AxiosInstance = axios.create({
 	baseURL: process.env.API_URL,
@@ -21,14 +23,44 @@ api.interceptors.response.use(
 	(error) => Promise.reject(error),
 );
 
-export const fetchShopifyOrders = async (params: StoreIntervalQuery, cookie: string) => {
-	console.log(params);
+export const fetchShopifyOrders = async (request: Request, user) => {
 	try {
+		const cookie = request.headers.get("cookie");
+		const searchParams = new URL(request.url).searchParams;
+		const store = searchParams.get("store") || user.shops[0].name;
+		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+
 		const response = await api.post("/shopify/orders", {
-			store: params.store,
-			start: params.start,
-			end: params.end,
-			granularity: params.granularity
+			store,
+			start,
+			end,
+			granularity: Granularity.Hour
+		}, {
+			headers: {
+				Cookie: cookie
+			}
+		});
+		console.log(response.data);
+		return response.data;
+	} catch (error) {
+		console.log(error.data);
+	}
+};
+
+export const fetchGoogleAdsInvestment = async (request: Request, user) => {
+	try {
+		const cookie = request.headers.get("cookie");
+
+		const searchParams = new URL(request.url).searchParams;
+		const store = searchParams.get("store") || user.shops[0].name;
+		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+
+		const response = await api.post("/google/ads", {
+			store,
+			start,
+			end
 		}, {
 			headers: {
 				Cookie: cookie
@@ -36,28 +68,32 @@ export const fetchShopifyOrders = async (params: StoreIntervalQuery, cookie: str
 		});
 		return response.data;
 	} catch (error) {
-		console.log(error.response.data);
+		console.log(error);
 	}
-
 };
 
-export const fetchGoogleAdsInvestment = async (params: StoreIntervalQuery) => {
-	const response = await api.post("/google/ads", {
-		store: params.store,
-		start: params.start,
-		end: params.end
-	});
-	return response.data;
-};
+export const fetchFacebookAdsInvestment = async (request: Request, user) => {
+	try {
+		const cookie = request.headers.get("cookie");
 
-export const fetchProfitData = (request: Request) => {
-	const cookie = request.headers.get("cookie");
-	const url = new URL(request.url);
-	const searchParams = url.searchParams;
-	const store = searchParams.get("store");
-	const start = searchParams.get("start");
-	const end = searchParams.get("end");
-	return "no data";
+		const searchParams = new URL(request.url).searchParams;
+		const store = searchParams.get("store") || user.shops[0].name;
+		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+
+		const response = await api.post("/facebook/ads", {
+			store,
+			start,
+			end
+		}, {
+			headers: {
+				Cookie: cookie
+			}
+		});
+		return response.data;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 export default api;
