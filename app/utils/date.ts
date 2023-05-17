@@ -7,6 +7,7 @@ export const formatDate = (dateString: string | Date) => {
 	return `${year}-${month}-${day}`;
 };
 
+//expects yyyy-mm-dd
 export const parseDateString = (dateString: string, eod = false) => {
 	const [year, month, day] = dateString.split("-").map(Number);
 	const date = new Date(year, month - 1, day);
@@ -32,3 +33,16 @@ export const formatDateLabel = (date: Date) => {
 
 	return [day, month, year].join("/");
 };
+
+//expects yyyy-mm-ddThh
+export const standardizeMetricDate = (date) => {
+	return new Date(date + ":00:00");
+}
+
+//expects yyyy-mm-ddThh for both keys otherwise wont work
+export const sortMetricsByDate = (a, b) => {
+	const dateA = standardizeMetricDate(a.key);
+	const dateB = standardizeMetricDate(b.key);
+	return dateA - dateB;
+};
+
