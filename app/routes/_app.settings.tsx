@@ -91,7 +91,6 @@ export default function Settings() {
 	const user = useLoaderData();
 	const actionData = useActionData();
 
-	console.log("actionData", actionData);
 	return (
 		<>
 			<PageTitle>

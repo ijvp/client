@@ -1,13 +1,12 @@
 import type { LinksFunction } from "@remix-run/node";
 import { NavLink } from "@remix-run/react";
 import ToggleButton, { links as toggleButtonLinks } from "~/components/toggle-button";
-import StoreSelect, { links as storeSelectLinks } from "~/components/store-select";
+import StoreSelect from "~/components/store-select";
 import ProfileButton, { links as profileButtonLinks } from "../profile-button";
 import SettingsButton, { links as settingsButtonLinks } from "../settings-button";
 
 export const links: LinksFunction = () => [
 	...toggleButtonLinks(),
-	...storeSelectLinks(),
 	...profileButtonLinks(),
 	...settingsButtonLinks()
 ];

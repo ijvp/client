@@ -1,38 +1,21 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
+import type { DataPoint } from '@shopify/polaris-viz';
 import { SparkLineChart } from '@shopify/polaris-viz';
-import orders from "~/data/orders-response.json";
-import googleAds from "~/data/google-ads-reponse.json";
-
 import styles from "./styles.css";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles }
 ];
 
-export default function LineChart() {
+interface LineChartProps {
+	data: DataPoint[],
+	title: string,
+	value: number | string,
+	prefix?: string
+}
+export default function LineChart({ data, title, value, prefix }: LineChartProps) {
 	const [render, setRender] = useState(false);
-
-	const calculateNetProfit = (revenueData, adsData) => {
-		const netProfitData = [];
-
-		const adsMap = adsData.reduce((map, ad) => {
-			const { date, metrics } = ad;
-			map[date] = metrics.spend;
-			return map;
-		}, {});
-
-		revenueData.forEach(({ date, value }) => {
-			const adSpend = adsMap[date] || 0;
-			const netProfit = value - adSpend;
-			netProfitData.push({ key: date, value: netProfit })
-		});
-
-		return netProfitData;
-	};
-
-	const profitData = calculateNetProfit(orders.metricsBreakdown, googleAds.metricsBreakdown);
-	console.log(profitData);
 
 	useEffect(() => {
 		if (navigator) {
@@ -44,14 +27,32 @@ export default function LineChart() {
 		<div
 			className="
 			nodge
-			max-w-[345px] h-[230px] w-full 
-			bg-black-secondary p-4 pb-16 rounded-lg
+			w-[356px] h-[238px]
+			p-4 pb-24 rounded-lg
+			bg-black-bg
+			border border-black-secondary box-border
 			flex flex-col gap-2
 		">
-			{render && <SparkLineChart data={[{ data: profitData }]} />}
-			<div className="h-16 absolute bottom-0 flex items-center justify-start">
-				<p>Faturamento:</p>
-			</div>
-		</div>
+			<div
+				className="
+					absolute
+					z-0
+					top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+					w-[110px]
+					aspect-square
+					bg-purple
+					blur-[115px]
+					rounded-full
+				"
+			/>
+			{render && <SparkLineChart data={[{ data: data }]} />}
+			<div className="h-16 absolute bottom-4">
+				<p className="text-white font-semibold">
+					{title}:
+					<br />
+					<span className="h h5">{prefix}{value}</span>
+				</p>
+			</div >
+		</div >
 	);
 }

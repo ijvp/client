@@ -1,40 +1,72 @@
-import { MouseEvent, ReactNode, useEffect } from "react";
+import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useMemo } from "react";
+import type { LinksFunction } from "@remix-run/node";
 import { useCallback, useState } from "react";
-import { format, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays } from "date-fns";
+import { endOfToday, startOfToday, subDays, subWeeks, subMonths, subYears, getMonth, getYear, startOfDay, } from "date-fns";
 import { DatePicker } from "@shopify/polaris";
-import { endDateAtom, startDateAtom } from "~/utils/atoms";
-import { useAtom } from "jotai";
-import { formatDate } from "~/utils/date";
+import { formatDate, formatDateLabel, parseDateString } from "~/utils/date";
+import { Link, useSearchParams } from "@remix-run/react";
+import styles from "./styles.css";
+import { endOfDay } from "date-fns";
 
-type ClickHandler = (event: MouseEvent<HTMLButtonElement>) => void;
+type ClickHandler = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 
 interface IntervalOptionButtonProps {
 	selected: boolean,
-	onClick: ClickHandler,
-	children: ReactNode
+	children: ReactNode,
+	onClick?: ClickHandler,
+	start?: Date,
+	end?: Date
 };
 
-function IntervalOptionButton({ selected, onClick, children }: IntervalOptionButtonProps) {
-	return (
-		<button
-			onClick={onClick}
-			className={`
-			px-4 py-2 min-w-[170px] w-fit
-			rounded-md border border-solid
-			${selected ? "bg-purple border-purple" : "border-black-secondary"}
-			`}>
-			{children}
-		</button>
-	)
-}
+function IntervalOptionButton({ selected, children, onClick, start, end }: IntervalOptionButtonProps) {
+	const [searchParams] = useSearchParams();
+
+	// Convert searchParams to an object
+	const searchParamsObj = Object.fromEntries(searchParams);
+
+	// Add start and end parameters to the object
+	if (start && end) {
+		searchParamsObj.start = formatDate(start);
+		searchParamsObj.end = formatDate(end);
+
+		return (
+			<Link to={{ search: new URLSearchParams(searchParamsObj).toString() }}>
+				<div
+					onClick={onClick}
+					className={`
+					px-4 py-2 min-w-[170px] w-fit
+					rounded-md border border-solid
+					text-white text-center
+					${selected ? "bg-purple border-purple" : "border-black-secondary"}
+				`}>
+					{children}
+				</div>
+			</Link>
+		)
+	} else {
+		return (
+			<div
+				onClick={onClick}
+				className={`
+					px-4 py-2 min-w-[170px] w-fit
+					rounded-md border border-solid
+					text-white text-center
+					${selected ? "bg-purple border-purple" : "border-black-secondary"}
+				`}>
+				{children}
+			</div>
+		)
+	}
+};
 
 const options = [
-	{ label: 'Hoje', value: { start: startOfToday(), end: startOfToday() } },
-	{ label: 'Ontem', value: { start: subDays(startOfToday(), 1), end: subDays(startOfToday(), 1) } },
-	{ label: 'Últimos 7 dias', value: { start: subWeeks(startOfToday(), 1), end: startOfToday() } },
-	{ label: 'Ultimos 14 dias', value: { start: subWeeks(startOfToday(), 2), end: startOfToday() } },
-	{ label: 'Últimos 30 dias', value: { start: subMonths(startOfToday(), 1), end: startOfToday() } },
-	{ label: 'Último ano', value: { start: subYears(startOfToday(), 1), end: startOfToday() } },
+	{ label: 'Hoje', value: { start: startOfToday(), end: endOfToday() } },
+	{ label: 'Ontem', value: { start: subDays(startOfToday(), 1), end: subDays(endOfToday(), 1) } },
+	{ label: 'Últimos 7 dias', value: { start: subWeeks(startOfToday(), 1), end: endOfToday() } },
+	{ label: 'Ultimos 14 dias', value: { start: subWeeks(startOfToday(), 2), end: endOfToday() } },
+	{ label: 'Últimos 30 dias', value: { start: subMonths(startOfToday(), 1), end: endOfToday() } },
+	{ label: 'Último ano', value: { start: subYears(startOfToday(), 1), end: endOfToday() } },
 ];
 
 interface DateRange {
@@ -42,62 +74,60 @@ interface DateRange {
 	end: Date
 };
 
+export const links: LinksFunction = () => [
+	{ rel: "stylesheet", href: styles }
+];
+
 export default function IntervalSelect() {
+	const [searchParams] = useSearchParams();
+	const start = searchParams.get("start");
+	const end = searchParams.get("end");
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [selectedDateRange, setSelectedDateRange] = useState<DateRange>({
-		start: startOfToday(),
-		end: startOfToday(),
+		start: start ? parseDateString(start) : startOfToday(),
+		end: end ? parseDateString(end) : startOfToday(),
 	});
 	const [{ month, year }, setDate] = useState({ month: getMonth(new Date()), year: getYear(new Date()) });
 	const [datePickerOpen, setDatePickerOpen] = useState(false);
-
-	const [start, setStart] = useAtom(startDateAtom);
-	const [end, setEnd] = useAtom(endDateAtom);
-
-	const handleOptionSelect = (index: number) => {
-		if (index < options.length) {
-			setDatePickerOpen(false);
-		}
-		setSelectedIndex(index);
-		setSelectedDateRange(options[index].value);
-		setStart(options[index].value.start);
-		setEnd(options[index].value.end);
-	};
 
 	const handleMonthChange = useCallback(
 		(month: number, year: number) => setDate({ month, year }),
 		[]
 	);
 
+	const handleOptionSelect = (index: number) => {
+		setSelectedIndex(index);
+		setDatePickerOpen(false);
+	};
+
 	const handleDateRangeChange = (dateRange: DateRange) => {
 		setSelectedDateRange(dateRange);
 	};
 
 	const handleDateRangeSubmit = () => {
-		setStart(selectedDateRange.start);
-		setEnd(selectedDateRange.end);
+		const queryParams = new URLSearchParams(searchParams);
+		queryParams.set("start", formatDate(selectedDateRange.start));
+		queryParams.set("end", formatDate(selectedDateRange.end));
+		window.location = `${location.pathname}?${queryParams.toString()}`;
 		setDatePickerOpen(false);
 	};
 
 	const handleDatePickerToggle = (event: MouseEvent) => {
+		event.stopPropagation();
 		setSelectedIndex(options.length);
 		setDatePickerOpen(!datePickerOpen);
 	};
 
-	const formatDateLabel = (date: Date) => {
-		const year = String(date.getFullYear());
-		let month = String(date.getMonth() + 1);
-		let day = String(date.getDate());
-		if (month.length < 2) {
-			month = String(month).padStart(2, "0");
+	useEffect(() => {
+		if (start && end) {
+			const index = options.findIndex(option =>
+				option.value.start.toLocaleString() === startOfDay(parseDateString(start)).toLocaleString() &&
+				option.value.end.toLocaleString() === endOfDay(parseDateString(end)).toLocaleString());
+			index > -1 ? setSelectedIndex(index) : setSelectedIndex(options.length);
+		} else {
+			setSelectedIndex(0);
 		}
-
-		if (day.length < 2) {
-			day = String(day).padStart(2, "0");
-		}
-
-		return [day, month, year].join("/");
-	};
+	}, [start, end]);
 
 	const dateRangeLabel =
 		selectedIndex === options.length ?
@@ -107,26 +137,24 @@ export default function IntervalSelect() {
 				"Escolher período"
 			);
 
-	const intervalPredeterminedOptions = options.map((option, index) => {
-		let selected = selectedIndex < options.length ? selectedIndex === index : false;
-
-		return (
-			<IntervalOptionButton
-				key={index}
-				selected={selected}
-				onClick={() => handleOptionSelect(index)}
-			>
-				{option.label}
-			</IntervalOptionButton>
-		)
-	});
-
-	useEffect(() => {
-		console.log(formatDate(String(start)), formatDate(String(end)));
-	}, [start, end]);
+	const intervalPredeterminedOptions = useMemo(
+		() =>
+			options.map((option, index) => (
+				<IntervalOptionButton
+					key={index}
+					onClick={() => handleOptionSelect(index)}
+					selected={selectedIndex < options.length ? index === selectedIndex : false}
+					start={option.value.start}
+					end={option.value.end}
+				>
+					{option.label}
+				</IntervalOptionButton>
+			)),
+		[selectedIndex]
+	);
 
 	return (
-		<div className="flex gap-2 my-6">
+		<div className="flex gap-4 my-6 interval-options">
 			{intervalPredeterminedOptions}
 			<div className="relative">
 				<IntervalOptionButton onClick={handleDatePickerToggle} selected={selectedIndex === options.length}>
