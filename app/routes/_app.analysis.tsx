@@ -1,11 +1,11 @@
 import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Await, useLoaderData, useNavigation } from "@remix-run/react";
+import { Await, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
 import { defer } from "react-router-dom";
 import PageTitle from "~/components/page-title";
 import IntervalSelect, { links as intervalSelectLinks } from "~/components/interval-select";
-import ChartsContainer from "~/components/charts-container";
+import ChartsContainer, { links as chartsContainerLinks } from "~/components/charts-container";
 import { useAtom } from "jotai";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
@@ -18,7 +18,8 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => [
-	...intervalSelectLinks()
+	...intervalSelectLinks(),
+	...chartsContainerLinks()
 ];
 
 export function ErrorBoundary() {
@@ -36,13 +37,11 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const ordersPromise = fetchShopifyOrders(request, user);
 	const googleAdsPromise = fetchGoogleAdsInvestment(request, user);
 	const facebookAdsPromise = fetchFacebookAdsInvestment(request, user);
-	return defer({ orders: ordersPromise });
+	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
 };
 
 export default function Analysis() {
 	const loaderData = useLoaderData();
-	const navigation = useNavigation();
-	console.log(loaderData);
 
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
@@ -59,13 +58,10 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<Suspense fallback={<div>loading charts data...</div>}>
-				<Await resolve={loaderData}>
-					{({ orders, facebookAds, googleAds }) => (
-						<>
-							<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />
-							<p id="test-id">{orders?.data}</p>
-						</>
+			<Suspense fallback={<div>Carregando...</div>}>
+				<Await resolve={loaderData.data}>
+					{([orders, googleAds, facebookAds]) => (
+						<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />
 					)}
 				</Await>
 			</Suspense >
