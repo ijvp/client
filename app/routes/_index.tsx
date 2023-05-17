@@ -1,38 +1,12 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { checkAuth } from "~/api/helpers";
 
-export const meta: V2_MetaFunction = () => {
-  return [{ title: "Turbo Dash" }];
+export const loader = async ({ request }: LoaderArgs) => {
+  const authenticated = await checkAuth(request);
+  if (authenticated) {
+    return redirect("/analysis");
+  } else {
+    return redirect("/logout")
+  }
 };
-
-export default function Index() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
-}
