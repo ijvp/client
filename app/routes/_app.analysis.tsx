@@ -34,9 +34,10 @@ export const loader = async ({ request }: LoaderArgs) => {
 		return redirect("/login");
 	};
 
+	const store = user.shops.find(shop => shop.name === new URL(request.url).searchParams.get("store")) || user.shops[0];
 	const ordersPromise = fetchShopifyOrders(request, user);
-	const googleAdsPromise = fetchGoogleAdsInvestment(request, user);
-	const facebookAdsPromise = fetchFacebookAdsInvestment(request, user);
+	const googleAdsPromise = store.google_client && fetchGoogleAdsInvestment(request, user);
+	const facebookAdsPromise = store.facebook_business && fetchFacebookAdsInvestment(request, user);
 	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
 };
 
