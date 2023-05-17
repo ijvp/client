@@ -55,7 +55,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Login() {
 	const actionData = useActionData();
-	console.log(actionData);
 
 	return (
 		<div className="md:max-w-screen-md h-screen w-full p-4 md:p-0 m-auto flex items-center justify-center">

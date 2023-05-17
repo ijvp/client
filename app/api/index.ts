@@ -2,7 +2,6 @@ import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { endOfToday, startOfToday } from "date-fns";
 import { Granularity } from "~/ts/enums";
-import { StoreIntervalQuery } from "~/ts/types";
 import { parseDateString } from "~/utils/date";
 
 const api: AxiosInstance = axios.create({
@@ -41,7 +40,6 @@ export const fetchShopifyOrders = async (request: Request, user) => {
 				Cookie: cookie
 			}
 		});
-		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		console.log(error.data);

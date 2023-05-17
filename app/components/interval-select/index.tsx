@@ -1,13 +1,13 @@
-import { MouseEvent, ReactNode, useEffect, useMemo } from "react";
+import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useMemo } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { useCallback, useState } from "react";
-import { endOfToday, startOfToday, subDays, subWeeks, subMonths, subYears, startOfYear, getMonth, getYear, differenceInDays, getDate } from "date-fns";
+import { endOfToday, startOfToday, subDays, subWeeks, subMonths, subYears, getMonth, getYear, startOfDay, } from "date-fns";
 import { DatePicker } from "@shopify/polaris";
-import { endDateAtom, startDateAtom } from "~/utils/atoms";
-import { useAtom } from "jotai";
 import { formatDate, formatDateLabel, parseDateString } from "~/utils/date";
 import { Link, useSearchParams } from "@remix-run/react";
 import styles from "./styles.css";
+import { endOfDay } from "date-fns";
 
 type ClickHandler = (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 
@@ -62,11 +62,11 @@ function IntervalOptionButton({ selected, children, onClick, start, end }: Inter
 
 const options = [
 	{ label: 'Hoje', value: { start: startOfToday(), end: endOfToday() } },
-	{ label: 'Ontem', value: { start: subDays(startOfToday(), 1), end: subDays(startOfToday(), 1) } },
-	{ label: 'Últimos 7 dias', value: { start: subWeeks(startOfToday(), 1), end: startOfToday() } },
-	{ label: 'Ultimos 14 dias', value: { start: subWeeks(startOfToday(), 2), end: startOfToday() } },
-	{ label: 'Últimos 30 dias', value: { start: subMonths(startOfToday(), 1), end: startOfToday() } },
-	{ label: 'Último ano', value: { start: subYears(startOfToday(), 1), end: startOfToday() } },
+	{ label: 'Ontem', value: { start: subDays(startOfToday(), 1), end: subDays(endOfToday(), 1) } },
+	{ label: 'Últimos 7 dias', value: { start: subWeeks(startOfToday(), 1), end: endOfToday() } },
+	{ label: 'Ultimos 14 dias', value: { start: subWeeks(startOfToday(), 2), end: endOfToday() } },
+	{ label: 'Últimos 30 dias', value: { start: subMonths(startOfToday(), 1), end: endOfToday() } },
+	{ label: 'Último ano', value: { start: subYears(startOfToday(), 1), end: endOfToday() } },
 ];
 
 interface DateRange {
@@ -121,8 +121,8 @@ export default function IntervalSelect() {
 	useEffect(() => {
 		if (start && end) {
 			const index = options.findIndex(option =>
-				option.value.start.toLocaleString() === parseDateString(start).toLocaleString() &&
-				option.value.end.toLocaleString() === parseDateString(end).toLocaleString());
+				option.value.start.toLocaleString() === startOfDay(parseDateString(start)).toLocaleString() &&
+				option.value.end.toLocaleString() === endOfDay(parseDateString(end)).toLocaleString());
 			index > -1 ? setSelectedIndex(index) : setSelectedIndex(options.length);
 		} else {
 			setSelectedIndex(0);

@@ -34,7 +34,7 @@ export default function App() {
             single: ["#5B4EEE"]
           },
           chartContainer: {
-            backgroundColor: "#1f1c3c",
+            backgroundColor: "#FF000000",
           }
         }
       }}>
