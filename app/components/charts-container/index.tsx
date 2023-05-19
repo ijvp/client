@@ -103,7 +103,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const calculateTotalROAs = (revenue: number, investment: number) => {
 		const ratio = revenue / investment;
-		return (isNaN(ratio) || !isFinite(ratio)) ? 0 : ratio.toFixed(2);
+		return (isNaN(ratio) || !isFinite(ratio) || ratio < 0) ? 0 : ratio.toFixed(2);
 	};
 
 	const adsInvestments = combineArraysSafely(combineArraysSafely(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown));
