@@ -1,6 +1,9 @@
 import type { LinksFunction } from "@remix-run/node";
+import { useSearchParams } from "@remix-run/react";
 import type { DataPoint } from "@shopify/polaris-viz";
 import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
+import { parseDateString, sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
+import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import styles from "./styles.css";
 import { sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
 import { getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
@@ -25,6 +28,11 @@ function combineArraysSafely(...arrays: any[]) {
 }
 
 export default function ChartsContainer({ orders, googleAds, facebookAds }) {
+	const [searchParams] = useSearchParams();
+	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+	const daysInterval = differenceInDays(end, start);
+
 	const calculateNetProfit = (revenueData, adsData): DataPoint[] => {
 		const netProfitData: DataPoint[] = [];
 
@@ -65,6 +73,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return Array.from(Object.entries(investmentsData)).map(item => { return { key: item[0], value: item[1] } });
 	};
 
+	//TODO: consertar para quando ha apenas um item no array
 	const fillMissingHours = (dataArray): DataPoint[] => {
 		if (dataArray.length) {
 			const filledArray = [];

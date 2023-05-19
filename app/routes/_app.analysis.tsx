@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
+import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { Suspense } from "react";
 import { defer } from "react-router-dom";
 import PageTitle from "~/components/page-title";
@@ -11,7 +11,7 @@ import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
 import { fetchShopifyOrders, fetchGoogleAdsInvestment, fetchFacebookAdsInvestment } from "~/api";
 import { checkAuth } from "~/api/helpers";
-
+import ChartsSkeleton from "~/components/charts-skeleton";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -43,6 +43,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Analysis() {
 	const loaderData = useLoaderData();
+	const navigation = useNavigation();
 
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
@@ -59,11 +60,15 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<Suspense fallback={<div>Carregando...</div>}>
+			<Suspense fallback={<ChartsSkeleton />}>
 				<Await resolve={loaderData.data}>
-					{([orders, googleAds, facebookAds]) => (
-						<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />
-					)}
+					{([orders, googleAds, facebookAds]) =>
+						navigation.state === "idle" ?
+							(< ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />)
+							: navigation.state === "loading" ?
+								<ChartsSkeleton />
+								: null
+					}
 				</Await>
 			</Suspense >
 		</>

@@ -9,12 +9,14 @@ export const links: LinksFunction = () => [
 ];
 
 interface LineChartProps {
-	data: DataPoint[],
-	title: string,
-	value: number | string,
-	prefix?: string
-}
-export default function LineChart({ data, title, value, prefix }: LineChartProps) {
+	data?: DataPoint[],
+	title?: string,
+	value?: number | string,
+	prefix?: string,
+	skeleton?: boolean
+};
+
+export default function LineChart({ data, title, value, prefix, skeleton }: LineChartProps) {
 	const [render, setRender] = useState(false);
 
 	useEffect(() => {
@@ -32,6 +34,7 @@ export default function LineChart({ data, title, value, prefix }: LineChartProps
 			bg-black-bg
 			border border-black-secondary box-border
 			flex flex-col gap-2
+			overflow-clip
 		">
 			<div
 				className="
@@ -45,14 +48,20 @@ export default function LineChart({ data, title, value, prefix }: LineChartProps
 					rounded-full
 				"
 			/>
-			{render && <SparkLineChart data={[{ data: data }]} />}
-			<div className="h-16 absolute bottom-4">
-				<p className="text-white font-semibold">
-					{title}:
-					<br />
-					<span className="h h5">{prefix}{value}</span>
-				</p>
-			</div >
+			{skeleton ?
+				(<div className="skeleton-effect">
+				</div>)
+				: (
+					<>
+						{render && <SparkLineChart data={[{ data: data }]} />}
+						<div className="h-16 absolute bottom-4">
+							<p className="text-white font-semibold">
+								{title}:
+								<br />
+								<span className="h h5">{prefix}{value}</span>
+							</p>
+						</div >
+					</>)}
 		</div >
 	);
 }

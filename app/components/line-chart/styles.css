@@ -19,3 +19,32 @@
 	top: 50%;
 	opacity: 1;
 }
+
+.skeleton-effect:before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 8px;
+	background: linear-gradient(
+		to top left,
+		transparent 33%,
+		var(--black-bg) 45%,
+		var(--black-secondary) 50%,
+		transparent 70%
+	);
+	background-size: 300% 300%; /* Increase size for smooth movement */
+	background-repeat: no-repeat;
+	animation: gradient 2s infinite linear;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 100% 100%; /* Start from bottom right */
+	}
+	100% {
+		background-position: 0% 0%; /* Move to top left */
+	}
+}
