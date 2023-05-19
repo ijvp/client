@@ -1,8 +1,10 @@
 import type { LinksFunction } from "@remix-run/node";
+import { useSearchParams } from "@remix-run/react";
 import type { DataPoint } from "@shopify/polaris-viz";
 import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
+import { parseDateString, sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
+import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import styles from "./styles.css";
-import { sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
@@ -24,6 +26,11 @@ function combineArraysSafely(...arrays: any[]) {
 }
 
 export default function ChartsContainer({ orders, googleAds, facebookAds }) {
+	const [searchParams] = useSearchParams();
+	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+	const daysInterval = differenceInDays(end, start);
+
 	const calculateNetProfit = (revenueData, adsData): DataPoint[] => {
 		const netProfitData: DataPoint[] = [];
 
@@ -64,6 +71,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return Array.from(Object.entries(investmentsData)).map(item => { return { key: item[0], value: item[1] } });
 	};
 
+	//TODO: consertar para quando ha apenas um item no array
 	const fillMissingHours = (dataArray): DataPoint[] => {
 		if (dataArray.length) {
 			const filledArray = [];
@@ -113,10 +121,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const profitData = calculateNetProfit(orders?.metricsBreakdown, investmentsData).sort(sortMetricsByDate);
 	const netProfit = profitData.reduce((accumulator, current) => accumulator + current.value, 0).toFixed(2);
 
-	const ordersData = fillMissingHours(orders?.metricsBreakdown.map(order => { return { key: order.date, value: order.count } }).sort(sortMetricsByDate));
+	const sortedOrders = orders?.metricsBreakdown
+		.map(order => { return { key: order.date, value: order.count } })
+		.sort(sortMetricsByDate);
+	const ordersData = daysInterval > 0 ? sortedOrders : fillMissingHours(sortedOrders); //verifica o tamanho do intervalo de tempo para determinar a quantidade de pontos que vao ser passados para o grafico
 	const totalOrders = ordersData.reduce((sum, order) => sum + order.value, 0);
 
-	const roas = calculateTotalROAs(parseFloat(netProfit), parseFloat(totalInvested));
+	const totalRevenue = orders?.metricsBreakdown.reduce((sum, metric) => sum + metric.value, 0);
+	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
 	const roasData = investmentsData.map(investment => {
 		let ratio = orders?.metricsBreakdown.find(item => item.date === investment.key)?.value || 0 / investment.value;
 		return {
