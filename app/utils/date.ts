@@ -35,8 +35,12 @@ export const formatDateLabel = (date: Date) => {
 };
 
 //expects yyyy-mm-ddThh
-export const standardizeMetricDate = (date) => {
-	return new Date(date + ":00:00");
+//returns date without offset
+export const standardizeMetricDate = (dateString: string) => {
+	const date = new Date(dateString + ":00:00");
+	const offset = date.getTimezoneOffset();
+	date.setMinutes(date.getMinutes() - offset);
+	return date;
 }
 
 //expects yyyy-mm-ddThh for both keys otherwise wont work

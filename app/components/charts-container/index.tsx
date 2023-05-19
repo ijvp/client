@@ -1,12 +1,12 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useSearchParams } from "@remix-run/react";
 import type { DataPoint } from "@shopify/polaris-viz";
+import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
 import { parseDateString, sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
-import { startOfToday, endOfToday, differenceInDays } from "date-fns";
-import styles from "./styles.css";
-import { sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
 import { getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
+import styles from "./styles.css";
+
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
@@ -73,42 +73,38 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return Array.from(Object.entries(investmentsData)).map(item => { return { key: item[0], value: item[1] } });
 	};
 
-	//TODO: consertar para quando ha apenas um item no array
-	const fillMissingHours = (dataArray): DataPoint[] => {
-		if (dataArray.length) {
-			const filledArray = [];
+	const fillMissingHours = (dataArray: DataPoint[]): DataPoint[] => {
+		const filledArray: DataPoint[] = [];
 
-			// Get the minimum and maximum dates from the array
+		if (dataArray.length) {
 			const minDate = standardizeMetricDate(dataArray[0].key);
 			const maxDate = standardizeMetricDate(dataArray[dataArray.length - 1].key);
 
-			// Adjust the minimum and maximum dates based on the local timezone offset
-			const minDateOffset = minDate.getTimezoneOffset();
-			const maxDateOffset = maxDate.getTimezoneOffset();
-			minDate.setMinutes(minDate.getMinutes() - minDateOffset);
-			maxDate.setMinutes(maxDate.getMinutes() - maxDateOffset);
-
-			// Iterate over each hour between the minimum and maximum dates
+			// Iterate over each day between the minimum and maximum dates
 			let currentDate = new Date(minDate);
 			while (currentDate <= maxDate) {
-				const key = currentDate.toISOString().slice(0, 13);
+				// Iterate over each hour of the day
+				for (let hour = 0; hour < 24; hour++) {
+					// Create the key for the current hour
+					currentDate.setUTCHours(hour);
+					const month = (currentDate.getUTCMonth() + 1).toString().length > 1 ? currentDate.getUTCMonth() + 1 : (currentDate.getUTCMonth() + 1).toString().padStart(2, "0");
+					const hours = currentDate.getUTCHours().toString().length > 1 ? currentDate.getUTCHours() : currentDate.getUTCHours().toString().padStart(2, "0");
+					const key = `${currentDate.getUTCFullYear()}-${month}-${currentDate.getUTCDate()}T${hours}`;
 
-				// Check if the current hour exists in the original array
-				const existingData = dataArray.find((data) => data.key === key);
-				if (existingData) {
-					filledArray.push(existingData);
-				} else {
-					filledArray.push({ key, value: 0 });
+					const existingData = dataArray.find((data) => data.key === key);
+					if (existingData) {
+						filledArray.push(existingData);
+					} else {
+						filledArray.push({ key, value: 0 });
+					}
 				}
 
-				// Move to the next hour
-				currentDate.setHours(currentDate.getHours() + 1);
+				// Move to the next day
+				currentDate.setDate(currentDate.getDate() + 1);
 			}
-
-			return filledArray;
-		} else {
-			return [];
 		}
+
+		return filledArray;
 	};
 
 	const calculateTotalROAs = (revenue: number, investment: number) => {
@@ -116,18 +112,20 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return (isNaN(ratio) || !isFinite(ratio) || ratio < 0) ? 0 : ratio.toFixed(2);
 	};
 
-	const adsInvestments = combineArraysSafely(combineArraysSafely(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown));
-	const investmentsData = aggregateInvestments(adsInvestments).sort(sortMetricsByDate);
-	const totalInvested = getTotalValue(investmentsData);
-
 	const revenueData = getRevenueFromOrderMetrics(orders.metricsBreakdown);
-	const totalRevenue = getTotalValue(revenueData);
+	const revenueDataSeries = daysInterval ? revenueData : fillMissingHours(revenueData);
+	const totalRevenue = getTotalValue(revenueDataSeries);
 
-	const ordersData = getCountFromOrderMetrics(orders.metricsBreakdown);
-	const totalOrders = getTotalValue(ordersData, 0);
+	const ordersData = getCountFromOrderMetrics(orders.metricsBreakdown)
+	const ordersDataSeries = daysInterval ? ordersData : fillMissingHours(ordersData);
+	const totalOrders = getTotalValue(ordersDataSeries, 0);
+
+	const adsInvestments = combineArraysSafely(combineArraysSafely(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown));
+	const investmentsDataSeries = aggregateInvestments(adsInvestments).sort(sortMetricsByDate);
+	const totalInvested = getTotalValue(investmentsDataSeries);
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
-	const roasData = investmentsData.map(investment => {
+	const roasDataSeries = investmentsDataSeries.map(investment => {
 		let ratio = orders?.metricsBreakdown.find(item => item.date === investment.key)?.value || 0 / investment.value;
 		return {
 			key: investment.key,
@@ -141,23 +139,23 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				title="Faturamento"
 				prefix="R$"
 				value={totalRevenue}
-				data={revenueData}
+				data={revenueDataSeries}
 			/>
 			<LineChart
 				title="Quantidade de pedidos"
 				value={totalOrders}
-				data={ordersData}
+				data={ordersDataSeries}
 			/>
 			<LineChart
 				title="Valor investido"
 				prefix="R$"
 				value={totalInvested}
-				data={investmentsData}
+				data={investmentsDataSeries}
 			/>
 			<LineChart
 				title="ROAs"
 				value={roas}
-				data={roasData}
+				data={roasDataSeries}
 			/>
 		</div>
 	)
