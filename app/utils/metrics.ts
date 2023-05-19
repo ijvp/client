@@ -19,18 +19,22 @@ export const getTotalValue = (data: any[], precision = 2) => {
 export const blendAdsMetrics = (...arrays) => {
 	const adsMap = {};
 
-	arrays.forEach((array) => {
-		array.forEach((item) => {
-			const date = item.date;
-			const spend = item.metrics?.spend || 0;
+	if (arrays) {
+		arrays.forEach((array) => {
+			if (array) {
+				array.forEach((item) => {
+					const date = item.date;
+					const spend = item.metrics?.spend || 0;
 
-			if (date in adsMap) {
-				adsMap[date] += spend;
-			} else {
-				adsMap[date] = spend;
+					if (date in adsMap) {
+						adsMap[date] += spend;
+					} else {
+						adsMap[date] = spend;
+					}
+				});
 			}
 		});
-	});
+	}
 
 	const blended = Object.entries(adsMap).map(([key, value]) => ({ key, value }));
 	return sortMetricsData(blended);

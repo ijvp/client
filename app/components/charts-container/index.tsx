@@ -8,7 +8,6 @@ import { blendAdsMetrics, getCountFromOrderMetrics, getRevenueFromOrderMetrics, 
 import styles from "./styles.css";
 import StackedBarChart from "../bar-chart";
 
-
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
 	...lineChartLinks()
@@ -106,11 +105,11 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 			<StackedBarChart
 				series={
 					[
-						{
+						!!facebookAds?.id && {
 							name: facebookAds.id,
 							data: blendAdsMetrics(facebookAds.metricsBreakdown)
 						},
-						{
+						!!googleAds?.id && {
 							name: googleAds.id,
 							data: blendAdsMetrics(googleAds.metricsBreakdown)
 						}
