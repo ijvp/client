@@ -3,6 +3,7 @@ import type { DataPoint } from "@shopify/polaris-viz";
 import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
 import styles from "./styles.css";
 import { sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
+import { getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
@@ -108,15 +109,15 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const adsInvestments = combineArraysSafely(combineArraysSafely(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown));
 	const investmentsData = aggregateInvestments(adsInvestments).sort(sortMetricsByDate);
-	const totalInvested = investmentsData.reduce((sum, investment) => sum + investment.value, 0).toFixed(2);
+	const totalInvested = getTotalValue(investmentsData);
 
-	const profitData = calculateNetProfit(orders?.metricsBreakdown, investmentsData).sort(sortMetricsByDate);
-	const netProfit = profitData.reduce((accumulator, current) => accumulator + current.value, 0).toFixed(2);
+	const revenueData = getRevenueFromOrderMetrics(orders.metricsBreakdown);
+	const totalRevenue = getTotalValue(revenueData);
 
-	const ordersData = fillMissingHours(orders?.metricsBreakdown.map(order => { return { key: order.date, value: order.count } }).sort(sortMetricsByDate));
-	const totalOrders = ordersData.reduce((sum, order) => sum + order.value, 0);
+	const ordersData = getCountFromOrderMetrics(orders.metricsBreakdown);
+	const totalOrders = getTotalValue(ordersData, 0);
 
-	const roas = calculateTotalROAs(parseFloat(netProfit), parseFloat(totalInvested));
+	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
 	const roasData = investmentsData.map(investment => {
 		let ratio = orders?.metricsBreakdown.find(item => item.date === investment.key)?.value || 0 / investment.value;
 		return {
@@ -128,10 +129,10 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto items-stretch gap-4 w-fit">
 			<LineChart
-				title="Lucro"
+				title="Faturamento"
 				prefix="R$"
-				value={netProfit}
-				data={profitData}
+				value={totalRevenue}
+				data={revenueData}
 			/>
 			<LineChart
 				title="Quantidade de pedidos"
