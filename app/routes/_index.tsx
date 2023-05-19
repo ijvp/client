@@ -7,6 +7,6 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (authenticated) {
     return redirect("/analysis");
   } else {
-    return redirect("/logout")
+    return redirect("/login")
   }
 };

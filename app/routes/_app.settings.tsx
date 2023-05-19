@@ -69,7 +69,7 @@ export const action = async ({ request }: ActionArgs) => {
 		);
 		return json({ ...response.data });
 	} catch (error) {
-		return json(error.response.data);
+		return json(error.response?.data);
 	};
 };
 

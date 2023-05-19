@@ -10,7 +10,7 @@ export const action = async ({ request }: ActionArgs) => {
 		await api.get("/auth/logout", { headers: { Cookie: cookie } });
 		return redirect("/login");
 	} catch (error) {
-		console.log(error.response.data);
+		console.log(error.response?.data);
 	};
 
 	if (authenticated) {
@@ -25,6 +25,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 	if (authenticated) {
 		return redirect("/analysis");
 	} else {
-		return redirect("/logout")
+		return redirect("/login");
 	}
 };

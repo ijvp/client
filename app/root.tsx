@@ -31,7 +31,8 @@ export default function App() {
       <PolarisVizProvider themes={{
         Default: {
           seriesColors: {
-            single: ["#5B4EEE"]
+            single: "#5B4EEE",
+            upToFour: ["#5B4EEE", "#EAB308", "#C052F3", "#2EE79F", "#EA477B"]
           },
           chartContainer: {
             backgroundColor: "#FF000000",

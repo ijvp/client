@@ -3,9 +3,10 @@ import { useSearchParams } from "@remix-run/react";
 import type { DataPoint } from "@shopify/polaris-viz";
 import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
-import { parseDateString, sortMetricsByDate, standardizeMetricDate } from "~/utils/date";
-import { getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
+import { parseDateString, standardizeMetricDate } from "~/utils/date";
+import { blendAdsMetrics, getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
 import styles from "./styles.css";
+import StackedBarChart from "../bar-chart";
 
 
 export const links: LinksFunction = () => [
@@ -13,65 +14,11 @@ export const links: LinksFunction = () => [
 	...lineChartLinks()
 ];
 
-function combineArraysSafely(...arrays: any[]) {
-	const result = [];
-
-	for (const array of arrays) {
-		if (array) {
-			for (const item of array) {
-				result.push(item);
-			}
-		}
-	}
-
-	return result;
-}
-
 export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const [searchParams] = useSearchParams();
 	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
 	const daysInterval = differenceInDays(end, start);
-
-	const calculateNetProfit = (revenueData, adsData): DataPoint[] => {
-		const netProfitData: DataPoint[] = [];
-
-		// Create a map of ad spend data indexed by date
-		const adsMap = adsData.reduce((map, { key, value }) => {
-			map[key] = value;
-			return map;
-		}, {});
-
-		// Calculate net profit for each date in revenueData
-		revenueData.forEach(({ date, value }) => {
-			const adSpend = adsMap[date] || 0;
-			const netProfit = value - adSpend;
-			netProfitData.push({ key: date, value: netProfit });
-		});
-
-		// Add missing dates from adsData
-		adsData.forEach(({ key, value }) => {
-			if (!revenueData.some(({ date: revenueDate }) => revenueDate === key)) {
-				netProfitData.push({ key: key, value: -value });
-			}
-		});
-
-		return netProfitData;
-	};
-
-	const aggregateInvestments = (adsData): DataPoint[] => {
-		const investmentsData = {};
-
-		adsData.forEach(ad => {
-			if (investmentsData[ad.date]) {
-				investmentsData[ad.date] += ad.metrics.spend
-			} else {
-				investmentsData[ad.date] = ad.metrics.spend
-			}
-		});
-
-		return Array.from(Object.entries(investmentsData)).map(item => { return { key: item[0], value: item[1] } });
-	};
 
 	const fillMissingHours = (dataArray: DataPoint[]): DataPoint[] => {
 		const filledArray: DataPoint[] = [];
@@ -120,8 +67,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const ordersDataSeries = daysInterval ? ordersData : fillMissingHours(ordersData);
 	const totalOrders = getTotalValue(ordersDataSeries, 0);
 
-	const adsInvestments = combineArraysSafely(combineArraysSafely(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown));
-	const investmentsDataSeries = aggregateInvestments(adsInvestments).sort(sortMetricsByDate);
+	const investmentsDataSeries = blendAdsMetrics(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown);
 	const totalInvested = getTotalValue(investmentsDataSeries);
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
@@ -142,21 +88,34 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				data={revenueDataSeries}
 			/>
 			<LineChart
-				title="Quantidade de pedidos"
-				value={totalOrders}
-				data={ordersDataSeries}
-			/>
-			<LineChart
 				title="Valor investido"
 				prefix="R$"
 				value={totalInvested}
 				data={investmentsDataSeries}
 			/>
 			<LineChart
+				title="Quantidade de pedidos"
+				value={totalOrders}
+				data={ordersDataSeries}
+			/>
+			<LineChart
 				title="ROAs"
 				value={roas}
 				data={roasDataSeries}
 			/>
+			<StackedBarChart
+				series={
+					[
+						{
+							name: facebookAds.id,
+							data: blendAdsMetrics(facebookAds.metricsBreakdown)
+						},
+						{
+							name: googleAds.id,
+							data: blendAdsMetrics(googleAds.metricsBreakdown)
+						}
+					]
+				} />
 		</div>
 	)
 }

@@ -16,3 +16,22 @@ export const getTotalValue = (data: any[], precision = 2) => {
 	return data.reduce((sum, item) => sum + item.value, 0).toFixed(precision);
 };
 
+export const blendAdsMetrics = (...arrays) => {
+	const adsMap = {};
+
+	arrays.forEach((array) => {
+		array.forEach((item) => {
+			const date = item.date;
+			const spend = item.metrics?.spend || 0;
+
+			if (date in adsMap) {
+				adsMap[date] += spend;
+			} else {
+				adsMap[date] = spend;
+			}
+		});
+	});
+
+	const blended = Object.entries(adsMap).map(([key, value]) => ({ key, value }));
+	return sortMetricsData(blended);
+};
