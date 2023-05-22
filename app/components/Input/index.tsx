@@ -9,11 +9,14 @@ interface InputProps {
 	defaultValue?: string;
 	value?: string;
 	autocomplete?: string;
+	onBlur?: ChangeHandler,
 	onChange?: ChangeHandler,
+	onFocus?: ChangeHandler,
 	disabled?: boolean,
 	icon?: string,
 	ariaInvalid?: boolean,
 	ariaErrorMessage?: string
+	className?: string
 	// debounceDelay?: number;
 };
 
@@ -25,10 +28,13 @@ export default function Input({
 	value,
 	autocomplete,
 	onChange,
+	onBlur,
+	onFocus,
 	disabled = false,
 	icon,
 	ariaInvalid,
-	ariaErrorMessage
+	ariaErrorMessage,
+	className
 }: InputProps) {
 	// const debouncedOnChange = debounce(onChange, debounceDelay);
 
@@ -45,19 +51,25 @@ export default function Input({
 				defaultValue={defaultValue}
 				value={value}
 				autoComplete={autocomplete}
+				onBlur={onBlur}
 				onChange={onChange}
+				onFocus={onFocus}
 				disabled={disabled}
 				aria-invalid={ariaInvalid}
 				aria-errormessage={ariaErrorMessage}
-				className="
-				w-full h-[60px]
-				bg-black-secondary 
-				rounded-lg 
-				px-6 py-4
-				box-border
-				focus:border focus:border-solid focus:border-purple
-				focus-visible:outline-none
-			"/>
+				className={`
+					w-full h-[60px]
+					rounded-lg 
+					px-6 py-4
+					box-border
+					bg-black-secondary 
+					focus:border 
+					focus:border-solid 
+					focus:border-purple
+					focus-visible:outline-none
+					${className}`
+				}
+			/>
 			{icon && (
 				<img
 					src={`/icons/${icon}`}

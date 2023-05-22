@@ -1,9 +1,17 @@
 import type { MouseEvent } from "react";
-import { useEffect, useState } from "react";
-import { Link, useLocation, useSearchParams } from "@remix-run/react";
-import { formatStoreName } from "~/utils/store";
+import type { LinksFunction } from "@remix-run/node";
+import styles from "./styles.css";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { useAtom } from "jotai";
+import { formatStoreName } from "~/utils/store";
+import AddShopModal, { links as addShopModalLinks } from "../add-shop-modal";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useSearchParams } from "@remix-run/react";
+
+export const links: LinksFunction = () => [
+	{ rel: "stylesheet", href: styles },
+	...addShopModalLinks()
+];
 
 export default function StoreSelect() {
 	const location = useLocation();
@@ -11,6 +19,7 @@ export default function StoreSelect() {
 	const storeId = searchParams.get("store");
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [open, setOpen] = useState(false);
 
 	const handleClick = () => {
@@ -18,8 +27,12 @@ export default function StoreSelect() {
 	};
 
 	const handleOpenStoreModal = (event: MouseEvent<HTMLButtonElement>) => {
-		event.stopPropagation(); // Prevent the dropdown from closing
-		console.log("opening modal...");
+		// event.stopPropagation(); //impede que o dropdown de fechar
+		setIsModalOpen(true);
+	};
+
+	const handleCloseStoreModel = () => {
+		setIsModalOpen(false);
 	};
 
 	const addStoreButton = (
@@ -54,6 +67,7 @@ export default function StoreSelect() {
 
 	const selectedStoreMarkdown = (
 		<div
+			onClick={handleClick}
 			className={`w-full flex items-center justify-between py-4 ${open ? "font-semibold" : ""
 				}`}
 		>
@@ -86,7 +100,7 @@ export default function StoreSelect() {
 
 	return (
 		<div
-			onClick={handleClick}
+			// onClick={handleClick}
 			className={`w-full flex flex-col items-center px-6 border border-solid border-black-secondary rounded-lg cursor-pointer ${open ? "menu--expanded" : "menu"
 				}`}
 		>
@@ -95,6 +109,16 @@ export default function StoreSelect() {
 				<div className="w-full">
 					{storeOptionsMarkdown}
 					{addStoreButton}
+				</div>
+			)}
+
+			{isModalOpen && (
+				<div className="modal-overlay">
+					<div className="modal">
+						<AddShopModal
+							onClickCloseStoreModel={handleCloseStoreModel}
+						/>
+					</div>
 				</div>
 			)}
 		</div>

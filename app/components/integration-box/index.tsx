@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { storeIndexAtom, storesAtom } from "~/utils/atoms";
 import IntegrationButton from "../integration-button";
 
-export default function IntegrationBox({ name, connected, id }: { name: string, id: string, connected: boolean }) {
+export default function IntegrationBox({ name, validation, id, locked }: { name: string, validation:string, id: string, locked: boolean }) {
     const [isConnected, setIsConnected] = useState(false)
+    const [stores, setStores] = useAtom(storesAtom);
+    const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 
     const handleConnectionChange = (connectionState: boolean) => {
         setIsConnected(connectionState)
     }
+
+    useEffect(() => {
+        setIsConnected(!!stores[selectedIndex]?.[validation])
+	}, [selectedIndex, validation, stores]);
 
     return (
         <div className="flex flex-row bg-black-bg border border-solid border-black-secondary rounded px-6 py-10 max-w-min text-white justify-between min-w-full">
@@ -18,8 +26,11 @@ export default function IntegrationBox({ name, connected, id }: { name: string, 
                 <div className={`w-4 h-4 ${isConnected === true ? 'bg-green-light' : 'bg-red-light'} rounded-full`}></div>
             </div>
             <IntegrationButton
-                connected={connected}
+                connected={isConnected}
+                locked={locked}
                 onConnectionChange={handleConnectionChange}
+                storeName={stores[selectedIndex]?.name}
+                storeintegrationId={id}
             />
         </div>
     )
