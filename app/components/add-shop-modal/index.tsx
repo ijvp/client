@@ -72,12 +72,13 @@ export default function AddShopModal({ onClickCloseStoreModel }: AddShopModalPro
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
+
     const formFields = new FormData(event.target);
 
     const response = await fetch("/addshopmodal", {
-        method: "POST",
-        body: formFields
+      method: "POST",
+      body: formFields
     });
 
     setResponseData(response);
@@ -87,10 +88,11 @@ export default function AddShopModal({ onClickCloseStoreModel }: AddShopModalPro
 
 
   return (
-    <Overlay>
+    <Overlay onClick={onClickCloseStoreModel}>
       <Form
         id="add-store-form"
         method="post"
+        onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         className="
           animated-form
