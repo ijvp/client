@@ -21,10 +21,10 @@ interface LinkProps {
 
 function SidebarLink({ label, link, src, alt }: LinkProps) {
 	const [searchParams] = useSearchParams();
-
+	const store = searchParams.get("store");
 	return (
 		<NavLink
-			to={{ pathname: link, search: new URLSearchParams(searchParams).toString() }}
+			to={{ pathname: link, search: store ? `?store=${store}` : "" }}
 			className={({ isActive, isPending }) =>
 				isActive ? "flex items-center p-4 h-[60px] w-full bg-black-secondary rounded-lg text-white" : "flex items-center p-4 h-[60px] w-full rounded-lg text-gray"
 			}>

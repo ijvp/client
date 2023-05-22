@@ -124,7 +124,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 								]
 							}
 						]}
-						labelFormatter={(y) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(y)}
+						labelFormatter={(y) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }).format(y)}
 					/>
 				</div>
 			</SimpleChart>

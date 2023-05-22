@@ -1,9 +1,10 @@
+import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { Form } from "@remix-run/react";
 import Overlay from "../overlay";
 import SubmitButton from "../submit-button";
 import styles from "./styles.css";
-import type { LinksFunction } from "@remix-run/node";
+
 
 export interface IAccounts {
   id: number;
@@ -43,7 +44,7 @@ export default function AccountSelect(data: data2) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.stopPropagation()
     event.preventDefault()
-
+    console.log(event.target);
     const formFields = new FormData(event.target);
 
     const response = await fetch("/integrations", {
@@ -77,6 +78,7 @@ export default function AccountSelect(data: data2) {
               flex flex-col gap-8
             "
             method="post"
+            onClick={(e) => e.stopPropagation()}
             onSubmit={handleSubmit}
             action="/integrations"
           >
@@ -107,7 +109,7 @@ export default function AccountSelect(data: data2) {
                 ))}
               </div>
             </div>
-            <SubmitButton label="Conectar" onClick={handleSubmit} />
+            <SubmitButton label="Conectar" />
           </Form>
         </Overlay>
         :

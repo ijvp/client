@@ -9,8 +9,10 @@ import { checkAuth } from "~/api/helpers";
 import AccountSelect, { links as accountSelectLinks } from "~/components/account-select";
 import IntegrationsContainer from "~/components/integrations-container";
 import PageTitle from "~/components/page-title";
-import { links as sidebarLinks } from "~/components/Sidebar";
+import { links as sidebarLinks } from "~/components/sidebar";
 import { storeIndexAtom, storesAtom } from "~/utils/atoms";
+
+
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Integrações" }];
 };
