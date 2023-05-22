@@ -1,7 +1,7 @@
 import type { LinksFunction } from "@remix-run/node";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import type { DataPoint } from '@shopify/polaris-viz';
-import { SparkLineChart } from '@shopify/polaris-viz';
+import { LineChart } from '@shopify/polaris-viz';
 import styles from "./styles.css";
 
 export const links: LinksFunction = () => [
@@ -13,10 +13,11 @@ interface LineChartProps {
 	title?: string,
 	value?: number | string,
 	prefix?: string,
-	skeleton?: boolean
+	skeleton?: boolean,
+	children: ReactNode
 };
 
-export default function LineChart({ data, title, value, prefix, skeleton }: LineChartProps) {
+export default function SimpleChart({ data, title, value, prefix, skeleton, xAxisOptions, yAxisOptions, children }: LineChartProps) {
 	const [render, setRender] = useState(false);
 
 	useEffect(() => {
@@ -26,18 +27,19 @@ export default function LineChart({ data, title, value, prefix, skeleton }: Line
 	}, []);
 
 	return (
-		<div
-			className="
+		<>
+			<div
+				className="
 			nodge
-			w-[356px] h-[238px]
-			p-4 pb-24 rounded-lg
+			w-[354px] h-[165px]
+			py-4 pb-24 rounded-lg
 			bg-black-bg
-			border border-black-secondary box-border
+			border border-black-secondary box-content
 			flex flex-col gap-2
 			overflow-clip
 		">
-			<div
-				className="
+				<div
+					className="
 					absolute
 					z-0
 					top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
@@ -47,21 +49,38 @@ export default function LineChart({ data, title, value, prefix, skeleton }: Line
 					blur-[115px]
 					rounded-full
 				"
-			/>
-			{skeleton ?
-				(<div className="skeleton-effect">
-				</div>)
-				: (
-					<>
-						{render && <SparkLineChart data={[{ data: data }]} />}
-						<div className="h-16 absolute bottom-4">
-							<p className="text-white font-semibold">
-								{title}:
-								<br />
-								<span className="h h5">{prefix}{value}</span>
-							</p>
-						</div >
-					</>)}
-		</div >
+				/>
+				{skeleton ?
+					(<div className="skeleton-effect">
+					</div>)
+					: (
+						<>
+							{render &&
+								<LineChart
+									data={[{ name: title, data: data }]}
+									xAxisOptions={{ ...xAxisOptions, hide: true }}
+									yAxisOptions={yAxisOptions}
+									showLegend={false}
+								/>
+							}
+							<div className="h-16 absolute bottom-2 left-4">
+								<p className="text-white font-semibold">
+									{title}:
+									<br />
+									<span className="h h5">{prefix}{value}</span>
+								</p>
+							</div >
+						</>)}
+			</div>
+			{children ? (
+				<>
+					has children
+				</>
+			) : (
+				<>
+					no child
+				</>
+			)}
+		</>
 	);
 }

@@ -2,7 +2,7 @@ import type { LinksFunction } from "@remix-run/node";
 import { useSearchParams } from "@remix-run/react";
 import type { DataPoint } from "@shopify/polaris-viz";
 import { startOfToday, endOfToday, differenceInDays } from "date-fns";
-import LineChart, { links as lineChartLinks } from "~/components/line-chart/index";
+import SimpleChart, { links as SimpleChartLinks } from "~/components/line-chart/index";
 import { parseDateString, standardizeMetricDate } from "~/utils/date";
 import { blendAdsMetrics, getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
 import styles from "./styles.css";
@@ -10,7 +10,7 @@ import StackedBarChart from "../bar-chart";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
-	...lineChartLinks()
+	...SimpleChartLinks()
 ];
 
 export default function ChartsContainer({ orders, googleAds, facebookAds }) {
@@ -80,30 +80,31 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto items-stretch gap-4 w-fit">
-			<LineChart
+			<SimpleChart
 				title="Faturamento"
-				prefix="R$"
-				value={totalRevenue}
+				value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRevenue)}
 				data={revenueDataSeries}
+				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 			/>
-			<LineChart
+			<SimpleChart
 				title="Valor investido"
-				prefix="R$"
-				value={totalInvested}
+				value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalInvested)}
 				data={investmentsDataSeries}
+				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 			/>
-			<LineChart
-				title="Quantidade de pedidos"
+			<SimpleChart
+				title="Pedidos"
 				value={totalOrders}
 				data={ordersDataSeries}
+				yAxisOptions={{ integersOnly: true }}
 			/>
-			<LineChart
+			<SimpleChart
 				title="ROAs"
-				value={roas}
+				value={new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(parseFloat(roas))}
 				data={roasDataSeries}
 			/>
-			<StackedBarChart
-				series={
+			{/* <StackedBarChart
+				data={
 					[
 						!!facebookAds?.id && {
 							name: facebookAds.id,
@@ -114,7 +115,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 							data: blendAdsMetrics(googleAds.metricsBreakdown)
 						}
 					]
-				} />
+				} /> */}
 		</div>
 	)
 }
