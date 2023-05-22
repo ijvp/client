@@ -4,7 +4,7 @@ import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import api from "~/api";
 import { checkAuth } from "~/api/helpers";
-import Input from "~/components/input-2";
+import Input from "~/components/input";
 import PageTitle from "~/components/page-title";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button";
 

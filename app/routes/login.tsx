@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
-import Input from "~/components/input-2";
+import Input from "~/components/input";
 import api from "~/api";
 import { checkAuth } from "~/api/helpers";
 

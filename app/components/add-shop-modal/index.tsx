@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import SubmitButton, { links as submitButtonLinks } from "../submit-button";
-import Input from "../input-2";
+import Input from "../input";
 import type { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
