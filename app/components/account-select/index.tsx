@@ -44,7 +44,7 @@ export default function AccountSelect(data: data2) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.stopPropagation()
     event.preventDefault()
-    console.log(event.target);
+
     const formFields = new FormData(event.target);
 
     const response = await fetch("/integrations", {
