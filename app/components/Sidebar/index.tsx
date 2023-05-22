@@ -1,5 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import { NavLink } from "@remix-run/react";
+import { NavLink, useSearchParams } from "@remix-run/react";
 import { links as toggleButtonLinks } from "~/components/toggle-button";
 import StoreSelect, { links as storeSelectLinks } from "~/components/store-select";
 import ProfileButton, { links as profileButtonLinks } from "../profile-button";
@@ -20,9 +20,11 @@ interface LinkProps {
 };
 
 function SidebarLink({ label, link, src, alt }: LinkProps) {
+	const [searchParams] = useSearchParams();
+
 	return (
 		<NavLink
-			to={link}
+			to={{ pathname: link, search: new URLSearchParams(searchParams).toString() }}
 			className={({ isActive, isPending }) =>
 				isActive ? "flex items-center p-4 h-[60px] w-full bg-black-secondary rounded-lg text-white" : "flex items-center p-4 h-[60px] w-full rounded-lg text-gray"
 			}>

@@ -37,7 +37,7 @@ export default function AccountSelect(data: data2) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.stopPropagation()
         event.preventDefault()
-        
+
         const formFields = new FormData(event.target);
 
         const response = await fetch("/integrations", {
@@ -45,7 +45,7 @@ export default function AccountSelect(data: data2) {
             body: formFields
         });
 
-        if(response.status === 200) {
+        if (response.status === 200) {
             setOpen(false)
         }
     }
@@ -55,16 +55,16 @@ export default function AccountSelect(data: data2) {
             setClient({ id: selectedAccount?.id.toString(), descriptive_name: selectedAccount?.descriptive_name })
         }
 
-	}, [selectedAccount]);
+    }, [selectedAccount]);
 
     return (
         <>
-            { open
+            {open
                 ? <Overlay >
-                    <Form 
-                        className="fixed bg-black/[0.02] backdrop-blur-[120px] w-[705px] min-h-[489px] rounded-2xl px-[72.5px] py-[62.5px] flex flex-col justify-between" 
-                        method="post" 
-                        onSubmit={handleSubmit} 
+                    <Form
+                        className="fixed bg-black/[0.02] backdrop-blur-[120px] w-[705px] min-h-[489px] rounded-2xl px-[72.5px] py-[62.5px] flex flex-col justify-between"
+                        method="post"
+                        onSubmit={handleSubmit}
                         action="/integrations"
                     >
                         <div className="flex flex-col h-max">
@@ -77,14 +77,13 @@ export default function AccountSelect(data: data2) {
                             {/* <div className="fixed bg-black/[0.02] backdrop-blur-[120px] w-[705px] min-h-[489px] rounded-2xl px-[72.5px] py-[62.5px] flex flex-col justify-center"></div> */}
                             {accounts.map((account) => (
                                 account.id && account.descriptive_name ?
-                                    <label 
-                                        key={account.id} 
+                                    <label
+                                        key={account.id}
                                         //className="flex items-center space-x-2"
-                                        className={`flex items-center space-x-2 rounded p-1 cursor-pointer gap-3 ${
-                                            selectedAccount && selectedAccount.id === account.id
+                                        className={`flex items-center space-x-2 rounded p-1 cursor-pointer gap-3 ${selectedAccount && selectedAccount.id === account.id
                                             ? "bg-black-secondary"
                                             : ""
-                                        }`}
+                                            }`}
                                     >
                                         <input
                                             type="checkbox"
@@ -100,14 +99,14 @@ export default function AccountSelect(data: data2) {
                             ))}
                             <div className="flex-grow" />
                         </div>
-                        <div className="flex justify-center mt-4 bottom-0">            
-                            <button className={"flex justify-center items-center w-[200px] h-[60px] py-[18px] rounded-lg bg-purple text-white border-0 hover:transition-colors ease-in-out duration-300 hover:bg-dark-purple"}> 
-                                Connect 
+                        <div className="flex justify-center mt-4 bottom-0">
+                            <button className={"flex justify-center items-center h-[60px] p-4 rounded-lg bg-purple text-white border-0 hover:transition-colors ease-in-out duration-300 hover:bg-dark-purple"}>
+                                Connect
                             </button>
-                        </div>            
+                        </div>
                     </Form>
                 </Overlay>
-            : 
+                :
                 null
             }
         </>

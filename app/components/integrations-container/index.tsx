@@ -4,7 +4,7 @@ import { storesAtom } from "~/utils/atoms";
 
 export default function IntegrationContainer() {
     const [stores, setStores] = useAtom(storesAtom);
-    
+
     interface IIntegrationsId {
         id: string;
         name: string;
@@ -107,7 +107,7 @@ export default function IntegrationContainer() {
 
     return (
         <>
-            {stores.length > 0?
+            {stores.length > 0 ?
                 <div>
                     <div>
                         {/* <div className="mt-[60px]">
@@ -137,7 +137,7 @@ export default function IntegrationContainer() {
                                 ))}
                             </div>
                         </div>
-                        <div className="mt-[60px]">
+                        {emailIntegrations.length > 0 && <div className="mt-[60px]">
                             <h2 id="eMailMarketing" className="h5 pb-8">E-Mail Marketing:</h2>
                             <div className="grid grid-cols-2 gap-6">
                                 {emailIntegrations.map(integration => (
@@ -150,7 +150,7 @@ export default function IntegrationContainer() {
                                     />
                                 ))}
                             </div>
-                        </div>
+                        </div>}
                         <div className="mt-[60px]">
                             <h2 id="planilhas" className="h5 pb-8">Planilhas:</h2>
                             <div className="grid grid-cols-2 gap-6">
@@ -167,7 +167,7 @@ export default function IntegrationContainer() {
                         </div>
                     </div>
                 </div>
-            : null }
+                : null}
         </>
     )
 }
