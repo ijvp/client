@@ -5,7 +5,7 @@ import ptBR from '@shopify/polaris/locales/pt-BR.json';
 import { Outlet, useLoaderData } from "@remix-run/react";
 import Sidebar, {
 	links as sidebarLinks
-} from "~/components/sidebar";
+} from "~/components/sidebar-2";
 import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
 import { storesAtom } from "~/utils/atoms";
