@@ -1,4 +1,5 @@
-import { V2_MetaFunction, LinksFunction, LoaderArgs, ActionArgs, json } from "@remix-run/node";
+import type { V2_MetaFunction, LinksFunction, LoaderArgs, ActionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import api from "~/api";
