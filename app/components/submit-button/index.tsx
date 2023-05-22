@@ -7,8 +7,8 @@ export const links: LinksFunction = () => [
 
 interface SubmitButtonProps {
 	label: string;
-	disabled: boolean;
-	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+	disabled?: boolean;
+	onClick?: (event: React.MouseEvent<HTMLElement>) => void
 };
 
 //Esse botão sempre deve ser usado dentro de algum formulário devido ao type="submit".

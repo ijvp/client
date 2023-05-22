@@ -6,8 +6,7 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { fetchAccounts, authorizeIntegration, connectAccount, disconnectIntegration } from "~/api";
 import { checkAuth } from "~/api/helpers";
-import type { IAccounts } from "~/components/account-select";
-import AccountSelect from "~/components/account-select";
+import AccountSelect, { links as accountSelectLinks } from "~/components/account-select";
 import IntegrationsContainer from "~/components/integrations-container";
 import PageTitle from "~/components/page-title";
 import { links as sidebarLinks } from "~/components/Sidebar";
@@ -17,7 +16,8 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => [
-	...sidebarLinks()
+	...sidebarLinks(),
+	...accountSelectLinks()
 ];
 
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 				})
 
 				return response.message;
-				
+
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -67,7 +67,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					platform,
 					request
 				})
-				
+
 				return response;
 
 			} catch (error) {
@@ -76,7 +76,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		}
 
 		default: {
-			console.log({error: 'ActionType invalid'})
+			console.log({ error: 'ActionType invalid' })
 		}
 	}
 
