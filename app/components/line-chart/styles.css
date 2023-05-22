@@ -5,7 +5,7 @@
 .nodge::after {
 	content: "";
 	position: absolute;
-	left: 1px;
+	left: 0px;
 	top: 75%;
 	transform: translateY(-50%);
 	opacity: 0;

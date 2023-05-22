@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useSearchParams } from "@remix-run/react";
-import type { DataPoint } from "@shopify/polaris-viz";
+import { DataPoint, DonutChart } from "@shopify/polaris-viz";
 import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import SimpleChart, { links as SimpleChartLinks } from "~/components/line-chart/index";
 import { parseDateString, standardizeMetricDate } from "~/utils/date";
@@ -91,7 +91,43 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalInvested)}
 				data={investmentsDataSeries}
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
-			/>
+			>
+				<div
+					className="
+					relative 
+					w-full max-w-3xl 
+					aspect-square
+					p-4
+					flex flex-col items-center justify-center
+					bg-black-bg 
+					border border-black-secondary rounded-xl
+				">
+					<h2 className="h5">{new Intl.DateTimeFormat('pt-BR').format(start)} - {new Intl.DateTimeFormat('pt-BR').format(end)}</h2>
+					<DonutChart
+						data={[
+							{
+								name: "Facebook Ads",
+								data: [
+									{
+										key: `${start} - ${end}`,
+										value: facebookAds?.metricsBreakdown.reduce((sum, ad) => sum + ad.metrics.spend, 0)
+									}
+								]
+							},
+							{
+								name: "Google Ads",
+								data: [
+									{
+										key: `${start} - ${end}`,
+										value: googleAds?.metricsBreakdown.reduce((sum, ad) => sum + ad.metrics.spend, 0)
+									}
+								]
+							}
+						]}
+						labelFormatter={(y) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(y)}
+					/>
+				</div>
+			</SimpleChart>
 			<SimpleChart
 				title="Pedidos"
 				value={totalOrders}
@@ -103,19 +139,6 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				value={new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(parseFloat(roas))}
 				data={roasDataSeries}
 			/>
-			{/* <StackedBarChart
-				data={
-					[
-						!!facebookAds?.id && {
-							name: facebookAds.id,
-							data: blendAdsMetrics(facebookAds.metricsBreakdown)
-						},
-						!!googleAds?.id && {
-							name: googleAds.id,
-							data: blendAdsMetrics(googleAds.metricsBreakdown)
-						}
-					]
-				} /> */}
 		</div>
 	)
 }

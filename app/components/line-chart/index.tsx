@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useState } from "react";
 import type { DataPoint } from '@shopify/polaris-viz';
 import { LineChart } from '@shopify/polaris-viz';
 import styles from "./styles.css";
+import Overlay from "../overlay";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles }
@@ -14,11 +15,12 @@ interface LineChartProps {
 	value?: number | string,
 	prefix?: string,
 	skeleton?: boolean,
-	children: ReactNode
+	children?: ReactNode
 };
 
 export default function SimpleChart({ data, title, value, prefix, skeleton, xAxisOptions, yAxisOptions, children }: LineChartProps) {
 	const [render, setRender] = useState(false);
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 		if (navigator) {
@@ -29,15 +31,17 @@ export default function SimpleChart({ data, title, value, prefix, skeleton, xAxi
 	return (
 		<>
 			<div
-				className="
-			nodge
-			w-[354px] h-[165px]
-			py-4 pb-24 rounded-lg
-			bg-black-bg
-			border border-black-secondary box-content
-			flex flex-col gap-2
-			overflow-clip
-		">
+				onClick={() => setOpen(true)}
+				className={`
+				nodge
+				w-[354px] h-[165px]
+				py-4 pb-24 rounded-lg
+				bg-black-bg
+				border border-black-secondary box-content
+				flex flex-col gap-2
+				overflow-clip
+				${children ? "cursor-pointer" : ""}
+			`}>
 				<div
 					className="
 					absolute
@@ -72,14 +76,10 @@ export default function SimpleChart({ data, title, value, prefix, skeleton, xAxi
 							</div >
 						</>)}
 			</div>
-			{children ? (
-				<>
-					has children
-				</>
-			) : (
-				<>
-					no child
-				</>
+			{children && open && (
+				<Overlay onClick={() => setOpen(false)}>
+					{children}
+				</Overlay>
 			)}
 		</>
 	);
