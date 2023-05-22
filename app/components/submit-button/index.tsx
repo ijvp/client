@@ -7,17 +7,22 @@ export const links: LinksFunction = () => [
 
 interface SubmitButtonProps {
 	label: string;
+	disabled: boolean;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 };
 
 //Esse botão sempre deve ser usado dentro de algum formulário devido ao type="submit".
 //O evento deve ser gerenciado pelo seu formulário pai ao inves de passar alguma 
 //função "onClick" para esse componente.
-export default function SubmitButton({ label }: SubmitButtonProps) {
+export default function SubmitButton({ label, disabled = false, onClick }: SubmitButtonProps) {
 	return (
 		<button
 			type="submit"
+			disabled={disabled}
+			onClick={onClick}
 			className="
-				button submit-button
+				button 
+				submit-button
 				relative
 				flex items-center justify-center
 				w-full h-[60px]
@@ -28,7 +33,7 @@ export default function SubmitButton({ label }: SubmitButtonProps) {
 				hover:transition-colors
 			"
 		>
-			<span className="bg-purple px-6 z-10 relative">
+			<span className="bg-purple px-4 z-10 relative">
 				{label}
 			</span>
 			<div className="

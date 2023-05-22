@@ -1,4 +1,4 @@
-import { Granularity } from './enums';
+import type { Granularity } from './enums';
 export interface FacebookBusiness {
 	business_id: string,
 	business_name: string
@@ -14,6 +14,7 @@ export interface Store {
 	name: string,
 	google_client: GoogleClient,
 	facebook_business: FacebookBusiness
+	[key: string]: any;
 };
 
 export interface StoreIntervalQuery {
@@ -21,4 +22,11 @@ export interface StoreIntervalQuery {
 	start: string,
 	end: string,
 	granularity?: Granularity
+}
+
+export interface StoreData {
+	store: string,
+	access_token: string,
+    storefront_token: string
+	request: Request
 }

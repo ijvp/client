@@ -3,11 +3,12 @@
 	transition: transform 300ms;
 }
 
-#login-form .submit-button span:after {
+#login-form .submit-button span:after,
+#add-store-form .submit-button span:after {
 	content: "";
 	display: block;
 	position: absolute;
-	right: 10%;
+	right: 7%;
 	top: 50%;
 	transform: translateY(-50%);
 	height: 125%;
