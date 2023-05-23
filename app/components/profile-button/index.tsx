@@ -2,6 +2,8 @@ import type { MouseEvent } from "react";
 import { useEffect, useState } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import styles from "./styles.css"
+import { userAtom } from "~/utils/atoms";
+import { useAtom } from "jotai";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles }
@@ -9,6 +11,7 @@ export const links: LinksFunction = () => [
 
 export default function ProfileButton() {
 	const [profileTooltipOpen, setProfileTooltipOpen] = useState(false);
+	const [user] = useAtom(userAtom);
 
 	const handleToggleProfileTooltip = () => {
 		setProfileTooltipOpen(!profileTooltipOpen);
@@ -76,9 +79,9 @@ export default function ProfileButton() {
 				w-[60px] aspect-square
 				flex items-center justify-center
 				bg-yellow-500 rounded-md 
-				text-2xl font-semibold
+				text-2xl font-semibold uppercase
 			">
-				P
+				{user[0]}
 			</button>
 		</form>
 	)

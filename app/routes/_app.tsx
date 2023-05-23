@@ -8,7 +8,7 @@ import Sidebar, {
 } from "~/components/sidebar";
 import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
-import { storesAtom } from "~/utils/atoms";
+import { storesAtom, userAtom } from "~/utils/atoms";
 import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
@@ -16,19 +16,25 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const { shops } = await checkAuth(request);
-	return { stores: shops };
+	const { username, shops } = await checkAuth(request);
+
+	return { username, stores: shops };
 };
 
 export default function App() {
 	const data = useLoaderData();
 	const [, setStores] = useAtom(storesAtom);
+	const [, setUser] = useAtom(userAtom);
 
 	useEffect(() => {
 		if (data.stores) {
 			setStores(data.stores);
 		}
-	}, [data.stores]);
+
+		if (data.username) {
+			setUser(data.username)
+		}
+	}, [data, setStores, setUser]);
 
 	return (
 		<AppProvider i18n={{ ...en, ...ptBR }}>

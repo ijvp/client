@@ -22,6 +22,7 @@ interface LinkProps {
 function SidebarLink({ label, link, src, alt }: LinkProps) {
 	const [searchParams] = useSearchParams();
 	const store = searchParams.get("store");
+
 	return (
 		<NavLink
 			to={{ pathname: link, search: store ? `?store=${store}` : "" }}

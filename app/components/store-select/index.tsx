@@ -4,7 +4,7 @@ import styles from "./styles.css";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { useAtom } from "jotai";
 import { formatStoreName } from "~/utils/store";
-import AddShopModal, { links as addShopModalLinks } from "../add-shop-modal";
+import AddStoreModal, { links as addShopModalLinks } from "../add-store-modal";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "@remix-run/react";
 
@@ -27,7 +27,6 @@ export default function StoreSelect() {
 	};
 
 	const handleOpenStoreModal = (event: MouseEvent<HTMLButtonElement>) => {
-		// event.stopPropagation(); //impede que o dropdown de fechar
 		setIsModalOpen(true);
 	};
 
@@ -59,13 +58,9 @@ export default function StoreSelect() {
 			const index = stores.findIndex((store) => store?.name === storeId);
 			index > -1 ? setSelectedIndex(index) : setSelectedIndex(0);
 		}
-	}, [stores, storeId]);
+	}, [stores, storeId, setSelectedIndex]);
 
-	if (!stores?.length) {
-		return (addStoreButton)
-	};
-
-	const selectedStoreMarkdown = (
+	const selectedStoreMarkdown = !!stores?.length && (
 		<div
 			onClick={handleClick}
 			className={`w-full flex items-center justify-between py-4 ${open ? "font-semibold" : ""
@@ -80,14 +75,14 @@ export default function StoreSelect() {
 		</div>
 	);
 
-	const storeOptionsMarkdown = (
+	const storeOptionsMarkdown = !!stores?.length && (
 		<div>
 			{stores.map((store, index) => {
 				if (store !== stores[selectedIndex]) {
 					return (
 						<div key={index} className="w-full last:border-b last:border-black-secondary">
-							<Link to={handleStoreSelect(store.name)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
-								{formatStoreName(store.name)}
+							<Link to={handleStoreSelect(store?.name)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
+								{formatStoreName(store?.name)}
 							</Link>
 						</div>
 					);
@@ -99,28 +94,43 @@ export default function StoreSelect() {
 	);
 
 	return (
-		<div
-			// onClick={handleClick}
-			className={`w-full flex flex-col items-center px-6 border border-solid border-black-secondary rounded-lg cursor-pointer ${open ? "menu--expanded" : "menu"
-				}`}
-		>
-			{selectedStoreMarkdown}
-			{open && (
-				<div className="w-full">
-					{storeOptionsMarkdown}
+		<>
+			{!stores?.length ? (
+				<div className="border border-solid border-black-secondary rounded-lg">
 					{addStoreButton}
 				</div>
-			)}
+			) : (
+				<>
+					<div
+						className={`
+						w-full 
+						flex flex-col items-center 
+						px-6 
+						border border-solid border-black-secondary rounded-lg 
+						cursor-pointer ${open ? "menu--expanded" : "menu"}
+					`}>
+						{selectedStoreMarkdown}
+						{open && (
+							<div className="w-full">
+								{storeOptionsMarkdown}
+								{addStoreButton}
+							</div>
+						)}
+
+
+					</div>
+				</>)}
 
 			{isModalOpen && (
 				<div className="modal-overlay">
 					<div className="modal">
-						<AddShopModal
+						<AddStoreModal
 							onClickCloseStoreModel={handleCloseStoreModel}
 						/>
 					</div>
 				</div>
 			)}
-		</div>
+		</>
+
 	);
 }

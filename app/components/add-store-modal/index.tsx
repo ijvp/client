@@ -12,11 +12,11 @@ export const links: LinksFunction = () => [
   ...submitButtonLinks()
 ];
 
-interface AddShopModalProps {
+interface AddStoreModalProps {
   onClickCloseStoreModel: () => void;
 }
 
-export default function AddShopModal({ onClickCloseStoreModel }: AddShopModalProps) {
+export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalProps) {
   const [allDataValid, setAllDataValid] = useState(false);
   const [data, setData] = useState({ url: '', accessToken: '', storefrontToken: '' });
   const [isUrlValid, setIsUrlValid] = useState(false);
@@ -76,7 +76,7 @@ export default function AddShopModal({ onClickCloseStoreModel }: AddShopModalPro
 
     const formFields = new FormData(event.target);
 
-    const response = await fetch("/addshopmodal", {
+    const response = await fetch("/AddStoremodal", {
       method: "POST",
       body: formFields
     });
