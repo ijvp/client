@@ -25,6 +25,7 @@ function SidebarLink({ label, link, src, alt }: LinkProps) {
 	return (
 		<NavLink
 			to={{ pathname: link, search: store ? `?store=${store}` : "" }}
+			prefetch="intent"
 			className={({ isActive, isPending }) =>
 				isActive ? "flex items-center p-4 h-[60px] w-full bg-black-secondary rounded-lg text-white" : "flex items-center p-4 h-[60px] w-full rounded-lg text-gray"
 			}>
