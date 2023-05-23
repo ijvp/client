@@ -1,4 +1,4 @@
-import type { LinksFunction, ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { LinksFunction, ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
@@ -6,6 +6,10 @@ import SubmitButton, { links as submitButtonLinks } from "~/components/submit-bu
 import Input from "~/components/input";
 import api from "~/api";
 import { checkAuth } from "~/api/helpers";
+
+export const meta: V2_MetaFunction = () => {
+	return [{ title: "Turbo Dash | Login" }];
+};
 
 export const links: LinksFunction = () => [
 	...submitButtonLinks()
