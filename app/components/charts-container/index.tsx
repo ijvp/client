@@ -1,12 +1,13 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useSearchParams } from "@remix-run/react";
-import { DataPoint, DonutChart } from "@shopify/polaris-viz";
+import type { DataPoint, InnerValueContents } from "@shopify/polaris-viz";
+import { DonutChart } from "@shopify/polaris-viz";
 import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import SimpleChart, { links as SimpleChartLinks } from "~/components/line-chart/index";
 import { parseDateString, standardizeMetricDate } from "~/utils/date";
 import { blendAdsMetrics, getCountFromOrderMetrics, getRevenueFromOrderMetrics, getTotalValue } from "~/utils/metrics";
 import styles from "./styles.css";
-import StackedBarChart from "../bar-chart";
+import { toLocalCurrency, toLocalNumber } from "~/utils/numbers";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
@@ -71,24 +72,29 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
 	const roasDataSeries = investmentsDataSeries.map(investment => {
-		let ratio = orders?.metricsBreakdown.find(item => item.date === investment.key)?.value || 0 / investment.value;
+		let order = orders?.metricsBreakdown.find(item => item.date === investment.key);
+		let ratio = (order ? order.value : 0) / investment.value;
 		return {
 			key: investment.key,
-			value: ratio
+			value: parseFloat(ratio.toFixed(2))
 		}
 	});
 
+	const renderDonutLabel = (innerValueContents: InnerValueContents) => {
+		return innerValueContents?.activeValue ? toLocalCurrency(innerValueContents.activeValue) : toLocalCurrency(innerValueContents.totalValue);
+	};
+
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto items-stretch gap-4 w-fit">
+		<div className="flex flex-wrap gap-4">
 			<SimpleChart
 				title="Faturamento"
-				value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRevenue)}
+				value={toLocalCurrency(totalRevenue)}
 				data={revenueDataSeries}
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 			/>
 			<SimpleChart
 				title="Valor investido"
-				value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalInvested)}
+				value={toLocalCurrency(totalInvested)}
 				data={investmentsDataSeries}
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 			>
@@ -105,7 +111,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 					<h2 className="h5">{new Intl.DateTimeFormat('pt-BR').format(start)} - {new Intl.DateTimeFormat('pt-BR').format(end)}</h2>
 					<DonutChart
 						data={[
-							{
+							facebookAds?.metricsBreakdown && {
 								name: "Facebook Ads",
 								data: [
 									{
@@ -114,7 +120,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 									}
 								]
 							},
-							{
+							googleAds?.metricsBreakdown && {
 								name: "Google Ads",
 								data: [
 									{
@@ -124,7 +130,8 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 								]
 							}
 						]}
-						labelFormatter={(y) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }).format(y)}
+						labelFormatter={(y) => toLocalCurrency(y)}
+						renderInnerValueContent={renderDonutLabel}
 					/>
 				</div>
 			</SimpleChart>
@@ -136,7 +143,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 			/>
 			<SimpleChart
 				title="ROAs"
-				value={new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(parseFloat(roas))}
+				value={toLocalNumber(roas)}
 				data={roasDataSeries}
 			/>
 		</div>

@@ -69,7 +69,7 @@ export default function Analysis() {
 				<Await resolve={loaderData.data}>
 					{([orders, googleAds, facebookAds]) =>
 						navigation.state === "idle" ?
-							(< ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />)
+							(<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />)
 							: navigation.state === "loading" ?
 								<ChartsSkeleton />
 								: null

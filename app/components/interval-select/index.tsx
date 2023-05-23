@@ -154,7 +154,7 @@ export default function IntervalSelect() {
 	);
 
 	return (
-		<div className="flex gap-4 my-6 interval-options">
+		<div className="flex flex-wrap gap-4 my-6 interval-options">
 			{intervalPredeterminedOptions}
 			<div className="relative">
 				<IntervalOptionButton onClick={handleDatePickerToggle} selected={selectedIndex === options.length}>

@@ -28,8 +28,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	const platform = data.get("platform")?.toString();
 	const store = data.get("store")?.toString();
 	const id = data.get("id");
-	const descriptive_name = data.get("descriptive_name")
-	const searchParams = new URL(request.url).searchParams
+	const descriptive_name = data.get("descriptive_name");
 
 	switch (actionType) {
 		case "authorize": {
@@ -53,9 +52,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					client: { id, descriptive_name },
 					request
 				})
-
 				return response.message;
-
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -63,7 +60,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 
 		case "disconnect": {
 			try {
-
 				const response = await disconnectIntegration({
 					store,
 					platform,
@@ -71,7 +67,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 				})
 
 				return response;
-
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -82,8 +77,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		}
 	}
 
-	return null
-
+	return null;
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -92,10 +86,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const store = searchParams.get("store");
 
 	if (platform && store) {
-		const response = await fetchAccounts({ store, platform, request })
+		const accounts = await fetchAccounts({ store, platform, request })
 
 		return json({
-			response: response, store, platform
+			accounts: accounts.map(account => { return { id: account.id, name: account.descriptive_name } }),
+			store,
+			platform
 		});
 	}
 
@@ -110,18 +106,18 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function Integrations() {
 	const [searchParams] = useSearchParams()
 	const platform = searchParams.get("platform");
-	const callbackStore = searchParams.get("store");
-	const [stores, setStores] = useAtom(storesAtom);
+	const storeName = searchParams.get("store");
+	const [stores] = useAtom(storesAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 	const data = useLoaderData<typeof loader>();
 
 	useEffect(() => {
-		const storeIndex = stores.findIndex((store) => store.name === callbackStore)
+		const storeIndex = stores.findIndex((store) => store.name === storeName)
 		if (storeIndex !== -1) {
 			setSelectedIndex(storeIndex)
 		}
 
-	}, [selectedIndex, callbackStore, stores, setSelectedIndex, data]);
+	}, [selectedIndex, storeName, stores, setSelectedIndex, data]);
 
 	return (
 		<>
@@ -129,9 +125,9 @@ export default function Integrations() {
 			<IntegrationsContainer />
 			{platform && (
 				<AccountSelect
-					data={data}
+					{...data}
 				/>
 			)}
 		</>
-	)
-}
+	);
+};

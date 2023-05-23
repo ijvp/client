@@ -34,7 +34,7 @@ export default function SimpleChart({ data, title, value, prefix, skeleton, xAxi
 				onClick={() => setOpen(true)}
 				className={`
 				nodge
-				w-[354px] h-[165px]
+				min-w-[354px] h-[165px] flex-grow
 				py-4 pb-24 rounded-lg
 				bg-black-bg
 				border border-black-secondary box-content

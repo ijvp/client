@@ -27,9 +27,9 @@ export const blendAdsMetrics = (...arrays) => {
 					const spend = item.metrics?.spend || 0;
 
 					if (date in adsMap) {
-						adsMap[date] += spend;
+						adsMap[date] += parseFloat(spend.toFixed(2));
 					} else {
-						adsMap[date] = spend;
+						adsMap[date] = parseFloat(spend.toFixed(2));
 					}
 				});
 			}

@@ -43,7 +43,7 @@ export default function Sidebar() {
 		<nav
 			id="sidebar"
 			className="
-			relative
+			sticky top-0
 			min-w-[280px] max-w-[280px] h-screen
 			border-box
 			py-8 px-6
