@@ -124,9 +124,9 @@ export default function IntegrationContainer() {
             <div className="mt-[60px]">
               <h2 id="anuncios" className="h5 pb-8">Anúncios:</h2>
               <div className="grid grid-cols-2 gap-6">
-                {anunciosIntegrations.map(integration => (
+                {anunciosIntegrations.map((integration, index) => (
                   <IntegrationBox
-                    key={integration.id}
+                    key={index}
                     id={integration.id}
                     name={integration.name}
                     locked={integration.locked}
