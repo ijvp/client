@@ -7,36 +7,28 @@ import { formatStoreName } from "~/utils/store";
 import AddStoreModal, { links as addShopModalLinks } from "../add-store-modal";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "@remix-run/react";
+import Overlay from "../overlay";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
 	...addShopModalLinks()
 ];
 
-export default function StoreSelect() {
+export default function StoreSelect({ openAddStoreModal }) {
 	const location = useLocation();
 	const [searchParams] = useSearchParams();
 	const storeId = searchParams.get("store");
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [open, setOpen] = useState(false);
 
 	const handleClick = () => {
 		setOpen(!open);
 	};
 
-	const handleOpenStoreModal = (event: MouseEvent<HTMLButtonElement>) => {
-		setIsModalOpen(true);
-	};
-
-	const handleCloseStoreModel = () => {
-		setIsModalOpen(false);
-	};
-
 	const addStoreButton = (
 		<button
-			onClick={handleOpenStoreModal}
+			onClick={openAddStoreModal}
 			className="w-full py-4 flex items-center justify-center gap-5"
 		>
 			Adicionar loja
@@ -100,37 +92,22 @@ export default function StoreSelect() {
 					{addStoreButton}
 				</div>
 			) : (
-				<>
-					<div
-						className={`
+				<div
+					className={`
 						w-full 
 						flex flex-col items-center 
 						px-6 
 						border border-solid border-black-secondary rounded-lg 
 						cursor-pointer ${open ? "menu--expanded" : "menu"}
 					`}>
-						{selectedStoreMarkdown}
-						{open && (
-							<div className="w-full">
-								{storeOptionsMarkdown}
-								{addStoreButton}
-							</div>
-						)}
-
-
-					</div>
-				</>)}
-
-			{isModalOpen && (
-				<div className="modal-overlay">
-					<div className="modal">
-						<AddStoreModal
-							onClickCloseStoreModel={handleCloseStoreModel}
-						/>
-					</div>
-				</div>
-			)}
+					{selectedStoreMarkdown}
+					{open && (
+						<div className="w-full">
+							{storeOptionsMarkdown}
+							{addStoreButton}
+						</div>
+					)}
+				</div>)}
 		</>
-
 	);
 }

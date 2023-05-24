@@ -76,7 +76,7 @@ export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalP
 
     const formFields = new FormData(event.target);
 
-    const response = await fetch("/AddStoremodal", {
+    const response = await fetch("/connect", {
       method: "POST",
       body: formFields
     });
