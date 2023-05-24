@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import { LinksFunction, redirect } from "@remix-run/node";
 import SubmitButton, { links as submitButtonLinks } from "../submit-button";
 import Input from "../input";
 import type { ChangeEvent } from "react";
@@ -6,17 +6,17 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { postShopifyStore } from "~/api";
 import Overlay from "../overlay";
-import { Form } from "@remix-run/react";
+import { Form, useFetcher, useSubmit } from "@remix-run/react";
 
 export const links: LinksFunction = () => [
   ...submitButtonLinks()
 ];
 
 interface AddStoreModalProps {
-  onClickCloseStoreModel: () => void;
+  onClick: () => void;
 }
 
-export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalProps) {
+export default function AddStoreModal({ onClick }: AddStoreModalProps) {
   const [allDataValid, setAllDataValid] = useState(false);
   const [data, setData] = useState({ url: '', accessToken: '', storefrontToken: '' });
   const [isUrlValid, setIsUrlValid] = useState(false);
@@ -25,13 +25,7 @@ export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalP
   const [urlClicked, setUrlClicked] = useState(false);
   const [accessTokenClicked, setAccessTokenClicked] = useState(false);
   const [storefrontTokenClicked, setStorefrontTokenClicked] = useState(false);
-  const [responseData, setResponseData] = useState<null | { success: boolean; message: string }>(null);
-
-  const handleCloseModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    onClickCloseStoreModel();
-  }
+  const [errors, setErrors] = useState("");
 
   const handleValidation = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -76,22 +70,35 @@ export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalP
 
     const formFields = new FormData(event.target);
 
-    const response = await fetch("/connect", {
-      method: "POST",
-      body: formFields
-    });
+    //fetch api stuff
+    //connect action will only return errors OR close modal and redirect
+    try {
+      const response = await fetch("/connect", {
+        method: "POST",
+        body: formFields
+      });
 
-    setResponseData(response);
-
-    if (response.status === 200) onClickCloseStoreModel()
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Redirect to the provided URL
+          onClick()
+          window.location.href = data.redirectUrl;
+        } else {
+          setErrors(data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    };
   }
 
-
   return (
-    <Overlay onClick={onClickCloseStoreModel}>
+    <Overlay onClick={onClick}>
       <Form
         id="add-store-form"
         method="post"
+        // action="/connect"
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
         className="
@@ -107,7 +114,7 @@ export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalP
         <input type="hidden" name="accessToken" value={data.accessToken} />
         <input type="hidden" name="storefrontToken" value={data.storefrontToken} />
 
-        <button onClick={handleCloseModal} className="absolute top-4 right-4 w-[60px] aspect-square bg-black-bg border border-solid border-black-secondary rounded-[4px] flex justify-center items-center hover:border-purple">
+        <button onClick={onClick} className="absolute top-4 right-4 w-[60px] aspect-square bg-black-bg border border-solid border-black-secondary rounded-[4px] flex justify-center items-center hover:border-purple">
           <img src="/x.svg" alt="sair" />
         </button>
         <h2 className="h5 h font-semibold text-center pb-8">
@@ -149,15 +156,9 @@ export default function AddStoreModal({ onClickCloseStoreModel }: AddStoreModalP
             disabled={!allDataValid}
           />
 
-          {responseData === null ? null : (
-            responseData.success === false ?
-              <h1 className="mt-8 text-base font-normal not-italic text-white underline text-center">
-                {`⚠️ ${responseData.message}`}
-              </h1>
-              :
-              null
-
-          )}
+          {errors && (<h2 className="mt-8 text-base font-normal not-italic text-red-500 text-center">
+            {`⚠️ ${errors}`}
+          </h2>)}
         </div>
       </Form>
     </Overlay>

@@ -107,7 +107,7 @@ export default function Sidebar() {
 			</nav>
 			{openModal && (
 				<AddStoreModal
-					onClickCloseStoreModel={handleToggleModal}
+					onClick={handleToggleModal}
 				/>
 			)}
 		</>

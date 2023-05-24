@@ -33,7 +33,7 @@ export default function SubmitButton({ label, disabled = false, onClick }: Submi
 				hover:transition-colors
 			"
 		>
-			<span className="bg-purple px-4 z-10 relative">
+			<span className="bg-purple px-4 z-[2] relative">
 				{label}
 			</span>
 			<div className="
