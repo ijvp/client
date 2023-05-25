@@ -5,7 +5,7 @@ export const sortMetricsData = (metrics: any[]) => {
 };
 
 export const getRevenueFromOrderMetrics = (orderMetrics: any[]) => {
-	if (orderMetrics.length) {
+	if (orderMetrics && orderMetrics.length) {
 		return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.value } }));
 	} else {
 		return []
@@ -14,7 +14,7 @@ export const getRevenueFromOrderMetrics = (orderMetrics: any[]) => {
 };
 
 export const getCountFromOrderMetrics = (orderMetrics: any[]) => {
-	if (orderMetrics.length) {
+	if (orderMetrics && orderMetrics.length) {
 		return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.count } }));
 	} else {
 		return []
