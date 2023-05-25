@@ -23,22 +23,19 @@ export const links: LinksFunction = () => [
 ];
 
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
+	const cookie = request.headers.get("cookie");
 	const data = await request.formData();
-	const actionType = data.get("actionType")?.toString();
+	const action = data.get("action")?.toString();
 	const platform = data.get("platform")?.toString();
 	const store = data.get("store")?.toString();
 	const id = data.get("id");
 	const descriptive_name = data.get("descriptive_name");
 
-	switch (actionType) {
+	switch (action) {
 		case "authorize": {
 			try {
-				const response = await authorizeIntegration({
-					store,
-					platform
-				})
-
-				return redirect(response);
+				const redirectUrl = await authorizeIntegration({ platform, store, cookie });
+				return redirect(redirectUrl);
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -47,10 +44,10 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		case "connect": {
 			try {
 				const response = await connectAccount({
-					store,
 					platform,
+					store,
 					client: { id, descriptive_name },
-					request
+					cookie
 				})
 				return response.message;
 			} catch (error) {
@@ -73,11 +70,9 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		}
 
 		default: {
-			console.log({ error: 'ActionType invalid' })
+			console.log(`Action invalid: ${action}`);
 		}
 	}
-
-	return null;
 }
 
 export const loader = async ({ request }: LoaderArgs) => {

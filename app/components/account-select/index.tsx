@@ -68,7 +68,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             action="/integrations"
           >
             <h2 className="h h5">Selecione uma conta</h2>
-            <input type="hidden" name="actionType" value="connect" />
+            <input type="hidden" name="action" value="connect" />
             <input type="hidden" name="id" value={client?.id} />
             <input type="hidden" name="descriptive_name" value={client?.name} />
             <input type="hidden" name="platform" value={platform} />

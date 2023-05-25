@@ -52,34 +52,23 @@ export const fetchShopifyOrders = async (request: Request, user) => {
 	}
 };
 
-interface IAuthorizeIntegration {
-	store: string;
-	platform: string;
-	request: Request
-}
-
-export const authorizeIntegration = async ({ store, platform }: IAuthorizeIntegration) => {
+export const authorizeIntegration = async ({ platform, store, cookie }) => {
 	try {
-		const res = await api.get(`/${platform}/authorize?store=${store}`);
+		const response = await api.get(`/${platform}/authorize?store=${store}`,
+			{
+				headers:
+				{
+					Cookie: cookie
+				}
+			});
 
-		return res.data
+		return response.data;
 	} catch (error) {
-		console.log('error', error);
+		console.log(error);
 	}
-}
-
-interface IConnectIntegration {
-	platform: string;
-	store: string;
-	client?: {
-		id: string,
-		descriptive_name: string
-	}
-	request?: Request
-}
+};
 
 export const fetchAccounts = async ({ platform, store, request }: IConnectIntegration) => {
-	if (!request) return ({ error: 'request missing' })
 	const cookie = request.headers.get("cookie");
 	try {
 		const res = await api.get(`/${platform}/accounts`, {
@@ -102,9 +91,7 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 	}
 }
 
-export const connectAccount = async ({ platform, store, client, request }: IConnectIntegration) => {
-	const cookie = request.headers.get("cookie");
-
+export const connectAccount = async ({ platform, store, client, cookie }) => {
 	try {
 		const res = await api.post(`/${platform}/account/connect`, {
 			store,
@@ -115,9 +102,9 @@ export const connectAccount = async ({ platform, store, client, request }: IConn
 			}
 		});
 
-		return res.data
+		return res.data;
 	} catch (error) {
-		console.log("failed to connect", platform, "account");
+		console.log("failed to connect", platform, "account", error.response?.data);
 	}
 }
 
