@@ -80,7 +80,16 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 			}
 		});
 
-		return res.data
+		switch (platform) {
+			case "google":
+				return res.data.map(account => { return { id: account.id, name: account.descriptive_name } });
+
+			case "facebook":
+				return res.data.map(account => { return { id: account.id, name: account.name } });
+
+			default:
+				return [];
+		};
 	} catch (error) {
 		if (error.response) {
 			console.log('error', error.response.data);
@@ -91,11 +100,11 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 	}
 }
 
-export const connectAccount = async ({ platform, store, client, cookie }) => {
+export const connectAccount = async ({ platform, store, account, cookie }) => {
 	try {
 		const res = await api.post(`/${platform}/account/connect`, {
 			store,
-			client
+			account
 		}, {
 			headers: {
 				Cookie: cookie

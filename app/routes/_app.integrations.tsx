@@ -29,7 +29,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	const platform = data.get("platform")?.toString();
 	const store = data.get("store")?.toString();
 	const id = data.get("id");
-	const descriptive_name = data.get("descriptive_name");
+	const name = data.get("name");
 
 	switch (action) {
 		case "authorize": {
@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 				const response = await connectAccount({
 					platform,
 					store,
-					client: { id, descriptive_name },
+					account: { id, name },
 					cookie
 				})
 				return response.message;
@@ -82,9 +82,10 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	if (platform && store) {
 		const accounts = await fetchAccounts({ store, platform, request })
+		console.log("accounts", accounts);
 
 		return json({
-			accounts: accounts.map(account => { return { id: account.id, name: account.descriptive_name } }),
+			accounts,
 			store,
 			platform
 		});

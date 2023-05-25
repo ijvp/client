@@ -4,16 +4,12 @@ import { Form } from "@remix-run/react";
 import Overlay from "../overlay";
 import SubmitButton from "../submit-button";
 import styles from "./styles.css";
+import type { AccountConnection } from "~/ts/types";
 
 interface AccountSelectProps {
-  accounts: GoogleClient[],
+  accounts: AccountConnection[],
   store: string;
   platform: string;
-}
-
-interface GoogleClient {
-  id: string;
-  name: string;
 }
 
 export const links: LinksFunction = () => [
@@ -22,7 +18,7 @@ export const links: LinksFunction = () => [
 
 export default function AccountSelect({ accounts, store, platform }: AccountSelectProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [client, setClient] = useState<GoogleClient>();
+  const [client, setClient] = useState<AccountConnection>();
   const [open, setOpen] = useState(true);
 
   const handleAccountSelect = (index: number) => {
@@ -49,6 +45,8 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
     setClient(accounts[selectedIndex]);
   }, [accounts, selectedIndex]);
 
+  console.log(accounts);
+
   return (
     <>
       {open
@@ -70,7 +68,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             <h2 className="h h5">Selecione uma conta</h2>
             <input type="hidden" name="action" value="connect" />
             <input type="hidden" name="id" value={client?.id} />
-            <input type="hidden" name="descriptive_name" value={client?.name} />
+            <input type="hidden" name="name" value={client?.name} />
             <input type="hidden" name="platform" value={platform} />
             <input type="hidden" name="store" value={store} />
             {/* <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xl z-10"></div> */}
