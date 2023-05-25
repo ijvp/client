@@ -5,11 +5,20 @@ export const sortMetricsData = (metrics: any[]) => {
 };
 
 export const getRevenueFromOrderMetrics = (orderMetrics: any[]) => {
-	return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.value } }));
+	if (orderMetrics.length) {
+		return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.value } }));
+	} else {
+		return []
+	}
+
 };
 
 export const getCountFromOrderMetrics = (orderMetrics: any[]) => {
-	return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.count } }));
+	if (orderMetrics.length) {
+		return sortMetricsData(orderMetrics.map(order => { return { key: order.date, value: order.count } }));
+	} else {
+		return []
+	}
 };
 
 export const getTotalValue = (data: any[], precision = 2) => {
