@@ -40,8 +40,16 @@ export default function StoreSelect({ openAddStoreModal }) {
 		const queryParams = new URLSearchParams(searchParams);
 		queryParams.set("store", storeName);
 		const sortedParams = new URLSearchParams([...queryParams.entries()].sort((a, b) => b[0].localeCompare(a[0])));
+		const paths = location.pathname.split("/");
+		let path;
+		if (paths.indexOf("products") !== paths.length - 1) {
+			paths.pop();
+			path = paths.join("/")
+		} else {
+			path = location.pathname
+		}
 
-		return `${location.pathname}?${sortedParams.toString()}`;
+		return `${path}?${sortedParams.toString()}`;
 	};
 
 	//Esse hook precisa ficar antes do if (!stores.length) para nao ser chamado condicionalmente
