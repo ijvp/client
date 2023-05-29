@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 
 interface PageTitleProps {
 	children: ReactNode
-}
+};
+
 export default function PageTitle({ children }: PageTitleProps) {
 	return (
 		<h2 className="
@@ -12,5 +13,5 @@ export default function PageTitle({ children }: PageTitleProps) {
 			">
 			{children}
 		</h2>
-	)
-}
+	);
+};

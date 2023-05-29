@@ -82,7 +82,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	if (platform && store) {
 		const accounts = await fetchAccounts({ store, platform, request })
-		console.log("accounts", accounts);
 
 		return json({
 			accounts,

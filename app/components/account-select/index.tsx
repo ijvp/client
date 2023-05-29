@@ -45,8 +45,6 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
     setClient(accounts[selectedIndex]);
   }, [accounts, selectedIndex]);
 
-  console.log(accounts);
-
   return (
     <>
       {open

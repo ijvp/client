@@ -241,7 +241,7 @@ export const fetchShopifyProducts = async (request, user) => {
 	}
 };
 
-export const fetchShopifyProduct = async (request, user, productId) => {
+export const fetchShopifyProductById = async (request, user, productId) => {
 	try {
 		const cookie = request.headers.get("cookie");
 

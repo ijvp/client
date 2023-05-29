@@ -39,7 +39,7 @@ export default function App() {
 	return (
 		<AppProvider i18n={{ ...en, ...ptBR }}>
 			<Sidebar />
-			<div className="p-6 md:p-10 lg:p-16 xl:p-20 w-full">
+			<div className="p-6 pb-0 md:p-10 md:pb-0 lg:p-16 lg:pb-0 xl:p-20 xl:pb-0 w-full">
 				<Outlet />
 			</div>
 		</AppProvider>

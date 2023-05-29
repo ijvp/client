@@ -1,5 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
-import { ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import type { DataPoint } from '@shopify/polaris-viz';
 import { LineChart } from '@shopify/polaris-viz';
 import styles from "./styles.css";
