@@ -1,4 +1,3 @@
-import { fetchShopifyProducts } from '~/api';
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { differenceInDays, endOfToday, startOfToday } from "date-fns";
