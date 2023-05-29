@@ -1,4 +1,4 @@
-import type { AxiosInstance } from "axios";
+import type { AxiosError, AxiosInstance } from "axios";
 import axios from "axios";
 import { differenceInDays, endOfToday, startOfToday } from "date-fns";
 import { Granularity } from "~/ts/enums";
@@ -44,9 +44,11 @@ export const fetchShopifyOrders = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		if (error.response) {
-			return error.response.data
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data);
+			return error.response?.data
 		} else {
+			console.log("failed to fetch shopify orders");
 			return error
 		}
 	}
@@ -176,7 +178,13 @@ export const fetchGoogleAdsInvestment = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		console.log(error);
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("failed to fetch google ads");
+			return error;
+		}
 	}
 };
 
@@ -200,7 +208,13 @@ export const fetchFacebookAdsInvestment = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		console.log(error);
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("Failed to fetch facebook ads");
+			return error;
+		}
 	}
 };
 
