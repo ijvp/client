@@ -24,7 +24,7 @@ export const links: LinksFunction = () => [
 
 export function ErrorBoundary() {
 	return (
-		<div>Analysis page error boundary</div>
+		<PageTitle>Erro ao carregar análise</PageTitle>
 	)
 };
 
@@ -52,7 +52,6 @@ export default function Analysis() {
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
-
 	if (!stores?.length) {
 		return (
 			<PageTitle>Você não tem uma loja cadastrada ainda...</PageTitle>
@@ -66,16 +65,19 @@ export default function Analysis() {
 			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={loaderData.data}>
+				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
 					{([orders, googleAds, facebookAds]) =>
-						navigation.state === "idle" ?
-							(<ChartsContainer orders={orders} facebookAds={facebookAds} googleAds={googleAds} />)
-							: navigation.state === "loading" ?
-								<ChartsSkeleton />
-								: null
-					}
+						navigation.state === "idle" ? (
+							<ChartsContainer
+								orders={orders}
+								facebookAds={facebookAds}
+								googleAds={googleAds}
+							/>
+						) : navigation.state === "loading" ? (
+							<ChartsSkeleton />
+						) : null}
 				</Await>
-			</Suspense >
+			</Suspense>
 		</>
 	);
 };
