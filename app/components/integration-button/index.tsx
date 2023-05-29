@@ -28,16 +28,28 @@ export default function IntegrationButton({ connected, locked, onConnectionChang
     onConnectionChange(false)
   }
 
+  const action = isConnected === false ? 'disconnect' : 'authorize';
+
   useEffect(() => {
     setIsConnected(connected)
   }, [connected]);
 
   return (
     <Form method="post" action="/integrations">
-      <input type="hidden" name="actionType" value={isConnected === false ? 'disconnect' : 'authorize'} />
+      <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />
       <input type="hidden" name="platform" value={storeintegrationId} />
-      <button disabled={locked} onClick={isConnected === false ? handleConnect : handleDisconnect} className={`flex justify-center min-w-[145px] items-center h-[60px] p-4 rounded-lg ${isConnected === false ? 'bg-purple text-white border-0' : 'bg-transparent hover:bg-black-secondary text-purple border border-purple box-border'} hover:transition-colors ease-in-out duration-300 ${isConnected === false && locked === false ? 'hover:bg-dark-purple' : ''}`}>
+      <button
+        disabled={locked}
+        onClick={isConnected === false ? handleConnect : handleDisconnect}
+        className={`
+        flex justify-center items-center
+        min-w-[145px] h-[60px] 
+        p-4 rounded-lg 
+        ${isConnected === false ? 'bg-purple text-white border-0' : 'bg-transparent hover:bg-black-secondary text-purple border border-purple box-border'} 
+        hover:transition-colors ease-in-out duration-300 
+        ${isConnected === false && locked === false ? 'hover:bg-dark-purple' : ''}
+        `}>
         {locked === false ?
           <span className="h text-base font-bold">
             {isConnected === true ? "Desconectar" : "Conectar"}
@@ -46,6 +58,6 @@ export default function IntegrationButton({ connected, locked, onConnectionChang
           <img src="/images/block.png" alt="blocked" />
         }
       </button>
-    </Form>
+    </Form >
   )
 }

@@ -7,7 +7,7 @@ export default function PageTitle({ children }: PageTitleProps) {
 	return (
 		<h2 className="
 				h2
-				mb-6
+				mb-6 pb-6
 				border-b border-solid border-black-secondary
 			">
 			{children}

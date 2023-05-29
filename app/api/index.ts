@@ -1,4 +1,4 @@
-import type { AxiosError, AxiosInstance } from "axios";
+import type { AxiosInstance } from "axios";
 import axios from "axios";
 import { differenceInDays, endOfToday, startOfToday } from "date-fns";
 import { Granularity } from "~/ts/enums";

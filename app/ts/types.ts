@@ -4,15 +4,15 @@ export interface FacebookBusiness {
 	business_name: string
 };
 
-export interface GoogleClient {
-	client_id: string,
-	client_name: string,
+export interface AccountConnection {
+	id: string,
+	name: string,
 };
 
 export interface Store {
 	id: string,
 	name: string,
-	google_client: GoogleClient,
+	google_client: AccountConnection,
 	facebook_business: FacebookBusiness
 	[key: string]: any;
 };
@@ -27,6 +27,6 @@ export interface StoreIntervalQuery {
 export interface StoreData {
 	store: string,
 	access_token: string,
-    storefront_token: string
+	storefront_token: string
 	request: Request
 }
