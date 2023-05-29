@@ -1,4 +1,4 @@
-import type { AxiosInstance } from "axios";
+import type { AxiosError, AxiosInstance } from "axios";
 import axios from "axios";
 import { differenceInDays, endOfToday, startOfToday } from "date-fns";
 import { Granularity } from "~/ts/enums";
@@ -44,42 +44,33 @@ export const fetchShopifyOrders = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		if (error.response) {
-			return error.response.data
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data);
+			return error.response?.data
 		} else {
+			console.log("failed to fetch shopify orders");
 			return error
 		}
 	}
 };
 
-interface IAuthorizeIntegration {
-	store: string;
-	platform: string;
-	request: Request
-}
-
-export const authorizeIntegration = async ({ store, platform }: IAuthorizeIntegration) => {
+export const authorizeIntegration = async ({ platform, store, cookie }) => {
 	try {
-		const res = await api.get(`/${platform}/authorize?store=${store}`);
+		const response = await api.get(`/${platform}/authorize?store=${store}`,
+			{
+				headers:
+				{
+					Cookie: cookie
+				}
+			});
 
-		return res.data
+		return response.data;
 	} catch (error) {
-		console.log('error', error);
+		console.log(error);
 	}
-}
-
-interface IConnectIntegration {
-	platform: string;
-	store: string;
-	client?: {
-		id: string,
-		descriptive_name: string
-	}
-	request?: Request
-}
+};
 
 export const fetchAccounts = async ({ platform, store, request }: IConnectIntegration) => {
-	if (!request) return ({ error: 'request missing' })
 	const cookie = request.headers.get("cookie");
 	try {
 		const res = await api.get(`/${platform}/accounts`, {
@@ -91,7 +82,16 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 			}
 		});
 
-		return res.data
+		switch (platform) {
+			case "google":
+				return res.data.map(account => { return { id: account.id, name: account.descriptive_name } });
+
+			case "facebook":
+				return res.data.map(account => { return { id: account.id, name: account.name } });
+
+			default:
+				return [];
+		};
 	} catch (error) {
 		if (error.response) {
 			console.log('error', error.response.data);
@@ -102,22 +102,20 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 	}
 }
 
-export const connectAccount = async ({ platform, store, client, request }: IConnectIntegration) => {
-	const cookie = request.headers.get("cookie");
-
+export const connectAccount = async ({ platform, store, account, cookie }) => {
 	try {
 		const res = await api.post(`/${platform}/account/connect`, {
 			store,
-			client
+			account
 		}, {
 			headers: {
 				Cookie: cookie
 			}
 		});
 
-		return res.data
+		return res.data;
 	} catch (error) {
-		console.log("failed to connect", platform, "account");
+		console.log("failed to connect", platform, "account", error.response?.data);
 	}
 }
 
@@ -180,7 +178,13 @@ export const fetchGoogleAdsInvestment = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		console.log(error);
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("failed to fetch google ads");
+			return error;
+		}
 	}
 };
 
@@ -204,7 +208,35 @@ export const fetchFacebookAdsInvestment = async (request: Request, user) => {
 		});
 		return response.data;
 	} catch (error) {
-		console.log(error);
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("Failed to fetch facebook ads");
+			return error;
+		}
+	}
+};
+
+export const fetchShopifyProducts = async (request, user) => {
+	try {
+		const cookie = request.headers.get("cookie");
+
+		const searchParams = new URL(request.url).searchParams;
+		const store = searchParams.get("store") || user.shops[0].name;
+		const response = await api.post("/shopify/most-wanted", {
+			store: store
+		}, { headers: { Cookie: cookie } });
+
+		return response.data;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("Failed to fetch shopify products");
+			return error;
+		}
 	}
 };
 

@@ -1,5 +1,7 @@
-import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node";
+import { V2_MetaFunction, LinksFunction, LoaderArgs, json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { fetchShopifyProducts } from "~/api";
 import { checkAuth } from "~/api/helpers";
 import PageTitle from "~/components/page-title";
 import { links as sidebarLinks } from "~/components/sidebar";
@@ -13,14 +15,18 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const authenticated = await checkAuth(request);
-	if (!authenticated) {
+	const user = await checkAuth(request);
+	if (!user) {
 		return redirect("/login");
 	}
 
-	return null;
+	const products = await fetchShopifyProducts(request, user);
+	return json(products.map(product => { return { ...product.node } }));
 };
+
 export default function Products() {
+	const loaderData = useLoaderData();
+	console.log("loader data", loaderData);
 	return (
 		<>
 			<PageTitle>Produtos</PageTitle>
