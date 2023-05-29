@@ -26,6 +26,15 @@ export const loader = async ({ request }: LoaderArgs) => {
 	return json(products.map(product => { return { ...product.node } }));
 };
 
+export function ErrorBoundary() {
+	return (
+		<>
+			<PageTitle>Produtos</PageTitle>
+			<p>Algo deu errado, verifique o storefront token que você adicionou a essa loja</p>
+		</>
+	)
+};
+
 export default function ProductsPage() {
 	const products = useLoaderData();
 
