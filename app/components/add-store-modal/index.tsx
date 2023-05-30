@@ -1,12 +1,11 @@
-import { LinksFunction, redirect } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import SubmitButton, { links as submitButtonLinks } from "../submit-button";
 import Input from "../input";
 import type { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { postShopifyStore } from "~/api";
 import Overlay from "../overlay";
-import { Form, useFetcher, useSubmit } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 
 export const links: LinksFunction = () => [
   ...submitButtonLinks()
