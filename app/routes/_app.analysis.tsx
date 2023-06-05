@@ -35,14 +35,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 	};
 
 	const store = user.shops?.find(shop => shop.name === new URL(request.url).searchParams.get("store")) || user.shops[0];
-	if (store) {
-		const ordersPromise = fetchShopifyOrders(request, user);
-		const googleAdsPromise = store.google_client && fetchGoogleAdsInvestment(request, user);
-		const facebookAdsPromise = store.facebook_business && fetchFacebookAdsInvestment(request, user);
-		return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
-	}
-
-	return null;
+	const orders = await fetchShopifyOrders(request, user);
+	return defer({ orders })
+	// if (store) {
+	// 	const ordersPromise = fetchShopifyOrders(request, user);
+	// 	const googleAdsPromise = store?.google_client && fetchGoogleAdsInvestment(request, user);
+	// 	const facebookAdsPromise = store?.facebook_business && fetchFacebookAdsInvestment(request, user);
+	// 	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
+	// }
 };
 
 export default function Analysis() {
@@ -61,17 +61,15 @@ export default function Analysis() {
 	return (
 		<>
 			<PageTitle>
-				{formatStoreName(stores[selectedIndex].name)}
+				{formatStoreName(stores[selectedIndex])}
 			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{([orders, googleAds, facebookAds]) =>
+				<Await resolve={loaderData} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+					{(loaderData) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
-								orders={orders}
-								facebookAds={facebookAds}
-								googleAds={googleAds}
+								orders={loaderData.orders}
 							/>
 						) : navigation.state === "loading" ? (
 							<ChartsSkeleton />

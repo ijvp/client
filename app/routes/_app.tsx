@@ -10,15 +10,17 @@ import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
 import { storesAtom, userAtom } from "~/utils/atoms";
 import { useEffect } from "react";
+import { fetchUserStores } from "~/api/user";
 
 export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const { username, shops } = await checkAuth(request);
+	const { username } = await checkAuth(request);
+	const { stores } = await fetchUserStores(request);
 
-	return { username, stores: shops };
+	return { username, stores };
 };
 
 export default function App() {

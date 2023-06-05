@@ -49,7 +49,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					account: { id, name },
 					cookie
 				})
-				return response.message;
+
+				return response;
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -71,6 +72,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 
 		default: {
 			console.log(`Action invalid: ${action}`);
+			return null;
 		}
 	}
 }
