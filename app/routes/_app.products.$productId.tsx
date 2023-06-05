@@ -2,7 +2,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { fetchShopifyProductById } from "~/api";
+import { fetchShopifyProductById } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import { toLocalCurrency } from "~/utils/numbers";
 

@@ -2,7 +2,7 @@ import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { fetchShopifyProducts } from "~/api";
+import { fetchShopifyProducts } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import PageTitle from "~/components/page-title";
 import ProductList from "~/components/product-list";

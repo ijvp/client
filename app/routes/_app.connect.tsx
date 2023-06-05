@@ -1,6 +1,6 @@
 import type { ActionArgs, ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { postShopifyStore } from "~/api";
+import { postShopifyStore } from "~/api/shopify";
 
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	const redirectPath = new URL(request.headers.get("referer")).pathname

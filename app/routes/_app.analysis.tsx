@@ -9,9 +9,11 @@ import ChartsContainer, { links as chartsContainerLinks } from "~/components/cha
 import { useAtom } from "jotai";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
-import { fetchShopifyOrders, fetchGoogleAdsInvestment, fetchFacebookAdsInvestment } from "~/api";
 import { checkAuth } from "~/api/helpers";
 import ChartsSkeleton from "~/components/charts-skeleton";
+import { fetchGoogleAdsInvestment } from "~/api/google";
+import { fetchShopifyOrders } from "~/api/shopify";
+import { fetchUserStores } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -34,8 +36,17 @@ export const loader = async ({ request }: LoaderArgs) => {
 		return redirect("/login");
 	};
 
-	const store = user.shops?.find(shop => shop.name === new URL(request.url).searchParams.get("store")) || user.shops[0];
-	const orders = await fetchShopifyOrders(request, user);
+	const searchParams = new URL(request.url).searchParams;
+	let store = searchParams.get("store");
+
+	if (!store) {
+		const { stores } = await fetchUserStores(request);
+		store = stores[0]
+	};
+
+	const orders = await fetchShopifyOrders(request, user, store);
+	const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+	console.log(googleAds);
 	return defer({ orders })
 	// if (store) {
 	// 	const ordersPromise = fetchShopifyOrders(request, user);

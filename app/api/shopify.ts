@@ -6,12 +6,10 @@ import { parseDateString } from "~/utils/date";
 import api from ".";
 import { fetchUserStores } from "./user";
 
-export const fetchShopifyOrders = async (request: Request, user) => {
+export const fetchShopifyOrders = async (request: Request, user, store) => {
 	try {
 		const cookie = request.headers.get("cookie");
 		const searchParams = new URL(request.url).searchParams;
-		const { stores } = await fetchUserStores(request);
-		const store = searchParams.get("store") || stores[0];
 		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
 		const daysInterval = differenceInDays(end, start);
