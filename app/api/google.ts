@@ -1,0 +1,34 @@
+import { isAxiosError } from "axios";
+import { startOfToday, endOfToday } from "date-fns";
+import { parseDateString } from "~/utils/date";
+import api from ".";
+
+export const fetchGoogleAdsInvestment = async (request: Request, user) => {
+	try {
+		const cookie = request.headers.get("cookie");
+
+		const searchParams = new URL(request.url).searchParams;
+		const store = searchParams.get("store") || user.shops[0].name;
+		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
+		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+
+		const response = await api.post("/google/ads", {
+			store,
+			start,
+			end
+		}, {
+			headers: {
+				Cookie: cookie
+			}
+		});
+		return response.data;
+	} catch (error) {
+		if (isAxiosError(error)) {
+			console.log(error.message, error.request.path, error.response?.data)
+			return error.response?.data;
+		} else {
+			console.log("failed to fetch google ads");
+			return error;
+		}
+	}
+};
