@@ -36,8 +36,8 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 					currentDate.setUTCHours(hour);
 					const month = (currentDate.getUTCMonth() + 1).toString().length > 1 ? currentDate.getUTCMonth() + 1 : (currentDate.getUTCMonth() + 1).toString().padStart(2, "0");
 					const hours = currentDate.getUTCHours().toString().length > 1 ? currentDate.getUTCHours() : currentDate.getUTCHours().toString().padStart(2, "0");
-					const key = `${currentDate.getUTCFullYear()}-${month}-${currentDate.getUTCDate()}T${hours}`;
-
+					const day = currentDate.getUTCDate().toString().length > 1 ? currentDate.getUTCDate() : currentDate.getUTCDate().toString().padStart(2, "0");
+					const key = `${currentDate.getUTCFullYear()}-${month}-${day}T${hours}`;
 					const existingData = dataArray.find((data) => data.key === key);
 					if (existingData) {
 						filledArray.push(existingData);
@@ -59,11 +59,11 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return (isNaN(ratio) || !isFinite(ratio) || ratio < 0) ? 0 : ratio.toFixed(2);
 	};
 
-	const revenueData = getRevenueFromOrderMetrics(orders.metricsBreakdown);
+	const revenueData = getRevenueFromOrderMetrics(orders);
 	const revenueDataSeries = daysInterval ? revenueData : fillMissingHours(revenueData);
 	const totalRevenue = getTotalValue(revenueDataSeries);
 
-	const ordersData = getCountFromOrderMetrics(orders.metricsBreakdown)
+	const ordersData = getCountFromOrderMetrics(orders);
 	const ordersDataSeries = daysInterval ? ordersData : fillMissingHours(ordersData);
 	const totalOrders = getTotalValue(ordersDataSeries, 0);
 

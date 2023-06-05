@@ -66,7 +66,7 @@ export default function StoreSelect({ openAddStoreModal }) {
 			className={`w-full flex items-center justify-between py-4 ${open ? "font-semibold" : ""
 				}`}
 		>
-			{formatStoreName(stores[selectedIndex]?.name)}
+			{formatStoreName(stores[selectedIndex])}
 			<img
 				src="/icons/chevron-left.svg"
 				alt="chevron-left"
@@ -82,7 +82,7 @@ export default function StoreSelect({ openAddStoreModal }) {
 					return (
 						<div key={index} className="w-full last:border-b last:border-black-secondary">
 							<Link to={handleStoreSelect(store?.name)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
-								{formatStoreName(store?.name)}
+								{formatStoreName(store)}
 							</Link>
 						</div>
 					);
