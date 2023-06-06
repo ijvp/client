@@ -1,10 +1,24 @@
 import { isAxiosError } from "axios";
 import { startOfToday, endOfToday, differenceInDays } from "date-fns";
 import { Granularity } from "~/ts/enums";
-import { StoreData } from "~/ts/types";
 import { parseDateString } from "~/utils/date";
 import api from ".";
-import { fetchUserStores } from "./user";
+
+export const fetchShopifyRedirectURI = async (request: Request) => {
+	try {
+		const cookie = request.headers.get("cookie");
+
+		const response = await api.get("/shopify/authorize", {
+			headers: {
+				Cookie: cookie
+			}
+		});
+
+		return response.data;
+	} catch (error) {
+		console.log("Failed to fetch shopify redirect URI", error);
+	}
+};
 
 export const fetchShopifyOrders = async (request: Request, user, store) => {
 	try {

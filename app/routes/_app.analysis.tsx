@@ -46,7 +46,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	const orders = await fetchShopifyOrders(request, user, store);
 	const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-	console.log(googleAds);
 	return defer({ orders })
 	// if (store) {
 	// 	const ordersPromise = fetchShopifyOrders(request, user);

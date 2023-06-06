@@ -1,13 +1,11 @@
-import type { MouseEvent } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import styles from "./styles.css";
 import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { useAtom } from "jotai";
 import { formatStoreName } from "~/utils/store";
-import AddStoreModal, { links as addShopModalLinks } from "../add-store-modal";
+import { links as addShopModalLinks } from "../add-store-modal";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "@remix-run/react";
-import Overlay from "../overlay";
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles },
@@ -26,9 +24,25 @@ export default function StoreSelect({ openAddStoreModal }) {
 		setOpen(!open);
 	};
 
+	const handleShopifyOAuthRedirect = async () => {
+		try {
+			const response = await fetch("/connect", {
+				method: "POST"
+			});
+			console.log("res", response);
+
+			if (response.ok) {
+				const data = await response.json();
+				window.location.href = data;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const addStoreButton = (
 		<button
-			onClick={openAddStoreModal}
+			onClick={handleShopifyOAuthRedirect}
 			className="w-full py-4 flex items-center justify-center gap-5"
 		>
 			Adicionar loja

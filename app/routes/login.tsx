@@ -35,7 +35,7 @@ export const action = async ({ request }: ActionArgs) => {
 				withCredentials: true
 			}
 		);
-
+		console.log(response);
 		if (response.data.success) {
 			return redirect("/analysis", {
 				headers: response.headers
