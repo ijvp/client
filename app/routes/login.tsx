@@ -37,7 +37,7 @@ export const action = async ({ request }: ActionArgs) => {
 		);
 		console.log(response);
 		if (response.data.success) {
-			return redirect("/analysis", {
+			return redirect("/integrations", {
 				headers: response.headers
 			});
 		}
