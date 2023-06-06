@@ -42,6 +42,7 @@ export const action = async ({ request }: ActionArgs) => {
 			});
 		}
 	} catch (error) {
+		console.error(error);
 		return json({ success: false, message: "Algo deu errado, verifique sua senha" });
 	}
 
