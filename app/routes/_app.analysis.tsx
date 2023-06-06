@@ -11,9 +11,9 @@ import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 import { formatStoreName } from "~/utils/store";
 import { checkAuth } from "~/api/helpers";
 import ChartsSkeleton from "~/components/charts-skeleton";
+import { fetchFacebookAdsInvestment } from "~/api/facebook";
 import { fetchGoogleAdsInvestment } from "~/api/google";
 import { fetchShopifyOrders } from "~/api/shopify";
-import { fetchUserStores } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -37,21 +37,18 @@ export const loader = async ({ request }: LoaderArgs) => {
 			return redirect("/login");
 		};
 
-		const searchParams = new URL(request.url).searchParams;
-		let store = searchParams.get("store");
-
-		if (!store) {
-			const { stores } = await fetchUserStores(request);
-			store = stores[0]
-		};
-
-		const orders = await fetchShopifyOrders(request, user, store);
-		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-		return defer({ orders });
+		const store = user.shops?.find(shop => shop.name === new URL(request.url).searchParams.get("store")) || user.shops[0];
+		if (store) {
+			const ordersPromise = fetchShopifyOrders(request, user, store);
+			const googleAdsPromise = store.google_client && fetchGoogleAdsInvestment(request, user, store);
+			const facebookAdsPromise = store.facebook_business && fetchFacebookAdsInvestment(request, user, store);
+			return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
+		}
 	} catch (error) {
-		console.log(error);
-		return json({ success: false, error: "Algo deu errado" });
+		console.error(error);
+		return json({ success: false, message: "Algo deu errado, verifique sua senha" });
 	}
+
 };
 
 export default function Analysis() {
@@ -70,15 +67,17 @@ export default function Analysis() {
 	return (
 		<>
 			<PageTitle>
-				{formatStoreName(stores[selectedIndex])}
+				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={loaderData} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{(loaderData) =>
+				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+					{([orders, googleAds, facebookAds]) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
-								orders={loaderData.orders}
+								orders={orders}
+								facebookAds={facebookAds}
+								googleAds={googleAds}
 							/>
 						) : navigation.state === "loading" ? (
 							<ChartsSkeleton />
