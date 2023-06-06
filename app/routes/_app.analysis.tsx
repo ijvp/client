@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LinksFunction, LoaderArgs, V2_MetaFunction, json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { Suspense } from "react";
@@ -31,28 +31,27 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const user = await checkAuth(request);
-	if (!user) {
-		return redirect("/login");
-	};
+	try {
+		const user = await checkAuth(request);
+		if (!user) {
+			return redirect("/login");
+		};
 
-	const searchParams = new URL(request.url).searchParams;
-	let store = searchParams.get("store");
+		const searchParams = new URL(request.url).searchParams;
+		let store = searchParams.get("store");
 
-	if (!store) {
-		const { stores } = await fetchUserStores(request);
-		store = stores[0]
-	};
+		if (!store) {
+			const { stores } = await fetchUserStores(request);
+			store = stores[0]
+		};
 
-	const orders = await fetchShopifyOrders(request, user, store);
-	const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-	return defer({ orders })
-	// if (store) {
-	// 	const ordersPromise = fetchShopifyOrders(request, user);
-	// 	const googleAdsPromise = store?.google_client && fetchGoogleAdsInvestment(request, user);
-	// 	const facebookAdsPromise = store?.facebook_business && fetchFacebookAdsInvestment(request, user);
-	// 	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
-	// }
+		const orders = await fetchShopifyOrders(request, user, store);
+		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+		return defer({ orders });
+	} catch (error) {
+		console.log(error);
+		return json({ success: false, error: "Algo deu errado" });
+	}
 };
 
 export default function Analysis() {
