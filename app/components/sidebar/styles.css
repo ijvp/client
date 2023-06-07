@@ -8,10 +8,13 @@
     transform: scaleX(0);
     width: 0;
   }
+  60% {
+    opacity: 0;
+  }
   100% {
     opacity: 1;
     transform: scaleX(1);
-    width: fit-content;
+    width: max-content;
   }
 }
 
@@ -19,7 +22,10 @@
   0% {
     opacity: 1;
     transform: scaleX(1);
-    width: fit-content;
+    width: max-content;
+  }
+  40% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
