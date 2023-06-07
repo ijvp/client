@@ -14,16 +14,35 @@ export const links: LinksFunction = () => [
 	...addShopModalLinks()
 ];
 
-export default function StoreSelect({ openAddStoreModal }) {
+export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 	const location = useLocation();
 	const [searchParams] = useSearchParams();
 	const storeId = searchParams.get("store");
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 	const [open, setOpen] = useState(false);
+	
+	const handleClick = (openSidebar: boolean) => {
+		if(!openSidebar) {
+			const toggleButton = document.getElementById('toggle-button');
+			toggleButton.click();
+		};
 
-	const handleClick = () => {
 		setOpen(!open);
+
+		const menu = document.querySelector('.menu');
+		const menuContent = document.querySelector('.menu--content');
+		
+		if (menu.classList.contains('menu--collapsed')) {
+			const menuHeight = Array.from(menuContent.children).map(item => item.clientHeight).reduce((a, b) => a + b, 0);
+			menuContent.style.height = menuHeight + 'px';
+			menuContent.style.opacity = 1;
+			menuContent.style.transform = "scaleY(1)";
+		} else {
+			menuContent.style.height = 0;
+			menuContent.style.opacity = 0;
+			menuContent.style.transform = "scaleY(0)";
+		}
 	};
 
 	const addStoreButton = (
@@ -62,15 +81,15 @@ export default function StoreSelect({ openAddStoreModal }) {
 
 	const selectedStoreMarkdown = !!stores?.length && (
 		<div
-			onClick={handleClick}
-			className={`w-full flex items-center justify-between py-4 ${open ? "font-semibold" : ""
-				}`}
+			onClick={() => handleClick(openSidebar)}
+			id="stores-dropdown"
+			className={`w-full flex items-center justify-between py-4 bold-not-active ${open && "bold-active"}`}
 		>
-			{formatStoreName(stores[selectedIndex]?.name)}
+			<span className={`${openSidebar ? 'text-show' : 'text-hide'}`}>{formatStoreName(stores[selectedIndex]?.name)}</span>
 			<img
-				src="/icons/chevron-left.svg"
-				alt="chevron-left"
-				className={`transition-transform ${open ? "-rotate-90" : ""}`}
+				src="/icons/chevron-right.svg"
+				alt="chevron-right"
+				className={`transition-transform ${open ? "rotate-90" : ""}`}
 			/>
 		</div>
 	);
@@ -94,7 +113,7 @@ export default function StoreSelect({ openAddStoreModal }) {
 	);
 
 	return (
-		<>
+		<div className="relative menu--wrapper">
 			{!stores?.length ? (
 				<div className="border border-solid border-black-secondary rounded-lg">
 					{addStoreButton}
@@ -106,16 +125,14 @@ export default function StoreSelect({ openAddStoreModal }) {
 						flex flex-col items-center 
 						px-6 
 						border border-solid border-black-secondary rounded-lg 
-						cursor-pointer ${open ? "menu--expanded" : "menu"}
+						cursor-pointer menu ${open ? "menu--expanded" : "menu--collapsed"}
 					`}>
 					{selectedStoreMarkdown}
-					{open && (
-						<div className="w-full">
-							{storeOptionsMarkdown}
-							{addStoreButton}
-						</div>
-					)}
+					<div className="w-full menu--content">
+						{storeOptionsMarkdown}
+						{addStoreButton}
+					</div>
 				</div>)}
-		</>
+		</div>
 	);
 }

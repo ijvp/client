@@ -1,0 +1,59 @@
+.menu-transition {
+  transition: all 750ms ease-in-out;
+}
+
+@keyframes showText {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+    width: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+    width: fit-content;
+  }
+}
+
+@keyframes hideText {
+  0% {
+    opacity: 1;
+    transform: scaleX(1);
+    width: fit-content;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0);
+    width: 0;
+  }
+}
+
+.text-white svg {
+  fill: white;
+}
+
+.text-gray svg {
+  fill: grey;
+}
+
+.text-show {
+  animation: showText 750ms ease-in-out;
+  transform-origin: center left;
+}
+
+.text-hide {
+  animation: hideText 750ms ease-in-out forwards;
+  transform-origin: center left;
+}
+
+.full-image {
+  width: 60px;
+}
+
+.image-text {
+  width: 32px;
+}
+
+.sidebar--closed {
+  min-width: 140px;
+}

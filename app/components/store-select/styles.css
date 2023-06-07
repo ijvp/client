@@ -9,3 +9,20 @@
 	transform: translateY(0);
 	transition: all ease 300ms;
 } */
+
+.menu .menu--content {
+	transition: all 750ms ease-in-out;
+	transform-origin: top center;
+	opacity: 0;
+	height: 0;
+	transform: scaleY(0);
+}
+
+.bold-not-active {
+	transition: all 750ms ease-in-out;
+	text-shadow: 0 0 0 currentColor;
+}
+
+.bold-active {
+	text-shadow: 1px 0 0 currentColor;
+}
