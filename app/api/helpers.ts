@@ -5,7 +5,6 @@ export const checkAuth = async (request: Request) => {
 	const cookie = request.headers.get("Cookie");
 
 	try {
-		console.log("COOKIE EXISTE SIM, CHEGOU NA VERIFICACAO DE AUTH", cookie)
 		const response = await api.get("/auth/me", { headers: { Cookie: cookie } });
 		return response.data;
 	} catch (error) {
