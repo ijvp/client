@@ -38,17 +38,17 @@ export const loader = async ({ request }: LoaderArgs) => {
 			return redirect("/login");
 		};
 
-		const searchParams = new URL(request.url).searchParams;
-		let store = searchParams.get("store");
+		// const searchParams = new URL(request.url).searchParams;
+		// let store = searchParams.get("store");
 
-		if (!store) {
-			const { stores } = await fetchUserStores(request);
-			store = stores[0]
-		};
+		// if (!store) {
+		// 	const { stores } = await fetchUserStores(request);
+		// 	store = stores[0]
+		// };
 
-		const orders = await fetchShopifyOrders(request, user, store);
-		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-		return defer({ orders });
+		// const orders = await fetchShopifyOrders(request, user, store);
+		// const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+		// return defer({ orders });
 	} catch (error) {
 		console.log(error);
 		return null;
@@ -81,7 +81,8 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex].name)}
 			</PageTitle>
 			<IntervalSelect />
-			<Suspense fallback={<ChartsSkeleton />}>
+			<p>Shit works bitch</p>
+			{/* <Suspense fallback={<ChartsSkeleton />}>
 				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
 					{([orders, googleAds, facebookAds]) =>
 						navigation.state === "idle" ? (
@@ -94,7 +95,7 @@ export default function Analysis() {
 							<ChartsSkeleton />
 						) : null}
 				</Await>
-			</Suspense>
+			</Suspense> */}
 		</>
 	);
 };
