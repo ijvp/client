@@ -31,8 +31,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 		return { username, stores };
 	} catch (error) {
 		console.log(error);
+		return null;
 	}
-
 };
 
 export default function App() {
