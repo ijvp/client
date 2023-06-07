@@ -3,12 +3,11 @@ import { parseDateString } from "~/utils/date";
 import api from ".";
 import { isAxiosError } from "axios";
 
-export const fetchFacebookAdsInvestment = async (request: Request, user) => {
+export const fetchFacebookAdsInvestment = async (request: Request, user, store) => {
 	try {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const store = searchParams.get("store") || user.shops[0].name;
 		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
 

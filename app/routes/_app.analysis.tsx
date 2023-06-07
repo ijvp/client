@@ -31,6 +31,8 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
+	console.log("loader called.....");
+
 	try {
 		const user = await checkAuth(request);
 		if (!user) {
@@ -42,6 +44,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 			const ordersPromise = fetchShopifyOrders(request, user, store);
 			const googleAdsPromise = store.google_client && fetchGoogleAdsInvestment(request, user, store);
 			const facebookAdsPromise = store.facebook_business && fetchFacebookAdsInvestment(request, user, store);
+			console.log("promises list...", ordersPromise, googleAdsPromise, facebookAdsPromise);
 			return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
 		}
 	} catch (error) {
