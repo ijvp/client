@@ -32,22 +32,28 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const user = await checkAuth(request);
-	if (!user) {
-		return redirect("/login");
-	};
+	try {
+		const user = await checkAuth(request);
+		if (!user) {
+			return redirect("/login");
+		};
 
-	const searchParams = new URL(request.url).searchParams;
-	let store = searchParams.get("store");
+		const searchParams = new URL(request.url).searchParams;
+		let store = searchParams.get("store");
 
-	if (!store) {
-		const { stores } = await fetchUserStores(request);
-		store = stores[0]
-	};
+		if (!store) {
+			const { stores } = await fetchUserStores(request);
+			store = stores[0]
+		};
 
-	const orders = await fetchShopifyOrders(request, user, store);
-	const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-	return defer({ orders });
+		const orders = await fetchShopifyOrders(request, user, store);
+		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+		return defer({ orders });
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
+
 	// if (store) {
 	// 	const ordersPromise = fetchShopifyOrders(request, user);
 	// 	const googleAdsPromise = store?.google_client && fetchGoogleAdsInvestment(request, user);
