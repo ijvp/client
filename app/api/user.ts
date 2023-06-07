@@ -15,10 +15,10 @@ export const fetchUserStores = async (request: Request) => {
 	} catch (error) {
 		if (isAxiosError(error)) {
 			console.log(error.message, error.request.path, error.response?.data);
-			return error.response?.data
+			throw new Error(error.response?.data);
 		} else {
 			console.log("failed to fetch shopify orders");
-			return error
+			throw new Error(error);
 		}
 	}
 }
