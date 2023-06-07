@@ -78,6 +78,11 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
+	const authenticated = await checkAuth(request);
+	if (!authenticated) {
+		return redirect("/login");
+	}
+
 	const searchParams = new URL(request.url).searchParams
 	const platform = searchParams.get("platform");
 	const store = searchParams.get("store");
@@ -90,11 +95,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 			store,
 			platform
 		});
-	}
-
-	const authenticated = await checkAuth(request);
-	if (!authenticated) {
-		return redirect("/login");
 	}
 
 	return null;
