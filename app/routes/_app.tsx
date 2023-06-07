@@ -11,16 +11,28 @@ import { useAtom } from "jotai";
 import { storesAtom, userAtom } from "~/utils/atoms";
 import { useEffect } from "react";
 import { fetchUserStores } from "~/api/user";
+import PageTitle from "~/components/page-title";
+
+export const ErrorBoundary = () => {
+	return (
+		<PageTitle>Your code sucks</PageTitle>
+	)
+};
 
 export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const { username } = await checkAuth(request);
-	const { stores } = await fetchUserStores(request);
+	try {
+		const { username } = await checkAuth(request);
+		const { stores } = await fetchUserStores(request);
 
-	return { username, stores };
+		return { username, stores };
+	} catch (error) {
+		console.log(error);
+	}
+
 };
 
 export default function App() {
