@@ -14,6 +14,7 @@ import ChartsSkeleton from "~/components/charts-skeleton";
 import { fetchFacebookAdsInvestment } from "~/api/facebook";
 import { fetchGoogleAdsInvestment } from "~/api/google";
 import { fetchShopifyOrders } from "~/api/shopify";
+import { fetchUserStores } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -31,27 +32,28 @@ export function ErrorBoundary() {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-	console.log("loader called.....");
+	const user = await checkAuth(request);
+	if (!user) {
+		return redirect("/login");
+	};
 
-	try {
-		const user = await checkAuth(request);
-		if (!user) {
-			return redirect("/login");
-		};
+	const searchParams = new URL(request.url).searchParams;
+	let store = searchParams.get("store");
 
-		const store = user.shops?.find(shop => shop.name === new URL(request.url).searchParams.get("store")) || user.shops[0];
-		if (store) {
-			const ordersPromise = fetchShopifyOrders(request, user, store);
-			const googleAdsPromise = store.google_client && fetchGoogleAdsInvestment(request, user, store);
-			const facebookAdsPromise = store.facebook_business && fetchFacebookAdsInvestment(request, user, store);
-			console.log("promises list...", ordersPromise, googleAdsPromise, facebookAdsPromise);
-			return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
-		}
-	} catch (error) {
-		console.error(error);
-		return json({ success: false, message: "Algo deu errado, verifique sua senha" });
-	}
+	if (!store) {
+		const { stores } = await fetchUserStores(request);
+		store = stores[0]
+	};
 
+	const orders = await fetchShopifyOrders(request, user, store);
+	const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+	return defer({ orders });
+	// if (store) {
+	// 	const ordersPromise = fetchShopifyOrders(request, user);
+	// 	const googleAdsPromise = store?.google_client && fetchGoogleAdsInvestment(request, user);
+	// 	const facebookAdsPromise = store?.facebook_business && fetchFacebookAdsInvestment(request, user);
+	// 	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
+	// }
 };
 
 export default function Analysis() {
