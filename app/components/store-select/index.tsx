@@ -29,7 +29,6 @@ export default function StoreSelect({ openAddStoreModal }) {
 			const response = await fetch("/connect", {
 				method: "POST"
 			});
-			console.log("res", response);
 
 			if (response.ok) {
 				const data = await response.json();

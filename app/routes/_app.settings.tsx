@@ -85,6 +85,7 @@ export const loader = ({ request }: LoaderArgs) => {
 		})
 		.catch(error => {
 			console.log(error);
+			return null;
 		});
 };
 
