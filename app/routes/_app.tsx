@@ -26,12 +26,12 @@ export const links: LinksFunction = () => [
 export const loader = async ({ request }: LoaderArgs) => {
 	try {
 		const { username } = await checkAuth(request);
-		const { stores } = await fetchUserStores(request);
+		// const { stores } = await fetchUserStores(request);
 
-		console.log("root fetched stores", stores);
-		return json({ username, stores });
+		// console.log("root fetched stores", stores);
+		return json({ username });
 	} catch (error) {
-		console.log(error);
+		console.log({ error });
 		return null;
 	}
 };
