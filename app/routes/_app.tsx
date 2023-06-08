@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderArgs, json } from "@remix-run/node";
+import { LinksFunction, LoaderArgs, json, redirect } from "@remix-run/node";
 import { AppProvider } from "@shopify/polaris";
 import en from '@shopify/polaris/locales/en.json';
 import ptBR from '@shopify/polaris/locales/pt-BR.json';
@@ -26,10 +26,15 @@ export const links: LinksFunction = () => [
 export const loader = async ({ request }: LoaderArgs) => {
 	try {
 		const { username } = await checkAuth(request);
+		if (username) {
+			return json({ username });
+		} else {
+			return redirect("/login");
+		}
 		// const { stores } = await fetchUserStores(request);
 
 		// console.log("root fetched stores", stores);
-		return json({ username });
+
 	} catch (error) {
 		console.log({ error });
 		return null;

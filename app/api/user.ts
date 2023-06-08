@@ -17,7 +17,7 @@ export const fetchUserStores = async (request: Request) => {
 			console.log(error.message, error.request.path, error.response?.data);
 			throw new Error(error.response?.data);
 		} else {
-			console.log("failed to fetch shopify orders");
+			console.log("failed to fetch user stores");
 			throw new Error(error);
 		}
 	}
