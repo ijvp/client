@@ -78,7 +78,7 @@ export default function Analysis() {
 	return (
 		<>
 			<PageTitle>
-				{formatStoreName(stores[selectedIndex].name)}
+				{formatStoreName(stores[selectedIndex])}
 			</PageTitle>
 			<IntervalSelect />
 			<p>Shit works bitch</p>

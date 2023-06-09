@@ -27,16 +27,15 @@ export const loader = async ({ request }: LoaderArgs) => {
 	try {
 		const { username } = await checkAuth(request);
 		if (username) {
-			return json({ username });
+			const stores = await fetchUserStores(request);
+
+			return json({ username, stores });
 		} else {
 			return redirect("/login");
 		}
-		// const { stores } = await fetchUserStores(request);
-
-		// console.log("root fetched stores", stores);
 
 	} catch (error) {
-		console.log({ error });
+		console.log(error);
 		return null;
 	}
 };
@@ -47,11 +46,12 @@ export default function App() {
 	const [, setUser] = useAtom(userAtom);
 
 	useEffect(() => {
-		if (data.stores) {
+		console.log("loader data", data);
+		if (data?.stores) {
 			setStores(data.stores);
 		}
 
-		if (data.username) {
+		if (data?.username) {
 			setUser(data.username)
 		}
 	}, [data, setStores, setUser]);
