@@ -1,11 +1,10 @@
 import type { LinksFunction, ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
 import Input from "~/components/input";
-import api from "~/api";
 import { checkAuth } from "~/api/helpers";
+import { loginUser } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Login" }];
@@ -16,36 +15,11 @@ export const links: LinksFunction = () => [
 ];
 
 export const action = async ({ request }: ActionArgs) => {
-	const form = await request.formData();
-	const username = form.get("username");
-	const password = form.get("password");
-
-	const fields = { username, password };
-	if (!Object.values(fields).some(Boolean)) {
-		return json({ success: false, message: "Por favor preencha todos os campos" });
-	};
-
 	try {
-		const response = await api.post("/auth/login",
-			{
-				username,
-				password
-			},
-			{
-				withCredentials: true
-			}
-		);
-		if (response.data.success) {
-			return redirect("/analysis", {
-				headers: response.headers
-			});
-		}
+		return await loginUser(request);
 	} catch (error) {
-		console.error(error);
-		return json({ success: false, message: "Algo deu errado, verifique sua senha" });
+		return null;
 	}
-
-	return null;
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
