@@ -41,7 +41,7 @@ export const loginUser = async (request: Request) => {
 				password
 			}
 		);
-		console.log(response);
+		console.log(response.headers);
 		if (response.data.success) {
 			return redirect("/analysis", {
 				headers: response.headers
