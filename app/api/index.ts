@@ -13,16 +13,17 @@ api.interceptors.response.use(
 	response => {
 		if (response.headers['set-cookie']) {
 			console.log("INTERCEPTED", response.headers['set-cookie']);
-			const cookies = response.headers['set-cookie']
-			console.log("COOKIES", cookies[1].split("=")[0] == "connect.sid")
+			const cookies = response.headers['set-cookie'];
 
 			const found = cookies.find(cookie => cookie.split("=")[0] == "connect.sid");
 			if (found) {
+				console.log("FOUND", found)
 				api.defaults.headers.common.Cookie = found;
 				return { ...response, headers: { ...response.headers, 'set-cookie': found } };
 			}
 		}
-		return response;
+
+		return { ...response, headers: { ...response.headers, 'set-cookie': undefined } };
 	},
 	(error) => Promise.reject(error),
 );
