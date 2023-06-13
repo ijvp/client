@@ -23,7 +23,8 @@ api.interceptors.response.use(
 			}
 		}
 
-		return { ...response, headers: { ...response.headers, 'set-cookie': undefined } };
+		delete response.headers['set-cookie'];
+		return response;
 	},
 	(error) => Promise.reject(error),
 );
