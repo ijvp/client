@@ -7,8 +7,8 @@ export const action = async ({ request }: ActionArgs) => {
 	const authenticated = await checkAuth(request);
 	const cookie = request.headers.get("Cookie");
 	try {
-		await api.get("/auth/logout", { headers: { Cookie: cookie } });
-		return redirect("/login", { headers: { "Set-Cookie": "connect.sid=" } });
+		const response = await api.get("/auth/logout", { headers: { Cookie: cookie } });
+		return redirect("/login", { headers: response.headers });
 	} catch (error) {
 		console.log(error.response?.data);
 	};
