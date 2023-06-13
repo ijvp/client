@@ -12,7 +12,10 @@ const api: AxiosInstance = axios.create({
 api.interceptors.response.use(
 	response => {
 		if (response.headers['set-cookie']) {
-			api.defaults.headers.common.Cookie = response.headers['set-cookie'][0];
+			console.log("INTERCEPTED", response.headers['set-cookie']);
+			const cookies = response.headers['set-cookie'].join('; ');
+			console.log("COOKIES", cookies);
+			api.defaults.headers.common.Cookie = cookies;
 		}
 		return response;
 	},

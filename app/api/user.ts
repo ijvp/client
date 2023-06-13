@@ -39,9 +39,11 @@ export const loginUser = async (request: Request) => {
 			{
 				username,
 				password
+			},
+			{
+				withCredentials: true
 			}
 		);
-		console.log(response.headers);
 		if (response.data.success) {
 			return redirect("/analysis", {
 				headers: response.headers
@@ -53,7 +55,7 @@ export const loginUser = async (request: Request) => {
 			throw new Error(error.response?.data);
 		} else {
 			console.error("failed to authenticate user");
-			throw new Error(error);
+			// throw new Error(error);
 		}
 	}
 }
