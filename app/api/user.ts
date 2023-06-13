@@ -36,33 +36,33 @@ export const loginUser = async (request: Request) => {
 			return json({ success: false, message: "Por favor preencha todos os campos" });
 		};
 
-		const response = await fetch(`${process.env.API_URL}/auth/login`, {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(fields)
-		})
-		console.log("DATA", response.headers);
-		if (response.ok) {
-			return redirect("/analysis", { headers: response.headers })
-		}
-		// const response = await api.post("/auth/login",
-		// 	{
-		// 		username,
-		// 		password
+		// const response = await fetch(`${process.env.API_URL}/auth/login`, {
+		// 	method: 'POST',
+		// 	credentials: 'include',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
 		// 	},
-		// 	{
-		// 		withCredentials: true
-		// 	}
-		// );
-		// console.log("headers", response.headers);
-		// if (response.data.success) {
-		// 	return redirect("/analysis", {
-		// 		headers: response.headers
-		// 	});
+		// 	body: JSON.stringify(fields)
+		// })
+		// console.log("DATA", response.headers);
+		// if (response.ok) {
+		// 	return redirect("/analysis", { headers: response.headers })
 		// }
+		const response = await api.post("/auth/login",
+			{
+				username,
+				password
+			},
+			{
+				withCredentials: true
+			}
+		);
+		console.log("headers", response.headers);
+		if (response.data.success) {
+			return redirect("/analysis", {
+				headers: response.headers
+			});
+		}
 	} catch (error) {
 		// if (isAxiosError(error)) {
 		// 	console.error(error.message, error.request.path, error.response?.data);
