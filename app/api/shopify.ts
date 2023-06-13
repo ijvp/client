@@ -16,7 +16,7 @@ export const fetchShopifyRedirectURI = async (request: Request) => {
 
 		return response.data;
 	} catch (error) {
-		console.log("Failed to fetch shopify redirect URI", error);
+		console.log("Failed to fetch shopify redirect URI", error.response.data);
 	}
 };
 

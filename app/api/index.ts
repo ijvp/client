@@ -6,29 +6,6 @@ const api: AxiosInstance = axios.create({
 	withCredentials: true
 });
 
-//TODO: descobrir porque isso não ta funcionando
-// atualmente é necessario passar o cookie explicitamente
-// em cada loader/requisicao
-// api.interceptors.response.use(
-// 	response => {
-// 		if (response.headers['set-cookie']) {
-// 			console.log("INTERCEPTED", response.headers['set-cookie']);
-// 			const cookies = response.headers['set-cookie'];
-
-// 			const found = cookies.find(cookie => cookie.split("=")[0] == "connect.sid");
-// 			if (found) {
-// 				console.log("FOUND", found)
-// 				api.defaults.headers.common.Cookie = found;
-// 				return { ...response, headers: { ...response.headers, 'set-cookie': found } };
-// 			}
-// 		}
-
-// 		delete response.headers['set-cookie'];
-// 		return response;
-// 	},
-// 	(error) => Promise.reject(error),
-// );
-
 export const authorizeIntegration = async ({ platform, store, cookie }) => {
 	try {
 		const response = await api.get(`/${platform}/authorize?store=${store}`,
