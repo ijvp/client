@@ -13,9 +13,7 @@ api.interceptors.response.use(
 	response => {
 		if (response.headers['set-cookie']) {
 			console.log("INTERCEPTED", response.headers['set-cookie']);
-			const cookies = response.headers['set-cookie'].join('; ');
-			console.log("COOKIES", cookies);
-			api.defaults.headers.common.Cookie = cookies;
+			api.defaults.headers.common.Cookie = response.headers['set-cookie'][1];
 		}
 		return response;
 	},
