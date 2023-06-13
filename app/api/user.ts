@@ -44,6 +44,7 @@ export const loginUser = async (request: Request) => {
 				withCredentials: true
 			}
 		);
+		console.log("headers", response.headers);
 		if (response.data.success) {
 			return redirect("/analysis", {
 				headers: response.headers
@@ -52,7 +53,7 @@ export const loginUser = async (request: Request) => {
 	} catch (error) {
 		if (isAxiosError(error)) {
 			console.error(error.message, error.request.path, error.response?.data);
-			throw new Error(error.response?.data);
+			// throw new Error(error.response?.data);
 		} else {
 			console.error("failed to authenticate user");
 			// throw new Error(error);
