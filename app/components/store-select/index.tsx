@@ -68,7 +68,7 @@ export default function StoreSelect({ openAddStoreModal }) {
 	//Esse hook precisa ficar antes do if (!stores.length) para nao ser chamado condicionalmente
 	useEffect(() => {
 		if (stores?.length) {
-			const index = stores.findIndex((store) => store?.name === storeId);
+			const index = stores.findIndex(store => store === storeId);
 			index > -1 ? setSelectedIndex(index) : setSelectedIndex(0);
 		}
 	}, [stores, storeId, setSelectedIndex]);
@@ -94,7 +94,7 @@ export default function StoreSelect({ openAddStoreModal }) {
 				if (store !== stores[selectedIndex]) {
 					return (
 						<div key={index} className="w-full last:border-b last:border-black-secondary">
-							<Link to={handleStoreSelect(store?.name)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
+							<Link to={handleStoreSelect(store)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
 								{formatStoreName(store)}
 							</Link>
 						</div>
