@@ -1,9 +1,9 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs, ActionArgs, ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { fetchAccounts, authorizeIntegration, connectAccount, disconnectIntegration, fetchActiveConnections } from "~/api";
 import { checkAuth } from "~/api/helpers";
 import AccountSelect, { links as accountSelectLinks } from "~/components/account-select";
@@ -78,6 +78,12 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	}
 }
 
+export function ErrorBoundary() {
+	return (
+		<PageTitle>Erro ao carregar integrações</PageTitle>
+	)
+};
+
 export const loader = async ({ request }: LoaderArgs) => {
 	const user = await checkAuth(request);
 	if (!user) {
@@ -122,7 +128,14 @@ export default function Integrations() {
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
-			<IntegrationsContainer connections={data.connections} />
+			<Suspense>
+				<Await
+					resolve={data?.connections}
+					errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}
+				>
+					<IntegrationsContainer connections={data.connections} />
+				</Await>
+			</Suspense>
 			{platform && (
 				<AccountSelect
 					{...data}
