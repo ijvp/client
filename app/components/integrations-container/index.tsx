@@ -23,7 +23,7 @@ export default function IntegrationContainer({ connections }) {
       active: true,
       validation: 'google_client',
       locked: false,
-      connected: connections["google_ads"]
+      connected: connections?.["google_ads"]
     },
     {
       id: "facebook",
@@ -32,7 +32,7 @@ export default function IntegrationContainer({ connections }) {
       validation: 'facebook_business',
       active: true,
       locked: false,
-      connected: connections["facebook_ads"]
+      connected: connections?.["facebook_ads"]
     },
     {
       id: "tiktok",

@@ -125,6 +125,7 @@ export default function Integrations() {
 
 	}, [selectedIndex, storeName, stores, setSelectedIndex, data]);
 
+	console.log("LOADER DATA", data);
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
@@ -133,7 +134,7 @@ export default function Integrations() {
 					resolve={data?.connections}
 					errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}
 				>
-					<IntegrationsContainer connections={data.connections} />
+					<IntegrationsContainer connections={data?.connections} />
 				</Await>
 			</Suspense>
 			{platform && (
