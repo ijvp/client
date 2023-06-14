@@ -4,7 +4,7 @@ import { redirect } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { fetchAccounts, authorizeIntegration, connectAccount, disconnectIntegration } from "~/api";
+import { fetchAccounts, authorizeIntegration, connectAccount, disconnectIntegration, fetchActiveConnections } from "~/api";
 import { checkAuth } from "~/api/helpers";
 import AccountSelect, { links as accountSelectLinks } from "~/components/account-select";
 import IntegrationsContainer from "~/components/integrations-container";
@@ -34,7 +34,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	switch (action) {
 		case "authorize": {
 			try {
-				const redirectUrl = await authorizeIntegration({ platform, store, cookie });
+				const redirectUrl = await authorizeIntegration({ cookie, platform, store });
+				console.log(redirectUrl);
 				return redirect(redirectUrl);
 			} catch (error) {
 				console.log("failed to connect account", error)
@@ -78,8 +79,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-	const authenticated = await checkAuth(request);
-	if (!authenticated) {
+	const user = await checkAuth(request);
+	if (!user) {
 		return redirect("/login");
 	}
 
@@ -87,17 +88,19 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const platform = searchParams.get("platform");
 	const store = searchParams.get("store");
 
+	const connections = await fetchActiveConnections({ request });
 	if (platform && store) {
 		const accounts = await fetchAccounts({ store, platform, request })
 
 		return json({
 			accounts,
 			store,
-			platform
+			platform,
+			connections
 		});
+	} else {
+		return json({ connections })
 	}
-
-	return null;
 };
 
 export default function Integrations() {
@@ -119,7 +122,7 @@ export default function Integrations() {
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
-			<IntegrationsContainer />
+			<IntegrationsContainer connections={data.connections} />
 			{platform && (
 				<AccountSelect
 					{...data}

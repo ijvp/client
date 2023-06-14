@@ -3,18 +3,14 @@ import { useEffect, useState } from "react";
 import { storeIndexAtom, storesAtom } from "~/utils/atoms";
 import IntegrationButton from "../integration-button";
 
-export default function IntegrationBox({ name, validation, id, locked }: { name: string, validation: string, id: string, locked: boolean }) {
-    const [isConnected, setIsConnected] = useState(false)
+export default function IntegrationBox({ name, validation, id, locked, connected }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
+    const [isConnected, setIsConnected] = useState(locked ? false : connected);
     const [stores, setStores] = useAtom(storesAtom);
     const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 
     const handleConnectionChange = (connectionState: boolean) => {
-        setIsConnected(connectionState)
-    }
-
-    useEffect(() => {
-        setIsConnected(!!stores[selectedIndex]?.[validation])
-    }, [selectedIndex, validation, stores]);
+        setIsConnected(connectionState);
+    };
 
     return (
         <div className="flex flex-row bg-black-bg border border-solid border-black-secondary rounded px-6 py-10 max-w-min text-white justify-between min-w-full">
@@ -30,7 +26,7 @@ export default function IntegrationBox({ name, validation, id, locked }: { name:
                 locked={locked}
                 onConnectionChange={handleConnectionChange}
                 storeName={stores[selectedIndex]}
-                storeintegrationId={id}
+                storeIntegrationId={id}
             />
         </div>
     )

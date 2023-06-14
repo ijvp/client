@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import IntegrationBox from "../integration-box";
 import { storesAtom } from "~/utils/atoms";
 
-export default function IntegrationContainer() {
+export default function IntegrationContainer({ connections }) {
   const [stores, setStores] = useAtom(storesAtom);
 
   interface IIntegrationsId {
@@ -12,6 +12,7 @@ export default function IntegrationContainer() {
     active: boolean;
     validation: string;
     locked: boolean;
+    connected?: boolean
   }
 
   const integrationsIds: IIntegrationsId[] = [
@@ -21,7 +22,8 @@ export default function IntegrationContainer() {
       type: "anuncios",
       active: true,
       validation: 'google_client',
-      locked: false
+      locked: false,
+      connected: connections["google_ads"]
     },
     {
       id: "facebook",
@@ -29,7 +31,8 @@ export default function IntegrationContainer() {
       type: "anuncios",
       validation: 'facebook_business',
       active: true,
-      locked: false
+      locked: false,
+      connected: connections["facebook_ads"]
     },
     {
       id: "tiktok",
@@ -48,8 +51,8 @@ export default function IntegrationContainer() {
       locked: true
     },
     {
-      id: "activeCampaing",
-      name: "Active Campaing",
+      id: "activeCampaign",
+      name: "Active Campaign",
       type: "eMailMarketing",
       validation: '',
       active: false,
@@ -108,19 +111,6 @@ export default function IntegrationContainer() {
       {stores.length > 0 ?
         <div>
           <div>
-            {/* <div className="mt-[60px]">
-                            <h2 id="ecommerce" className="h5 pb-8">E-Commerce:</h2>
-                            <div className="grid grid-cols-2 gap-6">
-                                {ecommerceIntegrations.map(integration => (
-                                    <IntegrationBox
-                                        key={integration.id}
-                                        id={integration.id}
-                                        name={integration.name}
-                                        connected={false}
-                                    />
-                                ))}
-                            </div>
-                        </div> */}
             <div className="mt-[60px]">
               <h2 id="anuncios" className="h5 pb-8">Anúncios:</h2>
               <div className="grid grid-cols-2 gap-6">
@@ -131,6 +121,7 @@ export default function IntegrationContainer() {
                     name={integration.name}
                     locked={integration.locked}
                     validation={integration.validation}
+                    connected={integration.connected}
                   />
                 ))}
               </div>
@@ -145,6 +136,7 @@ export default function IntegrationContainer() {
                     name={integration.name}
                     locked={integration.locked}
                     validation={integration.validation}
+                    connected={integration.connected}
                   />
                 ))}
               </div>

@@ -12,10 +12,10 @@ interface IIntegrationButton {
   locked: boolean;
   onConnectionChange: (connectionState: boolean) => void;
   storeName: string;
-  storeintegrationId: string;
+  storeIntegrationId: string;
 }
 
-export default function IntegrationButton({ connected, locked, onConnectionChange, storeintegrationId, storeName }: IIntegrationButton) {
+export default function IntegrationButton({ connected, locked, onConnectionChange, storeIntegrationId, storeName }: IIntegrationButton) {
   const [isConnected, setIsConnected] = useState(false)
 
   const handleConnect = async () => {
@@ -28,7 +28,7 @@ export default function IntegrationButton({ connected, locked, onConnectionChang
     onConnectionChange(false)
   }
 
-  const action = isConnected === false ? 'disconnect' : 'authorize';
+  const action = isConnected ? 'disconnect' : 'authorize';
 
   useEffect(() => {
     setIsConnected(connected)
@@ -38,10 +38,11 @@ export default function IntegrationButton({ connected, locked, onConnectionChang
     <Form method="post" action="/integrations">
       <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />
-      <input type="hidden" name="platform" value={storeintegrationId} />
+      <input type="hidden" name="platform" value={storeIntegrationId} />
       <button
         disabled={locked}
-        onClick={isConnected === false ? handleConnect : handleDisconnect}
+        type="submit"
+        // onClick={isConnected === false ? handleConnect : handleDisconnect}
         className={`
         flex justify-center items-center
         min-w-[145px] h-[60px] 

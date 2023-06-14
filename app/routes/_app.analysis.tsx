@@ -38,17 +38,17 @@ export const loader = async ({ request }: LoaderArgs) => {
 			return redirect("/login");
 		};
 
-		// const searchParams = new URL(request.url).searchParams;
-		// let store = searchParams.get("store");
+		const searchParams = new URL(request.url).searchParams;
+		let store = searchParams.get("store");
 
-		// if (!store) {
-		// 	const { stores } = await fetchUserStores(request);
-		// 	store = stores[0]
-		// };
+		if (!store) {
+			const stores = await fetchUserStores(request);
+			store = stores[0]
+		};
 
-		// const orders = await fetchShopifyOrders(request, user, store);
+		const orders = await fetchShopifyOrders(request, user, store);
 		// const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-		// return defer({ orders });
+		return defer({ orders });
 	} catch (error) {
 		console.log(error);
 		return null;
@@ -69,6 +69,7 @@ export default function Analysis() {
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
+	console.log(loaderData)
 	if (!stores?.length) {
 		return (
 			<PageTitle>Você não tem uma loja cadastrada ainda...</PageTitle>
@@ -81,21 +82,20 @@ export default function Analysis() {
 				{formatStoreName(stores[selectedIndex])}
 			</PageTitle>
 			<IntervalSelect />
-			<p>Shit works bitch</p>
-			{/* <Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{([orders, googleAds, facebookAds]) =>
+			<Suspense fallback={<ChartsSkeleton />}>
+				<Await resolve={loaderData?.orders} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+					{(data) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
-								orders={orders}
-								facebookAds={facebookAds}
-								googleAds={googleAds}
+								orders={data}
+								facebookAds={data?.facebookAds}
+								googleAds={data?.googleAds}
 							/>
 						) : navigation.state === "loading" ? (
 							<ChartsSkeleton />
 						) : null}
 				</Await>
-			</Suspense> */}
+			</Suspense>
 		</>
 	);
 };

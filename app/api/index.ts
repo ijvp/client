@@ -1,3 +1,4 @@
+import { fetchUserStores } from '~/api/user';
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 
@@ -6,7 +7,7 @@ const api: AxiosInstance = axios.create({
 	withCredentials: true
 });
 
-export const authorizeIntegration = async ({ platform, store, cookie }) => {
+export const authorizeIntegration = async ({ cookie, platform, store }) => {
 	try {
 		const response = await api.get(`/${platform}/authorize?store=${store}`,
 			{
@@ -19,6 +20,24 @@ export const authorizeIntegration = async ({ platform, store, cookie }) => {
 		return response.data;
 	} catch (error) {
 		console.log(error);
+	}
+};
+
+export const fetchActiveConnections = async ({ request }) => {
+	const cookie = request.headers.get("cookie");
+	const searchParams = new URL(request.url).searchParams;
+	const store = searchParams.get("store") || await fetchUserStores(request).then(stores => stores[0])
+	try {
+		const response = await api.get("/user/store/connections", {
+			params: { store: store },
+			headers: {
+				Cookie: cookie
+			}
+		});
+
+		return response.data;
+	} catch (error) {
+		console.log("Failed to fetch store connections", error.response.data);
 	}
 };
 

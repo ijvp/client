@@ -23,7 +23,7 @@ export const fetchShopifyRedirectURI = async (request: Request) => {
 export const fetchShopifyOrders = async (request: Request, user, store) => {
 	try {
 		const cookie = request.headers.get("cookie");
-		console.log("fetching orders...", cookie);
+
 		const searchParams = new URL(request.url).searchParams;
 		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();

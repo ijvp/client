@@ -46,7 +46,6 @@ export default function App() {
 	const [, setUser] = useAtom(userAtom);
 
 	useEffect(() => {
-		console.log("loader data", data);
 		if (data?.stores) {
 			setStores(data.stores);
 		}
