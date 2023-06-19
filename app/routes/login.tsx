@@ -92,10 +92,13 @@ export default function Login() {
 							</p>)}
 					</div>
 				</div>
-				<div className="flex">
-					<p>Ainda não tem uma conta?&nbsp;</p><Link to="/login">Registre aqui</Link>
+				<div className="flex flex-col gap-4">
+					<p>Ainda não tem uma conta?&nbsp;<Link to="/login">Registre aqui</Link></p>
+					<div className="flex gap-4">
+						<Link to="/terms-of-service">Termos de Uso</Link>
+						<Link to="/privacy-policy">Política de Privacidade</Link>
+					</div>
 				</div>
-
 			</form>
 		</div>
 	);
