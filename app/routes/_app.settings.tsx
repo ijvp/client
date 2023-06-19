@@ -4,9 +4,11 @@ import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import api from "~/api";
 import { checkAuth } from "~/api/helpers";
+import { fetchUserStores } from "~/api/user";
 import Input from "~/components/input";
 import PageTitle from "~/components/page-title";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button";
+import { formatStoreName } from "~/utils/store";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Configurações" }];
@@ -54,7 +56,6 @@ export const action = async ({ request }: ActionArgs) => {
 		passwordConfirm: validatePasswordComparision(newPassword, newPasswordConfirm)
 	};
 
-
 	if (Object.values(fieldErrors).some(Boolean)) {
 		return json({ fieldErrors, fields }, 400);
 	};
@@ -74,100 +75,143 @@ export const action = async ({ request }: ActionArgs) => {
 	};
 };
 
-export const loader = ({ request }: LoaderArgs) => {
-	return checkAuth(request)
-		.then(user => {
-			if (!user) {
-				return redirect("/login");
-			} else {
-				return user;
-			}
-		})
-		.catch(error => {
-			console.log(error);
-			return null;
-		});
+export const loader = async ({ request }: LoaderArgs) => {
+	try {
+		const user = await checkAuth(request);
+		const accounts = await fetchUserStores(request);
+		return json({ user, accounts })
+	} catch (error) {
+		console.log(error);
+		return redirect("/login");
+	}
 };
 
 export default function Settings() {
-	const user = useLoaderData();
+	const { user, accounts } = useLoaderData();
 	const actionData = useActionData();
+
+	const handleDeleteStore = async (index: number) => {
+		try {
+			const data = new FormData();
+			data.append("store", accounts[index]);
+			const response = await fetch("/settings/delete", {
+				method: "POST",
+				body: data
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				if (data.success) {
+					return data.message;
+				} else {
+					return data.error;
+				}
+			}
+		} catch (error) {
+			console.log(error);
+			return null;
+		}
+	};
+
 
 	return (
 		<>
 			<PageTitle>
 				Olá, {user.username}
 			</PageTitle>
-			<form
-				method="post"
-				className="
-				max-w-xl 
-				my-14
-				flex flex-col items-center justify-center gap-8
-			">
-				<div className="w-full flex flex-col items-start justify-center gap-4">
-					<h2 className="subtitle">Alterar nome de usuário:</h2>
-					<Input
-						type="text"
-						name="username"
-						defaultValue={actionData?.fields?.username || user.username}
-						ariaInvalid={Boolean(actionData?.fieldErrors?.username)}
-						ariaErrorMessage={actionData?.fieldErrors?.username}
-						autocomplete="username"
-						icon="edit-icon.svg"
-					/>
-					{!!actionData?.fieldErrors?.username && (
-						<p className="text-red-500">
-							{actionData.fieldErrors.username}
-						</p>
-					)}
-				</div>
-
-				<div className="w-full flex flex-col items-start justify-center gap-4">
-					<h2 className="subtitle">Alterar senha:</h2>
-					<Input
-						type="password"
-						name="password"
-						placeholder="Insira a senha atual"
-					/>
-					<Input
-						type="password"
-						name="new-password"
-						placeholder="Nova senha"
-						ariaInvalid={Boolean(actionData?.fieldErrors?.password)}
-						ariaErrorMessage={actionData?.fieldErrors?.password}
-					/>
-					{!!actionData?.fieldErrors?.newPassword && (
-						<p className="text-red-500">
-							{actionData.fieldErrors.newPassword}
-						</p>
-					)}
-					<Input
-						type="password"
-						name="new-password-confirm"
-						placeholder="Confirmar nova senha"
-						ariaInvalid={Boolean(actionData?.fieldErrors?.passwordConfirm)}
-						ariaErrorMessage={actionData?.fieldErrors?.passwordConfirm}
-					/>
-					{!!actionData?.fieldErrors?.passwordConfirm && (
-						<p className="text-red-500">
-							{actionData.fieldErrors.passwordConfirm}
-						</p>
-					)}
-				</div>
-				<div className="w-1/2 self-start">
-					<SubmitButton label="Salvar alterações" />
-					{actionData?.success ?
-						(
-							<p className="text-green-500 my-4">
-								Informações salvas com sucesso
-							</p>) : (
-							<p className="text-red-500 my-4">
-								{actionData?.message}
+			<div className="w-full flex gap-8 items-start justify-center">
+				<form
+					method="post"
+					className="
+					w-full max-w-xl 
+					my-14
+					flex flex-col items-start justify-center gap-8
+				">
+					<div className="w-full flex flex-col items-start justify-center gap-4">
+						<h2 className="subtitle">Alterar nome de usuário:</h2>
+						<Input
+							type="text"
+							name="username"
+							defaultValue={actionData?.fields?.username || user.username}
+							ariaInvalid={Boolean(actionData?.fieldErrors?.username)}
+							ariaErrorMessage={actionData?.fieldErrors?.username}
+							autocomplete="username"
+							icon="edit-icon.svg"
+						/>
+						{!!actionData?.fieldErrors?.username && (
+							<p className="text-red-500">
+								{actionData.fieldErrors.username}
 							</p>
 						)}
+					</div>
+
+					<div className="w-full flex flex-col items-start justify-center gap-4">
+						<h2 className="subtitle">Alterar senha:</h2>
+						<Input
+							type="password"
+							name="password"
+							placeholder="Insira a senha atual"
+						/>
+						<Input
+							type="password"
+							name="new-password"
+							placeholder="Nova senha"
+							ariaInvalid={Boolean(actionData?.fieldErrors?.password)}
+							ariaErrorMessage={actionData?.fieldErrors?.password}
+						/>
+						{!!actionData?.fieldErrors?.newPassword && (
+							<p className="text-red-500">
+								{actionData.fieldErrors.newPassword}
+							</p>
+						)}
+						<Input
+							type="password"
+							name="new-password-confirm"
+							placeholder="Confirmar nova senha"
+							ariaInvalid={Boolean(actionData?.fieldErrors?.passwordConfirm)}
+							ariaErrorMessage={actionData?.fieldErrors?.passwordConfirm}
+						/>
+						{!!actionData?.fieldErrors?.passwordConfirm && (
+							<p className="text-red-500">
+								{actionData.fieldErrors.passwordConfirm}
+							</p>
+						)}
+					</div>
+					<div className="w-2/3 self-start">
+						<SubmitButton label="Salvar alterações" />
+						{actionData?.success ?
+							(
+								<p className="text-green-500 my-4">
+									Informações salvas com sucesso
+								</p>) : (
+								<p className="text-red-500 my-4">
+									{actionData?.message}
+								</p>
+							)}
+					</div>
+				</form>
+				<div className="
+					w-full max-w-xl 
+					my-14
+					flex flex-col items-start justify-start gap-8
+					">
+					{!accounts.length ?
+						(<h2 className="subtitle">Nenhuma loja conectada</h2>)
+						: (<>
+							<h2 className="subtitle">Lojas conectadas:</h2>
+							{accounts.map((account: string, index: number) => {
+								return (
+									<div key={index} className="w-full">
+										<div className="w-full flex items-center justify-between">
+											<p>{formatStoreName(account)}</p>
+											<button onClick={() => handleDeleteStore(index)}>deletar</button>
+										</div>
+									</div>)
+							})}</>)
+					}
+
 				</div>
-			</form >
+			</div>
 		</>
 	)
 }
