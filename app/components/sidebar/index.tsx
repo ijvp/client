@@ -100,9 +100,15 @@ export default function Sidebar() {
 						/>
 					</div>
 				</div>
-				<div className="flex items-center justify-center gap-4">
-					<ProfileButton />
-					<SettingsButton />
+				<div className="flex flex-col gap-4">
+					<div className="flex items-center justify-center gap-4">
+						<ProfileButton />
+						<SettingsButton />
+					</div>
+					<div className="w-full flex flex-col items-center justify-center gap-1 border-t-2 pt-2 border-black-secondary">
+						<a href="/terms-of-service">Termos de Uso</a>
+						<a href="/privacy-policy">Política de privacidade</a>
+					</div>
 				</div>
 			</nav>
 			{openModal && (
