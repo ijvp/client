@@ -1,4 +1,5 @@
-import { LinksFunction, LoaderArgs, V2_MetaFunction, json } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, V2_MetaFunction} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { Suspense } from "react";
@@ -47,8 +48,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 		};
 
 		const orders = await fetchShopifyOrders(request, user, store);
-		// const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-		return defer({ orders });
+		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
+		return defer({ orders, googleAds });
 	} catch (error) {
 		console.log(error);
 		return null;
