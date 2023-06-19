@@ -3,155 +3,162 @@ import PageTitle from "~/components/page-title";
 export default function PrivacyPolicy() {
 	return (
 		<div className="p-6 md:p-10 lg:p-16 xl:p-20 w-full text-lg">
-			<PageTitle>Privacy Policy</PageTitle>
+			<PageTitle>Política de Privacidade</PageTitle>
 			<p>
-				Turbo Partners built the Turbo Dashboard app as
-				a Commercial app. This SERVICE is provided by
-				Turbo Partners  and is intended for use as
-				is. This page is used to inform visitors regarding our
-				policies with the collection, use, and disclosure of Personal
-				Information if anyone decided to use our Service. This page is used to inform visitors regarding our
-				policies with the collection, use, and disclosure of Personal
-				Information if anyone decided to use our Service.
+				A Turbo Partners criou o aplicativo Turbo Dash como
+				um aplicativo comercial. Este SERVIÇO é fornecido pela
+				Turbo Partners e destina-se ao uso como
+				é. Esta página é usada para informar os visitantes sobre nossas
+				políticas com a coleta, uso e divulgação de Dados Pessoais
+				Informações se alguém decidir usar nosso Serviço. Esta página é usada para informar os visitantes sobre nossas
+				políticas com a coleta, uso e divulgação de Dados Pessoais
+				Informações se alguém decidir usar nosso Serviço.
 			</p>
 			<p>
-				The terms used in this Privacy Policy have the same meanings
-				as in our Terms and Conditions, which are accessible at
-				Turbo Dashboard unless otherwise defined in this Privacy Policy.
+				Os termos usados ​​nesta Política de Privacidade têm os mesmos significados
+				como em nossos Termos e Condições, que podem ser acessados ​​em
+				Turbo Dashboard, a menos que definido de outra forma nesta Política de Privacidade.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Information Collection and Use</strong></p>
+			<p className="text-xl"><strong>Coleta e Uso de Informação</strong></p>
 			<p>
-				For a better experience, while using our Service, we
-				may require you to provide us with certain personally
-				identifiable information. The information that
-				we request will be retained by us and used as described in this privacy policy.
+				Para uma melhor experiência, ao usar nosso Serviço,
+				pode exigir que você nos forneça certos dados pessoais
+				informações identificáveis. A informação que
+				solicitamos serão retidos por nós e usados ​​conforme descrito nesta política de privacidade.
 			</p>
 			<div><p>
-				The app does use third-party services that may collect
-				information used to identify you.
+				O aplicativo usa serviços de terceiros que podem coletar
+				informações usadas para identificá-lo.
 			</p>
 				<p>
-					Link to the privacy policy of third-party service providers used
-					by the app
+					Link para a política de privacidade de provedores de serviços terceirizados usados
+					pelo aplicativo
 				</p>
 				<ul>
-					<li><a href="https://firebase.google.com/policies/analytics" target="_blank" rel="noopener noreferrer">Google Analytics for Firebase</a></li>
+					<li><a href="https://firebase.google.com/policies/analytics" target="_blank" rel="noopener noreferrer">Google Analytics para Firebase</a></li>
 					<li><a href="https://www.facebook.com/about/privacy/update/printable" target="_blank" rel="noopener noreferrer">Facebook</a></li>
 				</ul>
 			</div>
 
 			<br />
 			<p className="text-xl"><strong>Log Data</strong></p> <p>
-				We want to inform you that whenever you
-				use our Service, in a case of an error in the app
-				we collect data and information (through third-party
-				products) on your phone called Log Data. This Log Data may
-				include information such as your device Internet Protocol
-				(“IP”) address, device name, operating system version, the
-				configuration of the app when utilizing our Service,
-				the time and date of your use of the Service, and other
-				statistics.
+				Queremos informar que sempre que você
+				usar nosso Serviço, em caso de erro no aplicativo
+				coletamos dados e informações (através de terceiros
+				produtos) chamados Log Data. Esses dados de registro podem
+				inclua informações como o Protocolo de Internet do seu dispositivo
+				endereço (“IP”), nome do dispositivo, versão do sistema operacional,
+				configuração do aplicativo ao utilizar nosso Serviço,
+				a hora e a data de seu uso do Serviço e outras
+				Estatisticas.
 			</p>
 			<br />
 			<p className="text-xl"><strong>Cookies</strong></p>
 			<p>
-				Cookies are files with a small amount of data that are
-				commonly used as anonymous unique identifiers. These are sent
-				to your browser from the websites that you visit and are
-				stored on your device's internal memory.
+				Cookies são arquivos com uma pequena quantidade de dados que são
+				comumente usados ​​como identificadores exclusivos anônimos. Estes são enviados
+				para o seu navegador a partir dos sites que você visita e são
+				armazenados na memória interna do seu dispositivo.
 			</p>
 			<p>
-				This Service does not use these “cookies” explicitly. However,
-				the app may use third-party code and libraries that use
-				“cookies” to collect information and improve their services.
-				You have the option to either accept or refuse these cookies
-				and know when a cookie is being sent to your device. If you
-				choose to refuse our cookies, you may not be able to use some
-				portions of this Service.
+				Este Serviço usa esses “cookies” explicitamente, para as sessões de usuário. O
+				aplicativo tambem pode usar código de terceiros e bibliotecas que usam
+				“cookies” para coletar informações e melhorar seus serviços.
+				Você tem a opção de aceitar ou recusar esses cookies e saiba quando um
+				cookie está sendo enviado para o seu dispositivo. Se você
+				optar por recusar nossos cookies, talvez você não consiga usar alguns
+				partes deste Serviço.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Service Providers</strong></p>
+			<p className="text-xl"><strong>Provedores de serviço</strong></p>
 			<p>
-				We may employ third-party companies and
-				individuals due to the following reasons:
-			</p> <ul><li>To facilitate our Service;</li> <li>To provide the Service on our behalf;</li> <li>To perform Service-related services; or</li> <li>To assist us in analyzing how our Service is used.</li></ul> <p>
-				We want to inform users of this Service
-				that these third parties have access to their Personal
-				Information. The reason is to perform the tasks assigned to
-				them on our behalf. However, they are obligated not to
-				disclose or use the information for any other purpose.
+				Podemos empregar empresas terceirizadas e
+				pessoas pelas seguintes razões:
+			</p>
+			<ul>
+				<li>Para facilitar nosso Serviço;</li>
+				<li>Para fornecer o Serviço em nosso nome;</li>
+				<li>Para realizar serviços relacionados ao Serviço; ou</li>
+				<li>Para nos ajudar a analisar como nosso Serviço é usado.</li>
+			</ul>
+			<p>
+				Queremos informar os usuários deste Serviço
+				que esses terceiros tenham acesso aos seus dados pessoais
+				Informação. O motivo é executar as tarefas atribuídas a
+				eles em nosso nome. No entanto, eles são obrigados a não
+				divulgar ou usar as informações para qualquer outra finalidade.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Security</strong></p>
+			<p className="text-xl"><strong>Segurança</strong></p>
 			<p>
-				We value your trust in providing us your
-				Personal Information, thus we are striving to use commercially
-				acceptable means of protecting it. But remember that no method
-				of transmission over the internet, or method of electronic
-				storage is 100% secure and reliable, and we cannot
-				guarantee its absolute security.
+				Valorizamos sua confiança em nos fornecer seu
+				Informações Pessoais, portanto, estamos nos esforçando para usar comercialmente
+				meios aceitáveis ​​de protegê-lo. Mas lembre-se que nenhum método
+				de transmissão pela internet, ou método de transmissão eletrônica
+				armazenamento é 100% seguro e confiável, e não podemos
+				garantir a sua segurança absoluta.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Links to Other Sites</strong></p>
+			<p className="text-xl"><strong>Links para outros sites</strong></p>
 			<p>
-				This Service may contain links to other sites. If you click on
-				a third-party link, you will be directed to that site. Note
-				that these external sites are not operated by us.
-				Therefore, we strongly advise you to review the
-				Privacy Policy of these websites. We have
-				no control over and assume no responsibility for the content,
-				privacy policies, or practices of any third-party sites or
-				services.
+				Este Serviço pode conter links para outros sites. Se você clicar em
+				um link de terceiros, você será direcionado para esse site. Observação
+				que esses sites externos não são operados por nós.
+				Portanto, recomendamos fortemente que você revise o
+				Política de Privacidade desses sites. Nós temos
+				nenhum controle e não assume nenhuma responsabilidade pelo conteúdo,
+				políticas de privacidade ou práticas de quaisquer sites de terceiros ou
+				Serviços.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Children’s Privacy</strong></p>
+			<p className="text-xl"><strong>Privacidade das crianças</strong></p>
 			<div>
 				<p>
-					These Services do not address anyone under the age of 13.
-					We do not knowingly collect personally
-					identifiable information from children under 13 years of age. In the case
-					we discover that a child under 13 has provided
-					us with personal information, we immediately
-					delete this from our servers. If you are a parent or guardian
-					and you are aware that your child has provided us with
-					personal information, please contact us so that
-					we will be able to do the necessary actions.
+					Estes Serviços não se dirigem a menores de 13 anos.
+					Nós não coletamos intencionalmente pessoalmente
+					informações identificáveis ​​de crianças menores de 13 anos de idade. Dentro do estojo
+					descobrimos que uma criança menor de 13 anos forneceu
+					nós com informações pessoais, nós imediatamente
+					exclua isso de nossos servidores. Se você é pai ou responsável
+					e você está ciente de que seu filho nos forneceu
+					informações pessoais, entre em contato conosco para que
+					seremos capazes de fazer as ações necessárias.
 				</p></div>
 
 			<br />
-			<p className="text-xl"><strong>Changes to This Privacy Policy</strong></p>
+			<p className="text-xl"><strong>Mudanças nesta Política de Privacidade</strong></p>
 			<p>
-				We may update our Privacy Policy from
-				time to time. Thus, you are advised to review this page
-				periodically for any changes. We will
-				notify you of any changes by posting the new Privacy Policy on
-				this page.
+				Podemos atualizar nossa Política de Privacidade de
+				tempo ao tempo. Assim, você é aconselhado a rever esta página
+				periodicamente para quaisquer alterações. Vamos
+				notificá-lo sobre quaisquer alterações, publicando a nova Política de Privacidade em
+				esta página.
 			</p>
-			<p>This policy is effective as of 2023-04-04</p>
+			<p>Esta política é efetiva a partir de 2023-04-04.</p>
 
 			<br />
-			<p className="text-xl"><strong>Contact Us</strong></p>
+			<p className="text-xl"><strong>Entre em contato</strong></p>
 			<p>
-				If you have any questions or suggestions about our
-				Privacy Policy, do not hesitate to contact us at partnersturbo@gmail.com.
+				Se você tiver alguma dúvida ou sugestão sobre nossos
+				Política de Privacidade, não hesite em nos contatar em partnersturbo@gmail.com.
 			</p>
 
 			<br />
-			<p className="text-xl"><strong>Google Limited Use Requirements</strong></p>
+			<p className="text-xl"><strong>Requisitos de Uso Limitado do Google</strong></p>
 			<p>
-				Turbo Dash's use and transfer to any other app of information received from
-				Google APIs will adhere to the&nbsp;
+				O uso e transferência do Turbo Dash para qualquer outro aplicativo de informações recebidas de
+				As APIs do Google seguirão os&nbsp;
 				<a href="https://developers.google.com/terms/api-services-user-data-policy">
-					Google API Services User Data Policy
+					Google API Política de Serviçoes de Dados de Usuário
 				</a>
-				, including
-				the Limited Use requirements.
+				, incluindo
+				os requisitos de Uso Limitado.
 			</p>
 		</div>
 	)
