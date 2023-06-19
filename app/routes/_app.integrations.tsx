@@ -125,7 +125,6 @@ export default function Integrations() {
 
 	}, [selectedIndex, storeName, stores, setSelectedIndex, data]);
 
-	console.log("LOADER DATA", data);
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
