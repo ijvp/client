@@ -7,6 +7,7 @@ import { checkAuth } from "~/api/helpers";
 import PageTitle from "~/components/page-title";
 import ProductList from "~/components/product-list";
 import { links as sidebarLinks } from "~/components/sidebar";
+import { fetchUserStores } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Produtos" }];
@@ -22,7 +23,15 @@ export const loader = async ({ request }: LoaderArgs) => {
 		return redirect("/login");
 	}
 
-	const products = await fetchShopifyProducts(request, user);
+	const searchParams = new URL(request.url).searchParams;
+	let store = searchParams.get("store");
+
+	if (!store) {
+		const stores = await fetchUserStores(request);
+		store = stores[0]
+	};
+
+	const products = await fetchShopifyProducts(request, user, store);
 	return json(products.map(product => { return { ...product.node } }));
 };
 

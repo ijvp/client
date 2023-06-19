@@ -75,12 +75,11 @@ export const postShopifyStore = async (params: StoreData) => {
 	}
 }
 
-export const fetchShopifyProducts = async (request, user) => {
+export const fetchShopifyProducts = async (request, user, store) => {
 	try {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const store = searchParams.get("store") || user.shops[0].name;
 		const response = await api.post("/shopify/most-wanted", {
 			store: store
 		}, { headers: { Cookie: cookie } });
@@ -91,7 +90,7 @@ export const fetchShopifyProducts = async (request, user) => {
 			console.log(error.message, error.request.path, error.response?.data)
 			return error.response?.data;
 		} else {
-			console.log("Failed to fetch shopify products");
+			console.log("Failed to fetch shopify products", error);
 			return error;
 		}
 	}
