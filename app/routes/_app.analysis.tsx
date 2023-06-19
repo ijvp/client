@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderArgs, V2_MetaFunction} from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
@@ -70,10 +70,13 @@ export default function Analysis() {
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
-	console.log(loaderData)
 	if (!stores?.length) {
 		return (
-			<PageTitle>Você não tem uma loja cadastrada ainda...</PageTitle>
+			<>
+				<PageTitle>Análise</PageTitle>
+				<p className="subtitle">Você não tem uma loja cadastrada ainda, conecte uma loja shopify para começar!</p>
+			</>
+
 		)
 	};
 

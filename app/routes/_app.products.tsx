@@ -8,6 +8,8 @@ import PageTitle from "~/components/page-title";
 import ProductList from "~/components/product-list";
 import { links as sidebarLinks } from "~/components/sidebar";
 import { fetchUserStores } from "~/api/user";
+import { useAtom } from "jotai";
+import { storesAtom } from "~/utils/atoms";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Produtos" }];
@@ -28,25 +30,39 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	if (!store) {
 		const stores = await fetchUserStores(request);
-		store = stores[0]
+
+		if (stores.length) {
+			store = stores[0]
+			const products = await fetchShopifyProducts(request, user, store);
+			return json(products.map(product => { return { ...product.node } }));
+		}
 	};
 
-	const products = await fetchShopifyProducts(request, user, store);
-	return json(products.map(product => { return { ...product.node } }));
+	return null;
 };
 
 export function ErrorBoundary() {
 	return (
 		<>
-			<PageTitle>Produtos</PageTitle>
-			<p>Algo deu errado, verifique o storefront token que você adicionou a essa loja</p>
+			<PageTitle>Erro ao carregar produtos</PageTitle>
+			<p className="subtitle">Algo deu errado, verifique se ja adicionou alguma loja ou então tente novamente mais tarde</p>
 		</>
 	)
 };
 
 export default function ProductsPage() {
 	const products = useLoaderData();
+	const [stores] = useAtom(storesAtom);
 
+	if (!stores?.length) {
+		return (
+			<>
+				<PageTitle>Produtos</PageTitle>
+				<p className="subtitle">Você não tem uma loja cadastrada ainda, conecte uma loja shopify para começar!</p>
+			</>
+
+		)
+	};
 	return (
 		<>
 			<PageTitle>Produtos</PageTitle>

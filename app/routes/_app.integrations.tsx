@@ -125,6 +125,16 @@ export default function Integrations() {
 
 	}, [selectedIndex, storeName, stores, setSelectedIndex, data]);
 
+
+	if (!stores?.length) {
+		return (
+			<>
+				<PageTitle>Integrações</PageTitle>
+				<p className="subtitle">Você não tem uma loja cadastrada ainda, conecte uma loja shopify para começar!</p>
+			</>
+
+		)
+	};
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
