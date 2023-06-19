@@ -102,7 +102,7 @@ export default function Settings() {
 			if (response.ok) {
 				const data = await response.json();
 				if (data.success) {
-					return data.message;
+					location.reload();
 				} else {
 					return data.error;
 				}
