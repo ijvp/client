@@ -72,7 +72,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
 	const roasDataSeries = investmentsDataSeries.map(investment => {
-		let order = orders?.metricsBreakdown.find(item => item.date === investment.key);
+		let order = orders?.find(item => item.date === investment.key);
 		let ratio = (order ? order.value : 0) / investment.value;
 		return {
 			key: investment.key,

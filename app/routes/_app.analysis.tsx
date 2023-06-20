@@ -47,9 +47,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 			store = stores[0]
 		};
 
-		const orders = await fetchShopifyOrders(request, user, store);
-		const googleAds = await fetchGoogleAdsInvestment(request, user, store);
-		return defer({ orders, googleAds });
+		const orders = fetchShopifyOrders(request, user, store);
+		const googleAds = fetchGoogleAdsInvestment(request, user, store);
+		return defer({ data: Promise.all([orders, googleAds]) });
 	} catch (error) {
 		console.log(error);
 		return null;
@@ -87,13 +87,12 @@ export default function Analysis() {
 			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={loaderData?.orders} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{(data) =>
+				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+					{([orders, googleAds]) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
-								orders={data}
-								facebookAds={data?.facebookAds}
-								googleAds={data?.googleAds}
+								orders={orders}
+								googleAds={googleAds}
 							/>
 						) : navigation.state === "loading" ? (
 							<ChartsSkeleton />
