@@ -39,9 +39,10 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
 
     if (response.status === 200) {
       setOpen(false);
-      setTimeout(() => {
-        navigate('.', { replace: true, state: {} });
-      }, 100);
+      // setTimeout(() => {
+      //   navigate('.', { replace: true, state: {} });
+      // }, 100);
+      window.location.reload();
     };
   };
 
