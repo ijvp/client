@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					cookie
 				})
 
-				return redirect("/integrations");
+				setTimeout(() => redirect("/integrations"), 1000)
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -70,9 +70,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					request
 				})
 
-				setTimeout(() => {
-					return redirect("/integrations");
-				}, 100);
+				return redirect("/integrations");
 			} catch (error) {
 				console.log("failed to disconnect account", error)
 			}

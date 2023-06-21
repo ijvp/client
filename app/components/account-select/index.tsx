@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, useFetcher, useNavigate, useRevalidator } from "@remix-run/react";
 import Overlay from "../overlay";
 import SubmitButton from "../submit-button";
 import styles from "./styles.css";
@@ -20,7 +20,10 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [client, setClient] = useState<AccountConnection>();
   const [open, setOpen] = useState(true);
+
   const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const revalidator = useRevalidator();
 
   const handleAccountSelect = (index: number) => {
     setSelectedIndex(index);
@@ -32,18 +35,22 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
 
     const formFields = new FormData(event.target);
 
-    const response = await fetch("/integrations", {
-      method: "POST",
-      body: formFields
-    });
+    fetcher.submit(formFields, { method: "post", action: "/integrations" });
+    revalidator.revalidate();
+    // const response = await fetch("/integrations", {
+    //   method: "POST",
+    //   body: formFields
+    // });
 
-    if (response.status === 200) {
-      setOpen(false);
-      //intencionalmente não fixado para a pagina /integrations
-      //caso no futuro esse modal passa a ser usado em outras
-      // paginas.
-      window.location.assign(`${window.location.host}${window.location.pathname}`);
-    };
+
+    // if (response.status === 200) {
+    //   setOpen(false);
+    //   //intencionalmente não fixado para a pagina /integrations
+    //   //caso no futuro esse modal passa a ser usado em outras
+    //   // paginas.
+    //   console.log(`${window.location.host}${window.location.pathname}${window.location.origin}${window.location}`)
+    //   navigate(`${window.location.pathname}`, { replace: true });
+    // };
   };
 
   useEffect(() => {
@@ -65,7 +72,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             "
             method="post"
             onClick={(e) => e.stopPropagation()}
-            onSubmit={handleSubmit}
+            // onSubmit={handleSubmit}
             action="/integrations"
           >
             <h2 className="h h5">Selecione uma conta</h2>
