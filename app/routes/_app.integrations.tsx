@@ -1,7 +1,7 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs, ActionArgs, ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Await, useActionData, useLoaderData, useSearchParams } from "@remix-run/react";
 import { useAtom } from "jotai";
 import { Suspense, useEffect } from "react";
 import { fetchAccounts, authorizeIntegration, connectAccount, disconnectIntegration, fetchActiveConnections } from "~/api";
@@ -56,7 +56,8 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					cookie
 				})
 
-				setTimeout(() => redirect("/integrations"), 1000)
+				const activeConnections = await fetchActiveConnections({ request });
+				return json({ activeConnections });
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -64,13 +65,14 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 
 		case "disconnect": {
 			try {
-				const response = await disconnectIntegration({
+				await disconnectIntegration({
 					store,
 					platform,
 					request
 				})
 
-				return redirect("/integrations");
+				const activeConnections = await fetchActiveConnections({ request });
+				return json({ activeConnections });
 			} catch (error) {
 				console.log("failed to disconnect account", error)
 			}
@@ -94,6 +96,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const store = searchParams.get("store");
 
 	const connections = await fetchActiveConnections({ request });
+
 	if (platform && store) {
 		const accounts = await fetchAccounts({ store, platform, request })
 
@@ -114,7 +117,9 @@ export default function Integrations() {
 	const storeName = searchParams.get("store");
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
-	const data = useLoaderData<typeof loader>();
+
+	const loaderData = useLoaderData<typeof loader>();
+	const actionData = useActionData<typeof action>();
 
 	useEffect(() => {
 		const storeIndex = stores.findIndex((store) => store.name === storeName)
@@ -122,8 +127,13 @@ export default function Integrations() {
 			setSelectedIndex(storeIndex)
 		}
 
-	}, [selectedIndex, storeName, stores, setSelectedIndex, data]);
+	}, [selectedIndex, storeName, stores, setSelectedIndex, loaderData]);
 
+	useEffect(() => {
+		console.log(actionData?.activeConnections);
+	}, [actionData]);
+
+	const activeConnections = actionData?.activeConnections || loaderData.connections;
 
 	if (!stores?.length) {
 		return (
@@ -139,15 +149,15 @@ export default function Integrations() {
 			<PageTitle>Integrações</PageTitle>
 			<Suspense>
 				<Await
-					resolve={data?.connections}
+					resolve={activeConnections}
 					errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}
 				>
-					<IntegrationsContainer connections={data?.connections} />
+					<IntegrationsContainer connections={activeConnections} />
 				</Await>
 			</Suspense>
 			{platform && (
 				<AccountSelect
-					{...data}
+					{...loaderData}
 				/>
 			)}
 		</>

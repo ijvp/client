@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import IntegrationBox from "../integration-box";
 import { storesAtom } from "~/utils/atoms";
+import { useEffect, useMemo } from "react";
 
 export default function IntegrationContainer({ connections }) {
   const [stores, setStores] = useAtom(storesAtom);
@@ -23,7 +24,7 @@ export default function IntegrationContainer({ connections }) {
       active: true,
       validation: 'google_client',
       locked: false,
-      connected: connections?.["google_ads"]
+      connected: !!connections?.google_ads
     },
     {
       id: "facebook",
@@ -32,7 +33,7 @@ export default function IntegrationContainer({ connections }) {
       validation: 'facebook_business',
       active: true,
       locked: false,
-      connected: connections?.["facebook_ads"]
+      connected: connections?.facebook_ads
     },
     {
       id: "tiktok",
@@ -100,9 +101,15 @@ export default function IntegrationContainer({ connections }) {
     }
   ]
 
+  useEffect(() => {
+    console.log("CONNECTION PROPS", connections);
+    console.log(connections.google_ads);
+    console.log(integrationsIds[0].connected);
+  }, [connections, integrationsIds]);
+
   const activeIntegrationsIds = integrationsIds.filter(integration => integration.active === true);
   // const ecommerceIntegrations = activeIntegrationsIds.filter(integration => integration.type === "ecommerce");
-  const anunciosIntegrations = activeIntegrationsIds.filter(integration => integration.type === "anuncios");
+  const anunciosIntegrations = useMemo(() => activeIntegrationsIds.filter(integration => integration.type === "anuncios"), [activeIntegrationsIds, connections]);
   const emailIntegrations = activeIntegrationsIds.filter(integration => integration.type === "eMailMarketing");
   const planilhasIntegrations = activeIntegrationsIds.filter(integration => integration.type === "planilhas");
 
