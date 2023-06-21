@@ -70,9 +70,11 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					request
 				})
 
-				return redirect("/integrations");
+				setTimeout(() => {
+					return redirect("/integrations");
+				}, 100);
 			} catch (error) {
-				console.log("failed to connect account", error)
+				console.log("failed to disconnect account", error)
 			}
 		}
 

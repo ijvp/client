@@ -39,7 +39,9 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
 
     if (response.status === 200) {
       setOpen(false);
-      navigate('.', { replace: true, state: {} })
+      setTimeout(() => {
+        navigate('.', { replace: true, state: {} });
+      }, 100);
     };
   };
 
