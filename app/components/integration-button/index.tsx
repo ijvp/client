@@ -10,23 +10,12 @@ export const links: LinksFunction = () => {
 interface IIntegrationButton {
   connected: boolean;
   locked: boolean;
-  onConnectionChange: (connectionState: boolean) => void;
   storeName: string;
   storeIntegrationId: string;
 }
 
-export default function IntegrationButton({ connected, locked, onConnectionChange, storeIntegrationId, storeName }: IIntegrationButton) {
+export default function IntegrationButton({ connected, locked, storeIntegrationId, storeName }: IIntegrationButton) {
   const [isConnected, setIsConnected] = useState(false)
-
-  const handleConnect = async () => {
-    setIsConnected(true)
-    onConnectionChange(true)
-  }
-
-  const handleDisconnect = async () => {
-    setIsConnected(false)
-    onConnectionChange(false)
-  }
 
   const action = isConnected ? 'disconnect' : 'authorize';
 

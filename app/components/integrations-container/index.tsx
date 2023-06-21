@@ -1,10 +1,10 @@
 import { useAtom } from "jotai";
 import IntegrationBox from "../integration-box";
-import { storesAtom } from "~/utils/atoms";
-import { useEffect, useMemo } from "react";
+import { connectionsAtom, storesAtom } from "~/utils/atoms";
 
-export default function IntegrationContainer({ connections }) {
+export default function IntegrationContainer() {
   const [stores, setStores] = useAtom(storesAtom);
+  const [connections] = useAtom(connectionsAtom);
 
   interface IIntegrationsId {
     id: string;
@@ -14,7 +14,7 @@ export default function IntegrationContainer({ connections }) {
     validation: string;
     locked: boolean;
     connected?: boolean
-  }
+  };
 
   const integrationsIds: IIntegrationsId[] = [
     {
@@ -99,17 +99,11 @@ export default function IntegrationContainer({ connections }) {
       active: true,
       locked: true
     }
-  ]
-
-  useEffect(() => {
-    console.log("CONNECTION PROPS", connections);
-    console.log(connections.google_ads);
-    console.log(integrationsIds[0].connected);
-  }, [connections, integrationsIds]);
+  ];
 
   const activeIntegrationsIds = integrationsIds.filter(integration => integration.active === true);
   // const ecommerceIntegrations = activeIntegrationsIds.filter(integration => integration.type === "ecommerce");
-  const anunciosIntegrations = useMemo(() => activeIntegrationsIds.filter(integration => integration.type === "anuncios"), [activeIntegrationsIds, connections]);
+  const anunciosIntegrations = activeIntegrationsIds.filter(integration => integration.type === "anuncios");
   const emailIntegrations = activeIntegrationsIds.filter(integration => integration.type === "eMailMarketing");
   const planilhasIntegrations = activeIntegrationsIds.filter(integration => integration.type === "planilhas");
 
@@ -128,7 +122,7 @@ export default function IntegrationContainer({ connections }) {
                     name={integration.name}
                     locked={integration.locked}
                     validation={integration.validation}
-                    connected={integration.connected}
+                    connected={!!integration?.connected}
                   />
                 ))}
               </div>
@@ -143,7 +137,7 @@ export default function IntegrationContainer({ connections }) {
                     name={integration.name}
                     locked={integration.locked}
                     validation={integration.validation}
-                    connected={integration.connected}
+                    connected={!!integration?.connected}
                   />
                 ))}
               </div>
@@ -158,6 +152,7 @@ export default function IntegrationContainer({ connections }) {
                     name={integration.name}
                     locked={integration.locked}
                     validation={integration.validation}
+                    connected={!!integration?.connected}
                   />
                 ))}
               </div>

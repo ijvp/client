@@ -10,7 +10,7 @@ import AccountSelect, { links as accountSelectLinks } from "~/components/account
 import IntegrationsContainer from "~/components/integrations-container";
 import PageTitle from "~/components/page-title";
 import { links as sidebarLinks } from "~/components/sidebar";
-import { storeIndexAtom, storesAtom } from "~/utils/atoms";
+import { connectionsAtom, storeIndexAtom, storesAtom } from "~/utils/atoms";
 
 
 export const meta: V2_MetaFunction = () => {
@@ -116,6 +116,7 @@ export default function Integrations() {
 	const platform = searchParams.get("platform");
 	const storeName = searchParams.get("store");
 	const [stores] = useAtom(storesAtom);
+	const [, setConnections] = useAtom(connectionsAtom);
 	const [selectedIndex, setSelectedIndex] = useAtom(storeIndexAtom);
 
 	const loaderData = useLoaderData<typeof loader>();
@@ -129,11 +130,8 @@ export default function Integrations() {
 
 	}, [selectedIndex, storeName, stores, setSelectedIndex, loaderData]);
 
-	useEffect(() => {
-		console.log(actionData?.activeConnections);
-	}, [actionData]);
-
 	const activeConnections = actionData?.activeConnections || loaderData.connections;
+	setConnections(activeConnections);
 
 	if (!stores?.length) {
 		return (
@@ -141,18 +139,18 @@ export default function Integrations() {
 				<PageTitle>Integrações</PageTitle>
 				<p className="subtitle">Você não tem uma loja cadastrada ainda, conecte uma loja shopify para começar!</p>
 			</>
-
 		)
 	};
+
 	return (
 		<>
 			<PageTitle>Integrações</PageTitle>
 			<Suspense>
 				<Await
-					resolve={activeConnections}
+					resolve={loaderData}
 					errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}
 				>
-					<IntegrationsContainer connections={activeConnections} />
+					<IntegrationsContainer />
 				</Await>
 			</Suspense>
 			{platform && (
