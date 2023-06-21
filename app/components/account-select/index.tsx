@@ -106,7 +106,11 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
                 { }
               </div>
             </div>
-            <SubmitButton label="Conectar" />
+            {accounts.length ?
+              (<SubmitButton label="Conectar" />)
+              :
+              (<SubmitButton label="Cancelar" onClick={() => setOpen(false)} />)
+            }
           </Form>
         </Overlay>
         :
