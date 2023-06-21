@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
-import { Form } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 import Overlay from "../overlay";
 import SubmitButton from "../submit-button";
 import styles from "./styles.css";
@@ -20,6 +20,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [client, setClient] = useState<AccountConnection>();
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
 
   const handleAccountSelect = (index: number) => {
     setSelectedIndex(index);
@@ -38,6 +39,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
 
     if (response.status === 200) {
       setOpen(false);
+      navigate('.', { replace: true, state: {} })
     };
   };
 

@@ -22,6 +22,12 @@ export const links: LinksFunction = () => [
 	...accountSelectLinks()
 ];
 
+export function ErrorBoundary() {
+	return (
+		<PageTitle>Erro ao carregar integrações</PageTitle>
+	)
+};
+
 export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	const cookie = request.headers.get("cookie");
 	const data = await request.formData();
@@ -76,12 +82,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		}
 	}
 }
-
-export function ErrorBoundary() {
-	return (
-		<PageTitle>Erro ao carregar integrações</PageTitle>
-	)
-};
 
 export const loader = async ({ request }: LoaderArgs) => {
 	const user = await checkAuth(request);
