@@ -35,7 +35,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		case "authorize": {
 			try {
 				const redirectUrl = await authorizeIntegration({ cookie, platform, store });
-				console.log(redirectUrl);
 				return redirect(redirectUrl);
 			} catch (error) {
 				console.log("failed to connect account", error)
@@ -51,7 +50,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					cookie
 				})
 
-				return response;
+				return redirect("/integrations");
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
@@ -65,7 +64,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 					request
 				})
 
-				return response;
+				return redirect("/integrations");
 			} catch (error) {
 				console.log("failed to connect account", error)
 			}
