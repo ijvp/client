@@ -39,10 +39,10 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
 
     if (response.status === 200) {
       setOpen(false);
-      // setTimeout(() => {
-      //   navigate('.', { replace: true, state: {} });
-      // }, 100);
-      window.location.reload();
+      //intencionalmente não fixado para a pagina /integrations
+      //caso no futuro esse modal passa a ser usado em outras
+      // paginas.
+      window.location.assign(`${window.location.host}${window.location.pathname}`);
     };
   };
 
