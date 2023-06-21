@@ -3,7 +3,7 @@ import IntegrationBox from "../integration-box";
 import { connectionsAtom, storesAtom } from "~/utils/atoms";
 
 export default function IntegrationContainer() {
-  const [stores, setStores] = useAtom(storesAtom);
+  const [stores] = useAtom(storesAtom);
   const [connections] = useAtom(connectionsAtom);
 
   interface IIntegrationsId {

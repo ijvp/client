@@ -16,6 +16,7 @@ import { fetchFacebookAdsInvestment } from "~/api/facebook";
 import { fetchGoogleAdsInvestment } from "~/api/google";
 import { fetchShopifyOrders } from "~/api/shopify";
 import { fetchUserStores } from "~/api/user";
+import { fetchActiveConnections } from "~/api";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Analíse" }];
@@ -47,20 +48,15 @@ export const loader = async ({ request }: LoaderArgs) => {
 			store = stores[0]
 		};
 
+		const connections = await fetchActiveConnections({ request });
 		const orders = fetchShopifyOrders(request, user, store);
-		const googleAds = fetchGoogleAdsInvestment(request, user, store);
-		return defer({ data: Promise.all([orders, googleAds]) });
+		const googleAds = connections?.google_ads && fetchGoogleAdsInvestment(request, user, store);
+		const facebookAds = connections?.facebook_ads && fetchFacebookAdsInvestment(request, user, store);
+		return defer({ data: Promise.all([orders, googleAds, facebookAds]) });
 	} catch (error) {
 		console.log(error);
 		return null;
 	}
-
-	// if (store) {
-	// 	const ordersPromise = fetchShopifyOrders(request, user);
-	// 	const googleAdsPromise = store?.google_client && fetchGoogleAdsInvestment(request, user);
-	// 	const facebookAdsPromise = store?.facebook_business && fetchFacebookAdsInvestment(request, user);
-	// 	return defer({ data: Promise.all([ordersPromise, googleAdsPromise, facebookAdsPromise]) });
-	// }
 };
 
 export default function Analysis() {
@@ -88,11 +84,12 @@ export default function Analysis() {
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>
 				<Await resolve={loaderData?.data} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{([orders, googleAds]) =>
+					{([orders, googleAds, facebookAds]) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
 								orders={orders}
 								googleAds={googleAds}
+								facebookAds={facebookAds}
 							/>
 						) : navigation.state === "loading" ? (
 							<ChartsSkeleton />

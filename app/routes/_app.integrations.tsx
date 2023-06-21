@@ -49,7 +49,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 
 		case "connect": {
 			try {
-				const response = await connectAccount({
+				await connectAccount({
 					platform,
 					store,
 					account: { id, name },
@@ -98,7 +98,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const connections = await fetchActiveConnections({ request });
 
 	if (platform && store) {
-		const accounts = await fetchAccounts({ store, platform, request })
+		const accounts = await fetchAccounts({ store, platform, request });
 
 		return json({
 			accounts,
@@ -107,8 +107,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 			connections
 		});
 	} else {
-		return json({ connections })
-	}
+		return json({ connections });
+	};
 };
 
 export default function Integrations() {

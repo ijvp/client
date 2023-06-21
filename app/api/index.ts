@@ -43,7 +43,6 @@ export const fetchActiveConnections = async ({ request }) => {
 
 export const fetchAccounts = async ({ platform, store, request }: IConnectIntegration) => {
 	const cookie = request.headers.get("cookie");
-	console.log("cookie", cookie);
 
 	try {
 		const res = await api.get(`/${platform}/accounts`, {

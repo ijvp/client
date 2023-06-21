@@ -29,30 +29,6 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
     setSelectedIndex(index);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    const formFields = new FormData(event.target);
-
-    fetcher.submit(formFields, { method: "post", action: "/integrations" });
-    revalidator.revalidate();
-    // const response = await fetch("/integrations", {
-    //   method: "POST",
-    //   body: formFields
-    // });
-
-
-    // if (response.status === 200) {
-    //   setOpen(false);
-    //   //intencionalmente não fixado para a pagina /integrations
-    //   //caso no futuro esse modal passa a ser usado em outras
-    //   // paginas.
-    //   console.log(`${window.location.host}${window.location.pathname}${window.location.origin}${window.location}`)
-    //   navigate(`${window.location.pathname}`, { replace: true });
-    // };
-  };
-
   useEffect(() => {
     setClient(accounts[selectedIndex]);
   }, [accounts, selectedIndex]);
@@ -72,7 +48,6 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             "
             method="post"
             onClick={(e) => e.stopPropagation()}
-            // onSubmit={handleSubmit}
             action="/integrations"
           >
             <h2 className="h h5">Selecione uma conta</h2>
@@ -81,8 +56,6 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             <input type="hidden" name="name" value={client?.name} />
             <input type="hidden" name="platform" value={platform} />
             <input type="hidden" name="store" value={store} />
-            {/* <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xl z-10"></div> */}
-            {/* <div className="fixed bg-black/[0.02] backdrop-blur-[120px] w-[705px] min-h-[489px] rounded-2xl px-[72.5px] py-[62.5px] flex flex-col justify-center"></div> */}
             <div className="relative overflow-hidden flex flex-col flex-grow" id="accounts-list">
               <div className="relative overflow-y-scroll h-full">
                 {!accounts.length ?
