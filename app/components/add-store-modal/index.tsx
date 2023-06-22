@@ -114,7 +114,7 @@ export default function AddStoreModal({ onClick }: AddStoreModalProps) {
         <input type="hidden" name="storefrontToken" value={data.storefrontToken} />
 
         <button onClick={onClick} className="absolute top-4 right-4 w-[60px] aspect-square bg-black-bg border border-solid border-black-secondary rounded-[4px] flex justify-center items-center hover:border-purple">
-          <img src="/x.svg" alt="sair" />
+          <img src="/icons/x.svg" alt="sair" />
         </button>
         <h2 className="h5 h font-semibold text-center pb-8">
           Adicione sua Loja

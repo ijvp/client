@@ -123,7 +123,7 @@ export default function Settings() {
 				<form
 					method="post"
 					className="
-					w-full max-w-xl 
+					w-1/2
 					my-14
 					flex flex-col items-start justify-center gap-8
 				">
@@ -177,7 +177,7 @@ export default function Settings() {
 							</p>
 						)}
 					</div>
-					<div className="w-2/3 self-start">
+					<div className="w-full">
 						<SubmitButton label="Salvar alterações" />
 						{actionData?.success ?
 							(
@@ -191,7 +191,7 @@ export default function Settings() {
 					</div>
 				</form>
 				<div className="
-					w-full max-w-xl 
+					w-1/2
 					my-14
 					flex flex-col items-start justify-start gap-8
 					">
@@ -199,17 +199,24 @@ export default function Settings() {
 						(<h2 className="subtitle">Nenhuma loja conectada</h2>)
 						: (<>
 							<h2 className="subtitle">Lojas conectadas:</h2>
-							{accounts.map((account: string, index: number) => {
-								return (
-									<div key={index} className="w-full">
-										<div className="w-full flex items-center justify-between">
-											<p>{formatStoreName(account)}</p>
-											<button onClick={() => handleDeleteStore(index)}>deletar</button>
-										</div>
-									</div>)
-							})}</>)
+							<div className="w-full flex flex-col items-center justify-center gap-4">
+								{accounts.map((account: string, index: number) => {
+									return (
+										<div key={index} className="w-full border-b border-black-secondary pb-4 last:border-0 last:pb-0">
+											<div className="w-full flex items-center justify-between">
+												<p>{formatStoreName(account)}</p>
+												<button
+													className="rounded hover:bg-red-500 p-2"
+													onClick={() => handleDeleteStore(index)}
+												>
+													<img src="/icons/trash.svg" alt="deletar" />
+												</button>
+											</div>
+										</div>)
+								})}
+							</div>
+						</>)
 					}
-
 				</div>
 			</div>
 		</>
