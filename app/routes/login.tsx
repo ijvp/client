@@ -15,7 +15,6 @@ export const links: LinksFunction = () => [
 ];
 
 export const action = async ({ request }: ActionArgs) => {
-	console.count("loader fired");
 	try {
 		return await loginUser(request);
 	} catch (error) {
