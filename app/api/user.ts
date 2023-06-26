@@ -52,11 +52,6 @@ export const loginUser = async (request: Request) => {
 			});
 		}
 	} catch (error) {
-		// if (isAxiosError(error)) {
-		// 	console.error(error.message, error.request.path, error.response?.data);
-		// 	throw new Error(error.response?.data);
-		// } else {
-		console.error("failed to authenticate user", error);
-		throw new Error(error);
+		throw error;
 	}
 }

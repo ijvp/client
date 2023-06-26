@@ -1,4 +1,4 @@
-import type { LinksFunction, ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { LinksFunction, ActionArgs, LoaderArgs, V2_MetaFunction, json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
 import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
@@ -18,7 +18,11 @@ export const action = async ({ request }: ActionArgs) => {
 	try {
 		return await loginUser(request);
 	} catch (error) {
-		return null;
+		if (error.response.status === 401) {
+			return json({ success: false, message: "Usuário ou senha inválido" })
+		} else {
+			return json({ success: false, message: "Erro interno do servidor" })
+		}
 	}
 };
 
@@ -83,7 +87,6 @@ export default function Login() {
 					<div className="w-full relative">
 						<SubmitButton
 							label="Acessar"
-							disabled={false}
 						/>
 						{actionData?.success ? null : (
 							<p className="absolute top-full left-1/2 -translate-x-1/2 text-red-500 my-4">
