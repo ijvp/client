@@ -9,3 +9,11 @@
 	transform: translateY(0);
 	transition: all ease 300ms;
 } */
+
+.menu .menu--content {
+	transition: all 300ms ease-in-out;
+	transform-origin: top center;
+	opacity: 0;
+	height: 0;
+	transform: scaleY(0);
+}

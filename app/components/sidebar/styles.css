@@ -1,0 +1,19 @@
+.text-white svg {
+  fill: white;
+}
+
+.text-gray svg {
+  fill: grey;
+}
+
+.full-image {
+  width: 60px;
+}
+
+.image-text {
+  width: 32px;
+}
+
+.sidebar--closed {
+  min-width: 140px;
+}
