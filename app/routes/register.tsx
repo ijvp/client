@@ -2,13 +2,13 @@ import type { LinksFunction, ActionArgs, LoaderArgs, V2_MetaFunction } from "@re
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
-import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
 import Input from "~/components/input";
 import { checkAuth } from "~/api/helpers";
-import { loginUser } from "~/api/user";
+import SubmitButton, { links as submitButtonLinks } from "~/components/submit-button"
+import { registerUser } from "~/api/user";
 
 export const meta: V2_MetaFunction = () => {
-	return [{ title: "Turbo Dash | Login" }];
+	return [{ title: "Turbo Dash | Registrar" }];
 };
 
 export const links: LinksFunction = () => [
@@ -17,13 +17,9 @@ export const links: LinksFunction = () => [
 
 export const action = async ({ request }: ActionArgs) => {
 	try {
-		return await loginUser(request);
+		return await registerUser(request);
 	} catch (error) {
-		if (error.response.status === 401) {
-			return json({ success: false, message: "Usuário ou senha inválido" })
-		} else {
-			return json({ success: false, message: "Erro interno do servidor" })
-		}
+		return json({ success: false, message: "Erro interno do servidor" });
 	}
 };
 
@@ -36,7 +32,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	return null;
 };
 
-export default function Login() {
+export default function Register() {
 	const actionData = useActionData();
 
 	return (
@@ -70,7 +66,7 @@ export default function Login() {
 					<div className="flex items-center gap-2 mb-4">
 						<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
 					</div>
-					<h2 className="h3 font-bold">Acesse sua conta</h2>
+					<h2 className="h3 font-bold">Registrar usuário</h2>
 				</div>
 				<div className="flex flex-col items-center gap-6 w-full relative z-10">
 					<Input
@@ -85,9 +81,15 @@ export default function Login() {
 						placeholder="Senha"
 						autocomplete="current-password"
 					/>
+					<Input
+						type="password"
+						name="confirm-password"
+						placeholder="Confirmar senha"
+						autocomplete="current-password"
+					/>
 					<div className="w-full relative">
 						<SubmitButton
-							label="Acessar"
+							label="Registrar"
 						/>
 						{actionData?.success ? null : (
 							<p className="absolute top-full left-1/2 -translate-x-1/2 text-red-500 my-4">
@@ -96,7 +98,6 @@ export default function Login() {
 					</div>
 				</div>
 				<div className="flex flex-col gap-4">
-					<p>Ainda não tem uma conta?&nbsp;<Link to="/register">Registre aqui</Link></p>
 					<div className="flex gap-4">
 						<Link to="/terms-of-service">Termos de Uso</Link>
 						<Link to="/privacy-policy">Política de Privacidade</Link>
@@ -105,4 +106,4 @@ export default function Login() {
 			</form>
 		</div>
 	);
-};
+}

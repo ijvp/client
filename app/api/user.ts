@@ -1,4 +1,3 @@
-import { polarisOverwriteStyles } from '~/styles/polaris.css';
 import { json, redirect } from "@remix-run/node";
 import api from ".";
 import { isAxiosError } from "axios";
@@ -54,4 +53,50 @@ export const loginUser = async (request: Request) => {
 	} catch (error) {
 		throw error;
 	}
-}
+};
+
+export const registerUser = async (request: Request) => {
+	try {
+		const form = await request.formData();
+		const username = form.get("username");
+		const password = form.get("password");
+		const confirmPassword = form.get("confirm-password");
+
+		const fields = { username, password, confirmPassword };
+		if (!Object.values(fields).some(Boolean)) {
+			return json({ success: false, message: "Por favor preencha todos os campos" });
+		};
+
+		if (password !== confirmPassword) {
+			return json({ success: false, message: "As senhas não são iguais" });
+		};
+
+		const registerResponse = await api.post("/auth/register",
+			{
+				username,
+				password
+			},
+			{
+				withCredentials: true
+			}
+		);
+
+		const loginResponse = await api.post("/auth/login",
+			{
+				username,
+				password
+			},
+			{
+				withCredentials: true
+			}
+		);
+
+		if (loginResponse.data.success) {
+			return redirect("/analysis", {
+				headers: loginResponse.headers
+			});
+		}
+	} catch (error) {
+		throw error;
+	}
+};
