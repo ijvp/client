@@ -61,10 +61,10 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 	const addStoreButton = (
 		<button
 			onClick={handleShopifyOAuthRedirect}
-			className="w-full py-4 flex items-center justify-center gap-5"
+			className="w-full py-4 flex items-center justify-center"
 		>
-			Adicionar loja
-			<img src="/icons/add.svg" alt="add-icon" />
+			<span className={`${openSidebar ? 'text-show' : 'text-hide'}`}>Adicionar loja</span>
+			<img src="/icons/add.svg" alt="add-icon" className={`${openSidebar ? 'ml-5' : ''} menu-transition`}/>
 		</button>
 	);
 
