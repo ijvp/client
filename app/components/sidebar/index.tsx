@@ -8,9 +8,6 @@ import SettingsButton, { links as settingsButtonLinks } from "../settings-button
 import { Component, useState } from "react";
 import AddStoreModal from "../add-store-modal";
 import styles from "./styles.css";
-import { ReactComponent as Analysis } from "public/icons/analysis-icon.svg";
-import { ReactComponent as Products } from "public/icons/products-icon.svg";
-import { ReactComponent as Integrations } from "public/icons/integrations-icon.svg";
 
 export const links: LinksFunction = () => [
 	...toggleButtonLinks(),
@@ -70,6 +67,7 @@ export default function Sidebar() {
 			<nav
 				id="sidebar"
 				className={`
+					gap-5
 					sticky top-0
 					h-screen
 					border-box
@@ -121,14 +119,15 @@ export default function Sidebar() {
 						/>
 					</div>
 				</div>
-				<div className="flex flex-col gap-4">
-					<div className="flex items-center justify-center gap-4">
+				<div className="flex flex-col gap-4 w-full">
+					<div className="flex flex-wrap items-center justify-center gap-4">
 						<ProfileButton />
 						<SettingsButton />
 					</div>
 					<div className="w-full flex flex-col items-center justify-center gap-1 border-t-2 pt-2 border-black-secondary">
-						<a href="/terms-of-service">Termos de Uso</a>
-						<a href="/privacy-policy">Política de privacidade</a>
+						<a className={`${open ? 'text-show' : 'text-hide'}`} href="/terms-of-service">Termos de Uso</a>
+						<a className={`${open ? 'text-show' : 'text-hide'}`} href="/privacy-policy">Política de privacidade</a>
+						<button onClick={handleClick} className={`${open ? 'text-hide' : 'text-show'}`}>...</button>
 					</div>
 				</div>
 			</nav>

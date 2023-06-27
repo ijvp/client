@@ -81,3 +81,62 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+
+.menu-transition {
+	transition: all 300ms ease-in-out;
+}
+
+@keyframes showText {
+	0% {
+		opacity: 0;
+		transform: scaleX(0);
+		width: 0;
+		height: 0;
+	}
+	60% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		transform: scaleX(1);
+		width: max-content;
+		height: fit-content;
+	}
+}
+
+@keyframes hideText {
+	0% {
+		opacity: 1;
+		transform: scaleX(1);
+		width: max-content;
+		height: fit-content;
+	}
+	40% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+		transform: scaleX(0);
+		width: 0;
+		height: 0;
+	}
+}
+
+.text-show {
+  animation: showText 300ms ease-in-out;
+  transform-origin: center left;
+}
+
+.text-hide {
+  animation: hideText 300ms ease-in-out forwards;
+  transform-origin: center left;
+}
+
+.bold-not-active {
+	transition: all 300ms ease-in-out;
+	text-shadow: 0 0 0 currentColor;
+}
+
+.bold-active {
+	text-shadow: 1px 0 0 currentColor;
+}
