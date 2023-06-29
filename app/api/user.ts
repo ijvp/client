@@ -61,6 +61,8 @@ export const registerUser = async (request: Request) => {
 		const username = form.get("username");
 		const password = form.get("password");
 		const confirmPassword = form.get("confirm-password");
+		const searchParams = new URL(request.url).searchParams;
+		const guid = decodeURIComponent(searchParams.get("guid"));
 
 		const fields = { username, password, confirmPassword };
 		if (!Object.values(fields).some(Boolean)) {
@@ -71,7 +73,7 @@ export const registerUser = async (request: Request) => {
 			return json({ success: false, message: "As senhas não são iguais" });
 		};
 
-		const registerResponse = await api.post("/auth/register",
+		await api.post(`/auth/register${guid ? `?guid=${encodeURIComponent(guid)}` : ""}`,
 			{
 				username,
 				password
