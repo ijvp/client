@@ -84,6 +84,20 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return innerValueContents?.activeValue ? toLocalCurrency(innerValueContents.activeValue) : toLocalCurrency(innerValueContents.totalValue);
 	};
 
+	const donutData = [facebookAds, googleAds].map(adMetrics => {
+		if (adMetrics?.id) {
+			return {
+				name: adMetrics.id.split('.')[0].split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+				data: [
+					{
+						key: `${start} - ${end}`,
+						value: adMetrics?.metricsBreakdown.reduce((sum: number, ad: any) => sum + ad.metrics.spend, 0)
+					}
+				]
+			}
+		}
+	}).filter(data => !!data)
+
 	return (
 		<div className="flex flex-wrap gap-4">
 			<SimpleChart
@@ -110,26 +124,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				">
 					<h2 className="h5">{new Intl.DateTimeFormat('pt-BR').format(start)} - {new Intl.DateTimeFormat('pt-BR').format(end)}</h2>
 					<DonutChart
-						data={[
-							facebookAds?.metricsBreakdown && {
-								name: "Facebook Ads",
-								data: [
-									{
-										key: `${start} - ${end}`,
-										value: facebookAds?.metricsBreakdown.reduce((sum, ad) => sum + ad.metrics.spend, 0)
-									}
-								]
-							},
-							googleAds?.metricsBreakdown && {
-								name: "Google Ads",
-								data: [
-									{
-										key: `${start} - ${end}`,
-										value: googleAds?.metricsBreakdown.reduce((sum, ad) => sum + ad.metrics.spend, 0)
-									}
-								]
-							}
-						]}
+						data={donutData}
 						labelFormatter={(y) => toLocalCurrency(y)}
 						renderInnerValueContent={renderDonutLabel}
 					/>
