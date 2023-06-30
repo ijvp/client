@@ -52,7 +52,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 		const orders = fetchShopifyOrders(request, user, store);
 		const googleAds = connections?.google_ads && fetchGoogleAdsInvestment(request, user, store);
 		const facebookAds = connections?.facebook_ads && fetchFacebookAdsInvestment(request, user, store);
-		return defer({ data: Promise.all([orders, googleAds, facebookAds]) });
+		const promises = [orders, googleAds, facebookAds];
+		return defer({ data: Promise.all(promises) });
 	} catch (error) {
 		console.log(error);
 		return null;
@@ -87,7 +88,7 @@ export default function Analysis() {
 					{([orders, googleAds, facebookAds]) =>
 						navigation.state === "idle" ? (
 							<ChartsContainer
-								orders={orders}
+								orders={!orders.error ? orders : []}
 								googleAds={googleAds}
 								facebookAds={facebookAds}
 							/>
