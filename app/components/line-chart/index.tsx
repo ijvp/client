@@ -19,7 +19,17 @@ interface LineChartProps {
 	children?: ReactNode
 };
 
-export default function SimpleChart({ data, title, value, prefix, skeleton, xAxisOptions, yAxisOptions, children }: LineChartProps) {
+export default function SimpleChart({
+	data,
+	title,
+	value,
+	prefix,
+	skeleton,
+	xAxisOptions,
+	yAxisOptions,
+	tooltipOptions,
+	children
+}: LineChartProps) {
 	const [render, setRender] = useState(false);
 	const [open, setOpen] = useState(false);
 
@@ -66,6 +76,7 @@ export default function SimpleChart({ data, title, value, prefix, skeleton, xAxi
 									xAxisOptions={{ ...xAxisOptions, hide: true }}
 									yAxisOptions={yAxisOptions}
 									showLegend={false}
+									tooltipOptions={tooltipOptions}
 								/>
 							}
 							<div className="h-16 absolute bottom-2 left-4">

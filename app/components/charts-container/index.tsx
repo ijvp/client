@@ -19,7 +19,6 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
 	const daysInterval = differenceInDays(end, start);
-
 	const fillMissingHours = (dataArray: DataPoint[]): DataPoint[] => {
 		const filledArray: DataPoint[] = [];
 
@@ -105,12 +104,28 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				value={toLocalCurrency(totalRevenue)}
 				data={revenueDataSeries}
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})}`;
+					},
+					valueFormatter: (value) => toLocalCurrency(value)
+				}}
 			/>
 			<SimpleChart
 				title="Valor investido"
 				value={toLocalCurrency(totalInvested)}
 				data={investmentsDataSeries}
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})} ${!daysInterval ? new Date(value).toLocaleTimeString().slice(0, -3) : ""}`;
+					},
+					valueFormatter: (value) => toLocalCurrency(value)
+				}}
 			>
 				<div
 					className="
@@ -135,11 +150,25 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				value={totalOrders}
 				data={ordersDataSeries}
 				yAxisOptions={{ integersOnly: true }}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})}`;
+					}
+				}}
 			/>
 			<SimpleChart
 				title="ROAs"
 				value={toLocalNumber(roas)}
 				data={roasDataSeries}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})}`;
+					}
+				}}
 			/>
 		</div>
 	)

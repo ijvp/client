@@ -7,7 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { PolarisVizProvider } from "@shopify/polaris-viz";
 import globalStyles from "~/styles/global.css";
 import tailwind from "~/styles/tailwind.css";
@@ -22,8 +22,6 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: polarisStyles },
   { rel: "stylesheet", href: polarisOverwriteStyles }
 ];
-
-const queryClient = new QueryClient();
 
 export default function App() {
   return (
