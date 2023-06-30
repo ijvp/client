@@ -2,7 +2,7 @@ import type { LinksFunction } from "@remix-run/node";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import type { DataPoint } from '@shopify/polaris-viz';
-import { LineChart } from '@shopify/polaris-viz';
+import { BarChart } from '@shopify/polaris-viz';
 import styles from "./styles.css";
 import Overlay from "../overlay";
 
@@ -60,8 +60,8 @@ export default function SimpleChart({ data, title, value, prefix, skeleton, xAxi
 					</div>)
 					: (
 						<>
-							{render &&
-								<LineChart
+							{render && data &&
+								<BarChart
 									data={[{ name: title, data: data }]}
 									xAxisOptions={{ ...xAxisOptions, hide: true }}
 									yAxisOptions={yAxisOptions}

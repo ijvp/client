@@ -27,8 +27,8 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <PolarisVizProvider themes={{
+    <PolarisVizProvider
+      themes={{
         Default: {
           seriesColors: {
             single: "#5B4EEE",
@@ -38,24 +38,24 @@ export default function App() {
             backgroundColor: "#FF000000",
           }
         }
-      }}>
-        <html lang="en">
-          <head>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width,initial-scale=1" />
-            <Meta />
-            <Links />
-          </head>
-          <body className="min-h-screen min-w-screen text-white">
-            <div className="w-full flex items-stretch">
-              <Outlet />
-            </div>
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-          </body>
-        </html>
-      </PolarisVizProvider>
-    </QueryClientProvider >
+      }}
+    >
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <Meta />
+          <Links />
+        </head>
+        <body className="min-h-screen min-w-screen text-white">
+          <div className="w-full flex items-stretch">
+            <Outlet />
+          </div>
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </PolarisVizProvider>
   );
 }
