@@ -24,7 +24,9 @@ export default function IntegrationContainer() {
       active: true,
       validation: 'google_client',
       locked: false,
-      connected: !!connections?.google_ads
+      connected: !!connections?.google_ads,
+      connectionId: connections?.google_ads?.id,
+      connectionName: connections?.google_ads?.name
     },
     {
       id: "facebook",
@@ -33,7 +35,9 @@ export default function IntegrationContainer() {
       validation: 'facebook_business',
       active: true,
       locked: false,
-      connected: connections?.facebook_ads
+      connected: connections?.facebook_ads,
+      connectionId: connections?.facebook_ads?.id,
+      connectionName: connections?.facebook_ads?.name
     },
     {
       id: "tiktok",
@@ -123,6 +127,8 @@ export default function IntegrationContainer() {
                     locked={integration.locked}
                     validation={integration.validation}
                     connected={!!integration?.connected}
+                    connectionId={integration.connectionId}
+                    connectionName={integration.connectionName}
                   />
                 ))}
               </div>

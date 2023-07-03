@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { storeIndexAtom, storesAtom } from "~/utils/atoms";
 import IntegrationButton from "../integration-button";
 
-export default function IntegrationBox({ name, validation, id, locked, connected }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
+export default function IntegrationBox({ name, validation, id, locked, connected, connectionId, connectionName }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
     const [stores] = useAtom(storesAtom);
     const [selectedIndex] = useAtom(storeIndexAtom);
 
@@ -14,7 +14,8 @@ export default function IntegrationBox({ name, validation, id, locked, connected
                     <img className="min-w-[40px] min-h-[40px] h-10" src={`/images/${id}-icon.png`} alt={`${id} icon`} />
                 </div>
                 <span className="text-xl font-normal leading-[30px] h-[30px]">{name}</span>
-                <div className={`w-4 h-4 ${connected ? 'bg-green-light' : 'bg-red-light'} rounded-full`}></div>
+                <div className={`w-4 h-4 aspect-square ${connected ? 'bg-green-light' : 'bg-red-light'} rounded-full`}></div>
+                {connectionId && <p>{id === "facebook" ? connectionId.slice(4) : connectionId}&nbsp;/&nbsp;{connectionName} </p>}
             </div>
             <IntegrationButton
                 connected={connected}
