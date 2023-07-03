@@ -19,27 +19,27 @@ export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
-	const user = await checkAuth(request);
-	if (!user) {
-		return redirect("/login");
-	}
+// export const loader = async ({ request }: LoaderArgs) => {
+// 	const user = await checkAuth(request);
+// 	if (!user) {
+// 		return redirect("/login");
+// 	}
 
-	const searchParams = new URL(request.url).searchParams;
-	let store = searchParams.get("store");
+// 	const searchParams = new URL(request.url).searchParams;
+// 	let store = searchParams.get("store");
 
-	if (!store) {
-		const stores = await fetchUserStores(request);
+// 	if (!store) {
+// 		const stores = await fetchUserStores(request);
 
-		if (stores.length) {
-			store = stores[0]
-			const products = await fetchShopifyProducts(request, user, store);
-			return json(products.map(product => { return { ...product.node } }));
-		}
-	};
+// 		if (stores.length) {
+// 			store = stores[0]
+// 			const products = await fetchShopifyProducts(request, user, store);
+// 			return json(products.map(product => { return { ...product.node } }));
+// 		}
+// 	};
 
-	return null;
-};
+// 	return null;
+// };
 
 export function ErrorBoundary() {
 	return (
@@ -67,7 +67,8 @@ export default function ProductsPage() {
 		<>
 			<PageTitle>Produtos</PageTitle>
 			<div className="flex gap-16">
-				<ProductList products={products} />
+				<p className="subtitle">Em breve: análises e insights chaves sobre seus produtos!</p>
+				{/* <ProductList products={products} /> */}
 				<Outlet />
 			</div>
 		</>
