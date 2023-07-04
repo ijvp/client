@@ -34,13 +34,15 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 	const action = data.get("action")?.toString();
 	const platform = data.get("platform")?.toString();
 	const store = data.get("store")?.toString();
+	const service = data.get("service")?.toString();
 	const id = data.get("id");
 	const name = data.get("name");
 
 	switch (action) {
 		case "authorize": {
 			try {
-				const redirectUrl = await authorizeIntegration({ cookie, platform, store });
+				const redirectUrl = await authorizeIntegration({ cookie, platform, store, service });
+				console.log(redirectUrl);
 				return redirect(redirectUrl);
 			} catch (error) {
 				console.log("failed to connect account", error)
@@ -67,7 +69,7 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 			try {
 				await disconnectIntegration({
 					store,
-					platform,
+					platform: service ? service : platform,
 					request
 				})
 

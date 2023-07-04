@@ -14,7 +14,7 @@ interface IIntegrationButton {
   storeIntegrationId: string;
 }
 
-export default function IntegrationButton({ connected, locked, storeIntegrationId, storeName }: IIntegrationButton) {
+export default function IntegrationButton({ connected, locked, platform, storeIntegrationId, storeName, service }: IIntegrationButton) {
   const [isConnected, setIsConnected] = useState(false)
 
   const action = isConnected ? 'disconnect' : 'authorize';
@@ -27,7 +27,8 @@ export default function IntegrationButton({ connected, locked, storeIntegrationI
     <Form method="post" action="/integrations">
       <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />
-      <input type="hidden" name="platform" value={storeIntegrationId} />
+      <input type="hidden" name="platform" value={platform} />
+      {service && <input type="hidden" name="service" value={service} />}
       <button
         disabled={locked}
         type="submit"

@@ -7,9 +7,9 @@ const api: AxiosInstance = axios.create({
 	withCredentials: true
 });
 
-export const authorizeIntegration = async ({ cookie, platform, store }) => {
+export const authorizeIntegration = async ({ cookie, platform, store, service }) => {
 	try {
-		const response = await api.get(`/${platform}/authorize?store=${store}`,
+		const response = await api.get(`/${platform}/authorize?store=${store}${service ? '&service=' + service : ''}`,
 			{
 				headers:
 				{
@@ -94,6 +94,7 @@ export const connectAccount = async ({ platform, store, account, cookie }) => {
 export const disconnectIntegration = async ({ store, platform, request }: IAuthorizeIntegration) => {
 	const cookie = request.headers.get("cookie");
 
+	console.log("PLATFORM", platform);
 	try {
 		const res = await api.get(`/${platform}/account/disconnect?store=${store}`, {
 			headers: {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { storeIndexAtom, storesAtom } from "~/utils/atoms";
 import IntegrationButton from "../integration-button";
 
-export default function IntegrationBox({ name, validation, id, locked, connected, connectionId, connectionName }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
+export default function IntegrationBox({ name, validation, id, locked, connected, platform, connectionId, connectionName, service }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
     const [stores] = useAtom(storesAtom);
     const [selectedIndex] = useAtom(storeIndexAtom);
 
@@ -22,6 +22,8 @@ export default function IntegrationBox({ name, validation, id, locked, connected
                 locked={locked}
                 storeName={stores[selectedIndex]}
                 storeIntegrationId={id}
+                service={service}
+                platform={platform}
             />
         </div>
     )

@@ -9,17 +9,22 @@ export default function IntegrationContainer() {
   interface IIntegrationsId {
     id: string;
     name: string;
+    platform: string,
     type: string;
     active: boolean;
     validation: string;
     locked: boolean;
-    connected?: boolean
+    connected?: boolean,
+    connectionId?: string,
+    connectionName?: string
   };
 
   const integrationsIds: IIntegrationsId[] = [
     {
-      id: "google",
+      id: "google-ads",
       name: "Google Ads",
+      platform: "google",
+      service: "google-ads",
       type: "anuncios",
       active: true,
       validation: 'google_client',
@@ -29,8 +34,9 @@ export default function IntegrationContainer() {
       connectionName: connections?.google_ads?.name
     },
     {
-      id: "facebook",
+      id: "facebook-ads",
       name: "Facebook Ads",
+      platform: "facebook",
       type: "anuncios",
       validation: 'facebook_business',
       active: true,
@@ -40,16 +46,31 @@ export default function IntegrationContainer() {
       connectionName: connections?.facebook_ads?.name
     },
     {
-      id: "tiktok",
+      id: "tiktok-ads",
       name: "Tiktok Ads",
+      platform: "tiktok",
       type: "anuncios",
       validation: '',
       active: true,
       locked: true
     },
     {
-      id: "pinterest",
+      id: "google-analytics",
+      name: "Google Analytics",
+      platform: "google",
+      service: "google-analytics",
+      type: "analise",
+      active: true,
+      validation: 'google_client',
+      locked: false,
+      connected: !!connections?.google_analytics,
+      connectionId: connections?.google_analytics?.id,
+      connectionName: connections?.google_analytics?.name
+    },
+    {
+      id: "pinterest-ads",
       name: "Pinterest Ads",
+      platform: "pinterest",
       type: "anuncios",
       validation: '',
       active: true,
@@ -58,6 +79,7 @@ export default function IntegrationContainer() {
     {
       id: "activeCampaign",
       name: "Active Campaign",
+      platform: "active-campaign",
       type: "eMailMarketing",
       validation: '',
       active: false,
@@ -66,6 +88,7 @@ export default function IntegrationContainer() {
     {
       id: "getResponse",
       name: "Get Response",
+      platform: "getresponse",
       type: "eMailMarketing",
       validation: '',
       active: false,
@@ -74,6 +97,7 @@ export default function IntegrationContainer() {
     {
       id: "reportana",
       name: "Reportana",
+      platform: "reportana",
       type: "eMailMarketing",
       validation: '',
       active: false,
@@ -82,6 +106,7 @@ export default function IntegrationContainer() {
     {
       id: "mailChimp",
       name: "MailChimp",
+      platform: "mailchimp",
       type: "eMailMarketing",
       validation: '',
       active: false,
@@ -90,6 +115,7 @@ export default function IntegrationContainer() {
     {
       id: "arquivoCSV",
       name: "Arquivo CSV",
+      platform: "arquivo-csv",
       type: "planilhas",
       validation: '',
       active: true,
@@ -98,6 +124,7 @@ export default function IntegrationContainer() {
     {
       id: "googleSheets",
       name: "Google Sheets",
+      platform: "google-sheets",
       type: "planilhas",
       validation: '',
       active: true,
@@ -106,8 +133,8 @@ export default function IntegrationContainer() {
   ];
 
   const activeIntegrationsIds = integrationsIds.filter(integration => integration.active === true);
-  // const ecommerceIntegrations = activeIntegrationsIds.filter(integration => integration.type === "ecommerce");
   const anunciosIntegrations = activeIntegrationsIds.filter(integration => integration.type === "anuncios");
+  const analiseIntegrations = activeIntegrationsIds.filter(integration => integration.type === "analise");
   const emailIntegrations = activeIntegrationsIds.filter(integration => integration.type === "eMailMarketing");
   const planilhasIntegrations = activeIntegrationsIds.filter(integration => integration.type === "planilhas");
 
@@ -124,11 +151,32 @@ export default function IntegrationContainer() {
                     key={index}
                     id={integration.id}
                     name={integration.name}
+                    platform={integration.platform}
                     locked={integration.locked}
                     validation={integration.validation}
                     connected={!!integration?.connected}
                     connectionId={integration.connectionId}
                     connectionName={integration.connectionName}
+                    service={integration.service}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="mt-[60px]">
+              <h2 id="analise" className="h5 pb-8">Análise:</h2>
+              <div className="grid grid-cols-2 gap-6">
+                {analiseIntegrations.map((integration, index) => (
+                  <IntegrationBox
+                    key={index}
+                    id={integration.id}
+                    name={integration.name}
+                    platform={integration.platform}
+                    locked={integration.locked}
+                    validation={integration.validation}
+                    connected={!!integration?.connected}
+                    connectionId={integration.connectionId}
+                    connectionName={integration.connectionName}
+                    service={integration.service}
                   />
                 ))}
               </div>
@@ -141,6 +189,7 @@ export default function IntegrationContainer() {
                     key={integration.id}
                     id={integration.id}
                     name={integration.name}
+                    platform={integration.platform}
                     locked={integration.locked}
                     validation={integration.validation}
                     connected={!!integration?.connected}
@@ -156,6 +205,7 @@ export default function IntegrationContainer() {
                     key={integration.id}
                     id={integration.id}
                     name={integration.name}
+                    platform={integration.platform}
                     locked={integration.locked}
                     validation={integration.validation}
                     connected={!!integration?.connected}
