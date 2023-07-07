@@ -55,14 +55,14 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 		});
 
 		switch (platform) {
-			case "google":
+			case "google-ads":
 				return res.data.map(account => { return { id: account.id, name: account.descriptive_name } });
 
 			case "facebook":
 				return res.data.map(account => { return { id: account.id, name: account.name } });
 
 			default:
-				return [];
+				return res.data;
 		};
 	} catch (error) {
 		if (error.response) {
@@ -94,7 +94,6 @@ export const connectAccount = async ({ platform, store, account, cookie }) => {
 export const disconnectIntegration = async ({ store, platform, request }: IAuthorizeIntegration) => {
 	const cookie = request.headers.get("cookie");
 
-	console.log("PLATFORM", platform);
 	try {
 		const res = await api.get(`/${platform}/account/disconnect?store=${store}`, {
 			headers: {
