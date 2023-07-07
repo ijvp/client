@@ -10,7 +10,7 @@ export const fetchGoogleAdsInvestment = async (request: Request, user, store) =>
 		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
 		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
 
-		const response = await api.post("/google/ads", {
+		const response = await api.post("/google-ads/ads", {
 			store,
 			start,
 			end

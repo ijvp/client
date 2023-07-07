@@ -14,18 +14,57 @@ export const links: LinksFunction = () => [
 	...SimpleChartLinks()
 ];
 
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const startingToday = new Date(today).setHours(0, 0, 0, 0);
+const endingToday = new Date(today).setHours(23, 59, 59, 999);
+
 export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const [searchParams] = useSearchParams();
-	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
-	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+	const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startingToday;
+	const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endingToday;
 	const daysInterval = differenceInDays(end, start);
+
 	const fillMissingHours = (dataArray: DataPoint[]): DataPoint[] => {
 		const filledArray: DataPoint[] = [];
 
 		if (dataArray.length) {
 			const minDate = standardizeMetricDate(dataArray[0].key);
 			const maxDate = standardizeMetricDate(dataArray[dataArray.length - 1].key);
+			// Iterate over each day between the minimum and maximum dates
+			let currentDate = new Date(minDate);
+			while (currentDate <= maxDate) {
+				// Iterate over each hour of the day
+				for (let hour = 0; hour < 24; hour++) {
+					// Create the key for the current hour
+					currentDate.setUTCHours(hour);
+					const month = (currentDate.getUTCMonth() + 1).toString().length > 1 ? currentDate.getUTCMonth() + 1 : (currentDate.getUTCMonth() + 1).toString().padStart(2, "0");
+					const hours = currentDate.getUTCHours().toString().length > 1 ? currentDate.getUTCHours() : currentDate.getUTCHours().toString().padStart(2, "0");
+					const day = currentDate.getUTCDate().toString().length > 1 ? currentDate.getUTCDate() : currentDate.getUTCDate().toString().padStart(2, "0");
+					const key = `${currentDate.getUTCFullYear()}-${month}-${day}T${hours}`;
+					const existingData = dataArray.find((data) => data.key === key);
+					if (existingData) {
+						filledArray.push(existingData);
+					} else {
+						filledArray.push({ key, value: 0 });
+					}
+				}
 
+				// Move to the next day
+				currentDate.setDate(currentDate.getDate() + 1);
+			}
+		}
+
+		return filledArray;
+	};
+
+	const fillMissingDays = (dataArray: DataPoint[]): DataPoint[] => {
+		const filledArray: DataPoint[] = [];
+
+		if (dataArray.length) {
+			const minDate = start;
+			const maxDate = end;
+			console.log(minDate, standardizeMetricDate(dataArray[0].key))
 			// Iterate over each day between the minimum and maximum dates
 			let currentDate = new Date(minDate);
 			while (currentDate <= maxDate) {
@@ -64,6 +103,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const ordersData = getCountFromOrderMetrics(orders);
 	const ordersDataSeries = daysInterval ? ordersData : fillMissingHours(ordersData);
+	console.log(fillMissingDays(ordersData))
 	const totalOrders = getTotalValue(ordersDataSeries, 0);
 
 	const investmentsDataSeries = blendAdsMetrics(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown);

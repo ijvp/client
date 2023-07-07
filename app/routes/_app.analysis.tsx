@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { Suspense } from "react";
