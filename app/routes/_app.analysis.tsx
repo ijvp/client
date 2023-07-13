@@ -44,12 +44,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 		if (!store) {
 			const stores = await fetchUserStores(request);
-			store = stores[0]
+			if (stores) {
+				store = stores[0]
+			}
 		};
 
 		const connections = await fetchActiveConnections({ request });
 		const orders = fetchShopifyOrders(request, user, store);
-		const googleAds = connections?.google_ads && fetchGoogleAdsInvestment(request, user, store);
+		const googleAds = store && connections?.google_ads && fetchGoogleAdsInvestment(request, user, store);
 		const facebookAds = connections?.facebook_ads && fetchFacebookAdsInvestment(request, user, store);
 		const promises = [orders, googleAds, facebookAds];
 		return defer({ data: Promise.all(promises) });

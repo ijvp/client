@@ -1,15 +1,16 @@
-import { startOfToday, endOfToday } from "date-fns";
-import { parseDateString } from "~/utils/date";
 import api from ".";
 import { isAxiosError } from "axios";
+
+const now = new Date();
+const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
 export const fetchFacebookAdsInvestment = async (request: Request, user, store) => {
 	try {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
-		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
+		const start = searchParams.get("start") ? searchParams.get("start") : today.toISOString().split("T")[0];
+		const end = searchParams.get("end") ? searchParams.get("end") : today.toISOString().split("T")[0];
 
 		const response = await api.post("/facebook/ads", {
 			store,

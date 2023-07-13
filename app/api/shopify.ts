@@ -1,8 +1,11 @@
+import { parseDateString } from '~/utils/date';
 import { isAxiosError } from "axios";
-import { startOfToday, endOfToday, differenceInDays } from "date-fns";
+import { differenceInDays } from "date-fns";
 import { Granularity } from "~/ts/enums";
-import { parseDateString } from "~/utils/date";
 import api from ".";
+
+const now = new Date();
+const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
 export const fetchShopifyRedirectURI = async (request: Request) => {
 	try {
@@ -25,9 +28,9 @@ export const fetchShopifyOrders = async (request: Request, user, store) => {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const start = searchParams.get("start") ? parseDateString(searchParams.get("start")) : startOfToday();
-		const end = searchParams.get("end") ? parseDateString(searchParams.get("end"), true) : endOfToday();
-		const daysInterval = differenceInDays(end, start);
+		const start = searchParams.get("start") ? searchParams.get("start") : today.toISOString().split("T")[0];
+		const end = searchParams.get("end") ? searchParams.get("end") : today.toISOString().split("T")[0];
+		const daysInterval = differenceInDays(parseDateString(end), parseDateString(start));
 
 		const response = await api.post("/shopify/orders", {
 			store,
