@@ -19,24 +19,25 @@ export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
-// export const loader = async ({ request }: LoaderArgs) => {
-// 	const user = await checkAuth(request);
-// 	if (!user) {
-// 		return redirect("/login");
-// 	}
+export const loader = async ({ request }: LoaderArgs) => {
+	const user = await checkAuth(request);
+	if (!user) {
+		return redirect("/login");
+	}
 
-// 	const searchParams = new URL(request.url).searchParams;
-// 	let store = searchParams.get("store");
+	const searchParams = new URL(request.url).searchParams;
+	let store = searchParams.get("store");
 
-// 	if (!store) {
-// 		const stores = await fetchUserStores(request);
+	if (!store) {
+		const stores = await fetchUserStores(request);
 
-// 		if (stores.length) {
-// 			store = stores[0]
-// 			const products = await fetchShopifyProducts(request, user, store);
-// 			return json(products.map(product => { return { ...product.node } }));
-// 		}
-// 	};
+		if (stores.length) {
+			store = stores[0]
+			const products = await fetchShopifyProducts(request, user, store);
+			return json(products);
+		}
+	};
+};
 
 // 	return null;
 // };
@@ -63,11 +64,35 @@ export default function ProductsPage() {
 
 		)
 	};
+
+	if (!products?.length) {
+		return (
+			<>
+				<PageTitle>Produtos</PageTitle>
+				<p className="subtitle">Sua loja não tem produtos cadastrados ainda!</p>
+			</>
+
+		)
+	};
 	return (
 		<>
 			<PageTitle>Produtos</PageTitle>
 			<div className="flex gap-16">
-				<p className="subtitle">Em breve: análises e insights chaves sobre seus produtos!</p>
+				{products.length > 0 &&
+					<div className="flex flex-col items-start justify-center gap-4">
+						{
+							products.map((product: any, index: number) => {
+								return (
+									<div key={index} className="w-full flex items-center gap-2">
+										<img src={product.featuredImage?.url} alt={product.featuredImage?.altText} className="w-[100px] aspect-square" />
+										<span>{product.title}</span>
+										<span>{product.handle}</span>
+									</div>
+								)
+							})
+						}
+					</div>
+				}
 				{/* <ProductList products={products} /> */}
 				<Outlet />
 			</div>
