@@ -55,9 +55,6 @@ export const fetchAccounts = async ({ platform, store, request }: IConnectIntegr
 		});
 
 		switch (platform) {
-			case "google-ads":
-				return res.data.map(account => { return { id: account.id, name: account.descriptive_name } });
-
 			case "facebook":
 				return res.data.map(account => { return { id: account.id, name: account.name } });
 
