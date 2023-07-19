@@ -14,7 +14,7 @@ export const action = async ({ request }: ActionArgs) => {
 	};
 
 	if (authenticated) {
-		return redirect("/analysis");
+		return redirect("/analise");
 	} else {
 		return redirect("/logout")
 	}
@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionArgs) => {
 export const loader = async ({ request }: LoaderArgs) => {
 	const authenticated = await checkAuth(request);
 	if (authenticated) {
-		return redirect("/analysis");
+		return redirect("/analise");
 	} else {
 		return redirect("/login");
 	}

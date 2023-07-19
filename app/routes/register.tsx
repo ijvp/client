@@ -26,7 +26,7 @@ export const action = async ({ request }: ActionArgs) => {
 export const loader = async ({ request }: LoaderArgs) => {
 	const authenticated = await checkAuth(request);
 	if (authenticated) {
-		return redirect("/analysis");
+		return redirect("/analise");
 	};
 
 	return null;

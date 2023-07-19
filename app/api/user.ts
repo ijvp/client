@@ -46,7 +46,7 @@ export const loginUser = async (request: Request) => {
 		);
 
 		if (response.data.success) {
-			return redirect("/analysis", {
+			return redirect("/analise", {
 				headers: response.headers
 			});
 		}
@@ -94,7 +94,7 @@ export const registerUser = async (request: Request) => {
 		);
 
 		if (loginResponse.data.success) {
-			return redirect("/analysis", {
+			return redirect("/analise", {
 				headers: loginResponse.headers
 			});
 		}

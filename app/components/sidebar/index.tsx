@@ -98,21 +98,28 @@ export default function Sidebar() {
 					<div className="flex flex-col w-full gap-5">
 						<SidebarLink
 							label="Análise"
-							link="/analysis"
+							link="/analise"
 							src="/icons/analysis-icon.svg"
 							alt="Análise"
 							open={open}
 						/>
 						<SidebarLink
 							label="Produtos"
-							link="/products"
+							link="/produtos"
 							src="/icons/products-icon.svg"
 							alt="Produtos"
 							open={open}
 						/>
 						<SidebarLink
+							label="Criativos"
+							link="/criativos"
+							src="/icons/products-icon.svg"
+							alt="Criativos"
+							open={open}
+						/>
+						<SidebarLink
 							label="Integrações"
-							link="/integrations"
+							link="/integracoes"
 							src="/icons/integrations-icon.svg"
 							alt="Integrações"
 							open={open}
