@@ -103,7 +103,6 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 
 	const ordersData = getCountFromOrderMetrics(orders);
 	const ordersDataSeries = daysInterval ? ordersData : fillMissingHours(ordersData);
-	console.log(fillMissingDays(ordersData))
 	const totalOrders = getTotalValue(ordersDataSeries, 0);
 
 	const investmentsDataSeries = blendAdsMetrics(googleAds?.metricsBreakdown, facebookAds?.metricsBreakdown);
