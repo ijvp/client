@@ -39,3 +39,34 @@
 	fill: var(--white) !important;
 }
 /* end </DatePicker> styles */
+
+/* <ComboBox> styles */
+.Polaris-Connected .Polaris-TextField__Backdrop {
+	background: var(--black-secondary);
+	border-radius: 0.5rem;
+	border: none;
+}
+
+.Polaris-Connected .Polaris-TextField {
+	height: 60px;
+}
+
+.Polaris-Connected .Polaris-TextField__Input::placeholder {
+	color: var(--gray);
+}
+
+.Polaris-Connected .Polaris-TextField__Input:focus-visible {
+	color: var(--gray);
+}
+.Polaris-Connected .Polaris-Icon svg {
+	fill: var(--purple);
+}
+
+.Polaris-Tag {
+	background-color: var(--purple);
+	color: var(--white);
+}
+
+.Polaris-Tag .Polaris-Tag__TagText {
+	font-size: 0.9rem;
+}
