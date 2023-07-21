@@ -185,15 +185,12 @@ export default function CreativesPage() {
 			<table className="w-full border border-purple mb-8">
 				<thead>
 					<tr>
-						{tableHeaders.map((header) => (
+						{tableHeaders.filter(header => header !== "name").map((header) => (
 							selectedColumns.includes(header) && <th key={header} className="p-2 border border-purple">{Headers[header]}</th>
 						))}
 					</tr>
 				</thead>
-				{selectedColumns.slice(0, 1).map(header => (
-					<td key={header} colSpan={1} className="p-2 border border-purple text-center"><b>Total</b></td>
-				))}
-				{selectedColumns.slice(1).map(header => (
+				{selectedColumns.filter(header => header !== "name").map(header => (
 					<td key={header} className="p-2 border border-purple text-center">
 						<b>
 							{header === 'spend' ? totalSpend.toFixed(2) :
