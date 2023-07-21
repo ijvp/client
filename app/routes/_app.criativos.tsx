@@ -60,12 +60,12 @@ export default function CreativesPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filteredAds, setFilteredAds] = useState(ads);
 
-	const totalSpend = filteredAds.reduce((acc, item) => acc + item.spend, 0);
-	const totalImpressions = filteredAds.reduce((acc, item) => acc + item.impressions, 0);
-	const totalClicks = filteredAds.reduce((acc, item) => acc + item.outboundClicks, 0);
-	const totalPageViews = filteredAds.reduce((acc, item) => acc + item.pageViews, 0);
-	const totalPurchasesConversions = filteredAds.reduce((acc, item) => acc + item.purchasesConversionValue, 0).toFixed(2);
-	const totalPurchases = filteredAds.reduce((acc, item) => acc + item.purchases, 0);
+	const totalSpend = filteredAds?.reduce((acc, item) => acc + item.spend, 0);
+	const totalImpressions = filteredAds?.reduce((acc, item) => acc + item.impressions, 0);
+	const totalClicks = filteredAds?.reduce((acc, item) => acc + item.outboundClicks, 0);
+	const totalPageViews = filteredAds?.reduce((acc, item) => acc + item.pageViews, 0);
+	const totalPurchasesConversions = filteredAds?.reduce((acc, item) => acc + item.purchasesConversionValue, 0).toFixed(2);
+	const totalPurchases = filteredAds?.reduce((acc, item) => acc + item.purchases, 0);
 
 	const columnOptions = useMemo(
 		() => Array.from(Object.entries(Headers).map(entry => {
@@ -182,53 +182,56 @@ export default function CreativesPage() {
 					<LegacyStack>{tagsMarkup}</LegacyStack>
 				</HorizontalStack>
 			</div>
-			<table className="w-full mb-12">
+			<table className="w-full border border-purple mb-8">
 				<thead>
 					<tr>
-						{tableHeaders.map((header: string) =>
-							selectedColumns.includes(header) && (<th key={header}>{Headers[header]}</th>))}
+						{tableHeaders.map((header) => (
+							selectedColumns.includes(header) && <th key={header} className="p-2 border border-purple">{Headers[header]}</th>
+						))}
 					</tr>
 				</thead>
-				<tbody>
-					{filteredAds.map((ad: any) => (
-						<tr key={ad.id}>
-							{tableHeaders.map(header => header != 'id' && (
-								selectedColumns.includes(header) && (
-									<td key={header} className="p-2 border border-purple" >
-										{typeof ad[header] === 'number' ?
-											['impressions', 'outboundClicks', 'pageViews', 'purchases'].includes(header) ?
-												ad[header] :
-												ad[header].toFixed(2)
-											: ad[header]}
-									</td>
-								)
-							))}
-						</tr>
-					))}
-					<tr>
-						{selectedColumns.slice(0, 1).map(header => (
-							<td key={header} colSpan={1} className="p-2 border border-purple"><b>Total</b></td>
-						))}
-						{selectedColumns.slice(1).map(header => (
-							<td key={header} className="p-2 border border-purple">
-								<b>
-									{header === 'spend' ? totalSpend.toFixed(2) :
-										header === 'impressions' ? totalImpressions :
-											header === 'outboundClicks' ? totalClicks :
-												header === 'pageViews' ? totalPageViews :
-													header === 'purchases' ? totalPurchases :
-														header === 'purchasesConversionValue' ? totalPurchasesConversions :
-															header === 'CTR' ? (totalClicks / totalImpressions * 100).toFixed(2) :
-																header === 'CPS' ? (totalPageViews != 0 ? (totalSpend / totalPageViews) : 0).toFixed(2) :
-																	header === 'CPA' ? (totalPurchases != 0 ? (totalSpend / totalPurchases) : 0).toFixed(2) :
-																		header === 'ROAS' ? (totalPurchasesConversions / totalSpend).toFixed(2) : ''
-									}
-								</b>
-							</td>
-						))}
-					</tr>
-				</tbody>
+				{selectedColumns.slice(0, 1).map(header => (
+					<td key={header} colSpan={1} className="p-2 border border-purple text-center"><b>Total</b></td>
+				))}
+				{selectedColumns.slice(1).map(header => (
+					<td key={header} className="p-2 border border-purple text-center">
+						<b>
+							{header === 'spend' ? totalSpend.toFixed(2) :
+								header === 'impressions' ? totalImpressions :
+									header === 'outboundClicks' ? totalClicks :
+										header === 'pageViews' ? totalPageViews :
+											header === 'purchases' ? totalPurchases :
+												header === 'purchasesConversionValue' ? totalPurchasesConversions :
+													header === 'CTR' ? (totalClicks / totalImpressions * 100).toFixed(2) :
+														header === 'CPS' ? (totalPageViews != 0 ? (totalSpend / totalPageViews) : 0).toFixed(2) :
+															header === 'CPA' ? (totalPurchases != 0 ? (totalSpend / totalPurchases) : 0).toFixed(2) :
+																header === 'ROAS' ? (totalPurchasesConversions / totalSpend).toFixed(2) : ''
+							}
+						</b>
+					</td>
+				))}
 			</table>
+
+			<div className="w-full mb-12 grid grid-cols-4 gap-8">
+				{filteredAds?.map((ad: any) => (
+					<div key={ad.id} className="bg-black-border rounded-lg p-4 flex flex-col items-center">
+						<img src={ad.creativeThumbnail} alt={ad.creativeName} className="w-full aspect-square rounded-md overflow-clip" />
+						<p className="subtitle tracking-tight py-4 h-[95px]">{ad["name"]}</p>
+						{tableHeaders.map(header => header != 'id' && header !== 'name' && (
+							selectedColumns.includes(header) && (
+								<div key={header} className="flex items-center justify-between w-full mb-2 last:mb-0">
+									<div className="font-semibold tracking-tight">{Headers[header]}</div>
+									<div className="font-semibold tracking-tight">{typeof ad[header] === 'number' ?
+										['impressions', 'outboundClicks', 'pageViews', 'purchases'].includes(header) ?
+											ad[header] :
+											ad[header].toFixed(2)
+										: ad[header]}</div>
+								</div>
+							)
+						))}
+					</div>
+				))}
+			</div>
 		</>
 	);
 };

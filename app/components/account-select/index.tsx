@@ -44,7 +44,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             "
             method="post"
             onClick={(e) => e.stopPropagation()}
-            action="/integrations"
+            action="/integracoes"
           >
             <h2 className="h h5">Selecione uma conta</h2>
             <input type="hidden" name="action" value="connect" />

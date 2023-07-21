@@ -24,7 +24,7 @@ export default function IntegrationButton({ connected, locked, platform, storeIn
   }, [connected]);
 
   return (
-    <Form method="post" action="/integrations">
+    <Form method="post" action="/integracoes">
       <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />
       <input type="hidden" name="platform" value={platform} />

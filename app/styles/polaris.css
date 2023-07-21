@@ -70,3 +70,19 @@
 .Polaris-Tag .Polaris-Tag__TagText {
 	font-size: 0.9rem;
 }
+
+.Polaris-Listbox {
+	background: var(--black-secondary);
+}
+
+.Polaris-Listbox-Text-Option {
+	background: var(--black-secondary);
+}
+
+.Polaris-Listbox-Text-Option--selected {
+	background: var(--black-border);
+}
+
+.Polaris-Listbox-TextOption:before {
+	background-color: var(--purple);
+}
