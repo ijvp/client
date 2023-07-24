@@ -19,7 +19,7 @@ export const action = async ({ request }: ActionArgs) => {
 	try {
 		return await loginUser(request);
 	} catch (error) {
-		if (error.response.status === 401) {
+		if (error.response?.status === 401) {
 			return json({ success: false, message: "Usuário ou senha inválido" })
 		} else {
 			return json({ success: false, message: "Erro interno do servidor" })

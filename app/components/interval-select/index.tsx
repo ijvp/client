@@ -169,7 +169,7 @@ export default function IntervalSelect() {
 				{datePickerOpen && (
 					<div
 						className="
-						absolute z-[2] top-12 left-1/2 -translate-x-1/2
+						absolute z-30 top-12 left-1/2 -translate-x-1/2
 						flex flex-col items-center gap-2
 						bg-black-bg
 						border border-solid border-black-border rounded-md

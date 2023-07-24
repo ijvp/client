@@ -1,15 +1,17 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { Combobox, HorizontalStack, Icon, LegacyStack, Listbox, Stack, Tag, TextContainer, TextField, VerticalStack } from "@shopify/polaris";
-import { SearchMinor } from '@shopify/polaris-icons';
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { defer, json, redirect } from "@remix-run/node";
+import { Await, useLoaderData, useNavigation } from "@remix-run/react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { fetchFacebookAdsInsights } from "~/api/facebook";
 import { checkAuth } from "~/api/helpers";
 import { fetchUserStores } from "~/api/user";
+import AdInsightsCard from "~/components/ad-insights-card";
+import AdInsightsControls from "~/components/ad-insights-controls";
+import ChartsSkeleton from "~/components/charts-skeleton";
 import Input from "~/components/input";
 import IntervalSelect from "~/components/interval-select";
 import PageTitle from "~/components/page-title";
+import { Headers } from "~/ts/enums";
 
 export const loader = async ({ request }: LoaderArgs) => {
 	const user = await checkAuth(request);
@@ -25,8 +27,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 		if (stores.length) {
 			store = stores[0]
-			const adInsights = await fetchFacebookAdsInsights(request, user, store);
-			return json(adInsights);
+			const adInsightsData = await fetchFacebookAdsInsights(request, user, store);
+			return defer(adInsightsData);
 		}
 	};
 }
@@ -40,23 +42,9 @@ export function ErrorBoundary() {
 	);
 };
 
-const Headers = {
-	name: "Nome",
-	spend: "Valor investido",
-	impressions: "Impressões",
-	outboundClicks: "Cliques de saída",
-	pageViews: "Visualizações de página",
-	purchases: "Compras",
-	purchasesConversionValue: "Valor de conversão",
-	CTR: "CTR",
-	CPS: "CPS",
-	CPA: "CPA",
-	ROAS: "ROAS"
-};
-
 export default function CreativesPage() {
-	const ads = useLoaderData();
-	const tableHeaders = Object.keys(Headers);
+	const { adInsights: ads, ttl } = useLoaderData();
+	const navigation = useNavigation();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filteredAds, setFilteredAds] = useState(ads);
 
@@ -77,73 +65,42 @@ export default function CreativesPage() {
 		[]
 	);
 
-
 	const [selectedColumns, setSelectedColumns] = useState(Array.from(Object.keys(Headers)));
-	const [inputValue, setInputValue] = useState("");
-	const [options, setOptions] = useState(columnOptions);
-	const updateText = useCallback(
-		(value: string) => {
-			setInputValue(value)
-			if (value === "") {
-				setOptions(columnOptions);
-				return;
-			}
 
-			const filterRegex = new RegExp(value, 'i');
-			const resultOptions = columnOptions.filter(option => option.label.match(filterRegex));
-			setOptions(resultOptions);
-		},
-		[columnOptions]
-	);
-
-	const updateSelection = useCallback(
-		(selected: string) => {
-			if (selectedColumns.includes(selected)) {
-				setSelectedColumns(selectedColumns.filter(column => column !== selected));
-			} else {
-				setSelectedColumns([...selectedColumns, selected]);
-			}
-
-			updateText("");
-		},
-		[selectedColumns, updateText]
-	);
-
-	const removeTag = useCallback(
-		(tag: string) => () => {
-			const columns = [...selectedColumns];
-			columns.splice(columns.indexOf(tag), 1);
-			setSelectedColumns(columns);
-		},
-		[selectedColumns]
-	);
-
-	const tagsMarkup = selectedColumns.map((column, index) => {
-		return (<Tag key={index} onRemove={removeTag(column)}>
-			{Headers[column]}
-		</Tag>)
-	});
-
-	const columnsMarkup =
-		options.length > 0
-			? options.map((option, index) => {
-				const { label, value } = option;
-				return (
-					<Listbox.Option
-						key={index}
-						value={value}
-						selected={selectedColumns.includes(value)}
-						accessibilityLabel={label}
-					>
-						{label}
-					</Listbox.Option>
-				)
-			}) : null;
+	const tableHeaders = useMemo(() => Object.keys(Headers), []);
+	const tableHeaderCells = useMemo(() => {
+		return tableHeaders.map((header) => {
+			return header !== "name" && selectedColumns.includes(header) && <th key={header} className="p-2 border border-purple">{Headers[header]}</th>;
+		});
+	}, [selectedColumns, tableHeaders]);
+	const tableBodyCells = useMemo(() => {
+		return selectedColumns.filter(header => header !== "name").map(header => {
+			return (
+				<td key={header} className="p-2 border border-purple text-center">
+					<b>
+						{header === 'spend' ? totalSpend.toFixed(2) :
+							header === 'impressions' ? totalImpressions :
+								header === 'outboundClicks' ? totalClicks :
+									header === 'pageViews' ? totalPageViews :
+										header === 'purchases' ? totalPurchases :
+											header === 'purchasesConversionValue' ? totalPurchasesConversions :
+												header === 'CTR' ? (totalClicks / totalImpressions * 100).toFixed(2) :
+													header === 'CPS' ? (totalPageViews !== 0 ? (totalSpend / totalPageViews) : 0).toFixed(2) :
+														header === 'CPA' ? (totalPurchases !== 0 ? (totalSpend / totalPurchases) : 0).toFixed(2) :
+															header === 'ROAS' ? (totalPurchasesConversions / totalSpend).toFixed(2) : ''
+						}
+					</b>
+				</td>
+			);
+		});
+	}, [selectedColumns, totalClicks, totalImpressions, totalPageViews, totalPurchases, totalPurchasesConversions, totalSpend]);
 
 	useEffect(() => {
 		const filteredData = ads.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
 		setFilteredAds(filteredData);
 	}, [ads, searchTerm]);
+
+	const lastUpdate = Math.ceil((1800 - ttl) / 60);
 
 	return (
 		<>
@@ -152,83 +109,70 @@ export default function CreativesPage() {
 				Aqui você tem uma visualização geral de todos os seus criativos pertencentes a campanhas do Facebook Ads. Você pode buscar e agrupar por nome para ter uma visão melhor da performance de criativos duplicados!
 			</p>
 			<IntervalSelect />
-			<Input
-				name="ad-name"
-				type="text"
-				placeholder="agrupar por nome de anuncio"
-				className="w-full my-8"
-				value={searchTerm}
-				onChange={(e) => setSearchTerm(e.target.value)}
-			/>
-			<div className="flex flex-col gap-4 mb-8">
-				<Combobox
-					allowMultiple
-					activator={
-						<Combobox.TextField
-							prefix={<Icon source={SearchMinor} />}
-							onChange={updateText}
-							label="Selecionar colunas"
-							labelHidden
-							value={inputValue}
-							placeholder="Selecionar colunas"
-							autoComplete="off"
-						/>
+			<div className="subtitle flex items-center justify-start gap-2">
+
+				<Suspense>
+					<Await resolve={ttl} errorElement={
+						<>
+							<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
+							<p>Não foi possível atualizar</p>
+						</>
 					}>
-					{columnsMarkup ? (
-						<Listbox onSelect={updateSelection}>{columnsMarkup}</Listbox>
-					) : null}
-				</Combobox>
-				<HorizontalStack gap="4">
-					<LegacyStack>{tagsMarkup}</LegacyStack>
-				</HorizontalStack>
+						{() =>
+							navigation.state === "idle" ? (
+								<>
+									<div className="w-4 h-4 aspect-square bg-green-light rounded-full" />
+									<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate >= 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
+								</>
+							) : navigation.state === "loading" ? (
+								<p>Carregando...</p>
+							) : null}
+					</Await>
+				</Suspense>
+			</div>
+			<div className="flex items-start gap-4 mb-8">
+				<Input
+					name="ad-name"
+					type="text"
+					placeholder="agrupar por nome de anuncio"
+					className="w-full my-8"
+					value={searchTerm}
+					onChange={(e) => setSearchTerm(e.target.value)}
+				/>
+				<AdInsightsControls
+					columnOptions={columnOptions}
+					selectedColumns={selectedColumns}
+					setSelectedColumns={setSelectedColumns}
+				/>
 			</div>
 			<table className="w-full border border-purple mb-8">
 				<thead>
 					<tr>
-						{tableHeaders.filter(header => header !== "name").map((header) => (
-							selectedColumns.includes(header) && <th key={header} className="p-2 border border-purple">{Headers[header]}</th>
-						))}
+						{tableHeaderCells}
 					</tr>
 				</thead>
-				{selectedColumns.filter(header => header !== "name").map(header => (
-					<td key={header} className="p-2 border border-purple text-center">
-						<b>
-							{header === 'spend' ? totalSpend.toFixed(2) :
-								header === 'impressions' ? totalImpressions :
-									header === 'outboundClicks' ? totalClicks :
-										header === 'pageViews' ? totalPageViews :
-											header === 'purchases' ? totalPurchases :
-												header === 'purchasesConversionValue' ? totalPurchasesConversions :
-													header === 'CTR' ? (totalClicks / totalImpressions * 100).toFixed(2) :
-														header === 'CPS' ? (totalPageViews != 0 ? (totalSpend / totalPageViews) : 0).toFixed(2) :
-															header === 'CPA' ? (totalPurchases != 0 ? (totalSpend / totalPurchases) : 0).toFixed(2) :
-																header === 'ROAS' ? (totalPurchasesConversions / totalSpend).toFixed(2) : ''
-							}
-						</b>
-					</td>
-				))}
+				<tbody>
+					<tr>
+						{tableBodyCells}
+					</tr>
+				</tbody>
 			</table>
 
-			<div className="w-full mb-12 grid grid-cols-4 gap-8">
-				{filteredAds?.map((ad: any) => (
-					<div key={ad.id} className="bg-black-border rounded-lg p-4 flex flex-col items-center">
-						<img src={ad.creativeThumbnail} alt={ad.creativeName} className="w-full aspect-square rounded-md overflow-clip" />
-						<p className="subtitle tracking-tight py-4 h-[95px]">{ad["name"]}</p>
-						{tableHeaders.map(header => header != 'id' && header !== 'name' && (
-							selectedColumns.includes(header) && (
-								<div key={header} className="flex items-center justify-between w-full mb-2 last:mb-0">
-									<div className="font-semibold tracking-tight">{Headers[header]}</div>
-									<div className="font-semibold tracking-tight">{typeof ad[header] === 'number' ?
-										['impressions', 'outboundClicks', 'pageViews', 'purchases'].includes(header) ?
-											ad[header] :
-											ad[header].toFixed(2)
-										: ad[header]}</div>
-								</div>
-							)
-						))}
-					</div>
-				))}
-			</div>
+			<Suspense>
+				<Await resolve={ads} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+					{() =>
+						navigation.state === "idle" ? (
+							<div className="w-full mb-12 grid grid-cols-4 gap-8">
+								{filteredAds?.map((ad: any, index: number) => (
+									<AdInsightsCard key={index} ad={ad} selectedColumns={selectedColumns} tableHeaders={tableHeaders} />
+								))}
+							</div>
+						) : navigation.state === "loading" ? (
+							<ChartsSkeleton />
+						) : null}
+				</Await>
+			</Suspense>
+
 		</>
 	);
 };

@@ -123,13 +123,13 @@ a:hover {
 }
 
 .text-show {
-  animation: showText 300ms ease-in-out;
-  transform-origin: center left;
+	animation: showText 300ms ease-in-out;
+	transform-origin: center left;
 }
 
 .text-hide {
-  animation: hideText 300ms ease-in-out forwards;
-  transform-origin: center left;
+	animation: hideText 300ms ease-in-out forwards;
+	transform-origin: center left;
 }
 
 .bold-not-active {
@@ -139,4 +139,28 @@ a:hover {
 
 .bold-active {
 	text-shadow: 1px 0 0 currentColor;
+}
+
+.nodge {
+	position: relative;
+}
+
+.nodge::after {
+	content: "";
+	position: absolute;
+	left: 0px;
+	top: 75%;
+	transform: translateY(-50%);
+	opacity: 0;
+	width: 1px;
+	height: 66%;
+	background: linear-gradient(transparent, var(--black-bg), var(--purple), var(--black-bg), transparent);
+	transition:
+		top 300ms ease,
+		opacity 300ms ease;
+}
+
+.nodge:hover::after {
+	top: 50%;
+	opacity: 1;
 }

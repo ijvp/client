@@ -60,5 +60,4 @@ export const fetchFacebookAdsInsights = async (request: Request, user, store) =>
 			return error;
 		}
 	}
-
 }

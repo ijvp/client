@@ -41,6 +41,14 @@
 /* end </DatePicker> styles */
 
 /* <ComboBox> styles */
+#PolarisPortalsContainer .Polaris-Box {
+	background: var(--black-secondary);
+}
+
+.Polaris-Listbox-TextOption .Polaris-Listbox-TextOption--allowMultiple {
+	background: var(--black-secondary);
+}
+
 .Polaris-Connected .Polaris-TextField__Backdrop {
 	background: var(--black-secondary);
 	border-radius: 0.5rem;
@@ -84,5 +92,22 @@
 }
 
 .Polaris-Listbox-TextOption:before {
+	background-color: var(--purple);
+}
+
+[data-focused] .Polaris-Listbox-TextOption:not(.Polaris-Listbox-TextOption--disabled) {
+	background-color: var(--black);
+}
+
+.Polaris-Listbox-TextOption:hover {
+	background-color: var(--black-border);
+}
+
+.Polaris-Popover__Pane,
+.Polaris-Popover__Content {
+	height: fit-content !important;
+}
+
+.Polaris-Checkbox__Backdrop:before {
 	background-color: var(--purple);
 }
