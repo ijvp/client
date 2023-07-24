@@ -1,6 +1,8 @@
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="10" y="10" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5"/>
-<rect x="10" y="21.6667" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5"/>
-<path d="M25.8332 10H22.6665C22.1142 10 21.6665 10.4477 21.6665 11V17.3333C21.6665 17.8856 22.1142 18.3333 22.6665 18.3333H28.9998C29.5521 18.3333 29.9998 17.8856 29.9998 17.3333V14.1667" stroke="#A499B2" stroke-width="1.5" stroke-linecap="round"/>
-<rect x="21.6665" y="21.6667" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5"/>
+	<rect x="10" y="10" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5" />
+	<rect x="10" y="21.6667" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5" />
+	<path
+		d="M25.8332 10H22.6665C22.1142 10 21.6665 10.4477 21.6665 11V17.3333C21.6665 17.8856 22.1142 18.3333 22.6665 18.3333H28.9998C29.5521 18.3333 29.9998 17.8856 29.9998 17.3333V14.1667"
+		stroke="#A499B2" stroke-width="1.5" stroke-linecap="round" />
+	<rect x="21.6665" y="21.6667" width="8.33333" height="8.33333" rx="1" stroke="#A499B2" stroke-width="1.5" />
 </svg>
