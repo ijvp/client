@@ -54,19 +54,19 @@ export default function IntegrationContainer() {
       active: true,
       locked: true
     },
-    {
-      id: "google-analytics",
-      name: "Google Analytics",
-      platform: "google",
-      service: "google-analytics",
-      type: "analise",
-      active: true,
-      validation: 'google_client',
-      locked: false,
-      connected: !!connections?.google_analytics,
-      connectionId: connections?.google_analytics?.id,
-      connectionName: connections?.google_analytics?.name
-    },
+    // {
+    //   id: "google-analytics",
+    //   name: "Google Analytics",
+    //   platform: "google",
+    //   service: "google-analytics",
+    //   type: "analise",
+    //   active: true,
+    //   validation: 'google_client',
+    //   locked: false,
+    //   connected: !!connections?.google_analytics,
+    //   connectionId: connections?.google_analytics?.id,
+    //   connectionName: connections?.google_analytics?.name
+    // },
     {
       id: "pinterest-ads",
       name: "Pinterest Ads",
@@ -143,8 +143,8 @@ export default function IntegrationContainer() {
       {stores.length > 0 ?
         <div>
           <div>
-            <div className="mt-[60px]">
-              <h2 id="anuncios" className="h5 pb-8">Anúncios:</h2>
+            <div className="mt-16">
+              {anunciosIntegrations.length > 0 && (<h2 id="anuncios" className="h5 pb-8">Anúncios:</h2>)}
               <div className="grid grid-cols-2 gap-6">
                 {anunciosIntegrations.map((integration, index) => (
                   <IntegrationBox
@@ -162,8 +162,8 @@ export default function IntegrationContainer() {
                 ))}
               </div>
             </div>
-            <div className="mt-[60px]">
-              <h2 id="analise" className="h5 pb-8">Análise:</h2>
+            <div className="mt-8">
+              {analiseIntegrations.length > 0 && (<h2 id="analise" className="h5 pb-8">Análise:</h2>)}
               <div className="grid grid-cols-2 gap-6">
                 {analiseIntegrations.map((integration, index) => (
                   <IntegrationBox
@@ -181,7 +181,7 @@ export default function IntegrationContainer() {
                 ))}
               </div>
             </div>
-            {emailIntegrations.length > 0 && <div className="mt-[60px]">
+            {emailIntegrations.length > 0 && <div className="mt-16">
               <h2 id="eMailMarketing" className="h5 pb-8">E-Mail Marketing:</h2>
               <div className="grid grid-cols-2 gap-6">
                 {emailIntegrations.map(integration => (
@@ -197,8 +197,8 @@ export default function IntegrationContainer() {
                 ))}
               </div>
             </div>}
-            <div className="mt-[60px]">
-              <h2 id="planilhas" className="h5 pb-8">Planilhas:</h2>
+            <div className="mt-16">
+              {planilhasIntegrations.length > 0 && (<h2 id="planilhas" className="h5 pb-8">Planilhas:</h2>)}
               <div className="grid grid-cols-2 gap-6">
                 {planilhasIntegrations.map(integration => (
                   <IntegrationBox

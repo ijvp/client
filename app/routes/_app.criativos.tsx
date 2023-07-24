@@ -109,9 +109,8 @@ export default function CreativesPage() {
 				Aqui você tem uma visualização geral de todos os seus criativos pertencentes a campanhas do Facebook Ads. Você pode buscar e agrupar por nome para ter uma visão melhor da performance de criativos duplicados!
 			</p>
 			<IntervalSelect />
-			<div className="subtitle flex items-center justify-start gap-2">
-
-				<Suspense>
+			<Suspense>
+				<div className="subtitle flex items-center justify-start gap-2">
 					<Await resolve={ttl} errorElement={
 						<>
 							<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
@@ -128,8 +127,8 @@ export default function CreativesPage() {
 								<p>Carregando...</p>
 							) : null}
 					</Await>
-				</Suspense>
-			</div>
+				</div>
+			</Suspense>
 			<div className="flex items-start gap-4 mb-8">
 				<Input
 					name="ad-name"
@@ -172,7 +171,6 @@ export default function CreativesPage() {
 						) : null}
 				</Await>
 			</Suspense>
-
 		</>
 	);
 };
