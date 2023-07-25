@@ -109,14 +109,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const totalInvested = getTotalValue(investmentsDataSeries);
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
-	const roasDataSeries = investmentsDataSeries.map(investment => {
+	const roasDataSeries = orders.length ? investmentsDataSeries.map(investment => {
 		let order = orders?.find(item => item.date === investment.key);
 		let ratio = (order ? order.value : 0) / investment.value;
 		return {
 			key: investment.key,
 			value: parseFloat(ratio.toFixed(2))
 		}
-	});
+	}) : ordersDataSeries;
 
 	const renderDonutLabel = (innerValueContents: InnerValueContents) => {
 		return innerValueContents?.activeValue ? toLocalCurrency(innerValueContents.activeValue) : toLocalCurrency(innerValueContents.totalValue);
