@@ -1,5 +1,8 @@
+import { differenceInDays } from "date-fns";
+import { parseDateString } from "~/utils/date";
 import api from ".";
 import { isAxiosError } from "axios";
+import { Granularity } from "~/ts/enums";
 
 const now = new Date();
 const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
@@ -11,11 +14,13 @@ export const fetchFacebookAdsInvestment = async (request: Request, user, store) 
 		const searchParams = new URL(request.url).searchParams;
 		const start = searchParams.get("start") ? searchParams.get("start") : today.toISOString().split("T")[0];
 		const end = searchParams.get("end") ? searchParams.get("end") : today.toISOString().split("T")[0];
+		const daysInterval = differenceInDays(parseDateString(end), parseDateString(start));
 
-		const response = await api.post("/facebook/ads", {
+		const response = await api.post("/facebook/ad-expenses", {
 			store,
 			start,
-			end
+			end,
+			granularity: daysInterval > 0 ? Granularity.Day : Granularity.Hour
 		}, {
 			headers: {
 				Cookie: cookie
