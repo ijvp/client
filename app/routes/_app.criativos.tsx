@@ -2,6 +2,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { defer, json, redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { useEffect, useState, useMemo, Suspense } from "react";
+import { fetchActiveConnections } from "~/api";
 import { fetchFacebookAdsInsights } from "~/api/facebook";
 import { checkAuth } from "~/api/helpers";
 import { fetchUserStores } from "~/api/user";
@@ -26,9 +27,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 		const stores = await fetchUserStores(request);
 
 		if (stores.length) {
-			store = stores[0]
-			const adInsightsData = await fetchFacebookAdsInsights(request, user, store);
+			store = stores[0];
+			const connections = await fetchActiveConnections({ request });
+			const adInsightsData = connections?.facebook_ads && await fetchFacebookAdsInsights(request, user, store);
 			return defer(adInsightsData);
+		} else {
+			return null;
 		}
 	};
 }
@@ -121,7 +125,7 @@ export default function CreativesPage() {
 							navigation.state === "idle" ? (
 								<>
 									<div className="w-4 h-4 aspect-square bg-green-light rounded-full" />
-									<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate >= 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
+									<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate > 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
 								</>
 							) : navigation.state === "loading" ? (
 								<p>Carregando...</p>

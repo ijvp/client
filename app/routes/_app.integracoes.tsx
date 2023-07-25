@@ -12,7 +12,6 @@ import PageTitle from "~/components/page-title";
 import { links as sidebarLinks } from "~/components/sidebar";
 import { connectionsAtom, storeIndexAtom, storesAtom } from "~/utils/atoms";
 
-
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Integrações" }];
 };
@@ -42,7 +41,6 @@ export const action: ActionFunction = async ({ request }: ActionArgs) => {
 		case "authorize": {
 			try {
 				const redirectUrl = await authorizeIntegration({ cookie, platform, store, service });
-				console.log(redirectUrl);
 				return redirect(redirectUrl);
 			} catch (error) {
 				console.log("failed to connect account", error)
@@ -101,7 +99,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	if (platform && store) {
 		const accounts = await fetchAccounts({ store, platform, request });
-
 		return json({
 			accounts,
 			store,
