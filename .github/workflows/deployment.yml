@@ -17,8 +17,7 @@ jobs:
     steps:        
       - name: Checkout repository
         uses: actions/checkout@v2
-
-
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -56,8 +55,6 @@ jobs:
             aws configure set region ${{ env.AWS_REGION }}
 
             aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ECR_REPO }}
-
-            console.log(${{ env.AWS_ECR_REPO }}, ${{ github.sha }})
 
             docker pull ${{ env.AWS_ECR_REPO }}:${{ github.sha }})
 
