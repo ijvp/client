@@ -51,4 +51,10 @@ jobs:
               sudo docker rm dashboard-react-client
             fi
 
-            docker --version
+            aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ECR_REPO }}
+
+            console.log(${{ env.AWS_ECR_REPO }}, ${{ github.sha }})
+
+            docker pull ${{ env.AWS_ECR_REPO }}:latest
+
+            sudo docker run -d -p 3000:3000 --name dashboard-react-client --restart on-failure --network dashboard-api-network -e API_URL=http://dashboard-javascript-api:8080 ${{ env.AWS_ECR_REPO }}:latest
