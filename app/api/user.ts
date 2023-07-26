@@ -45,6 +45,8 @@ export const loginUser = async (request: Request) => {
 			}
 		);
 
+		console.log(response.headers.get("Set-Cookie"))
+
 		if (response.data.success) {
 			return redirect("/analise", {
 				headers: response.headers
