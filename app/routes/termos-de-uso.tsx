@@ -2,8 +2,18 @@ import PageTitle from "~/components/page-title";
 
 export default function TermsOfService() {
 	return (
-		<div className="p-6 md:p-10 lg:p-16 xl:p-20 w-full text-lg">
+		<div className="p-6 md:p-10 lg:p-16 xl:p-20 w-full text-lg relative">
 			<PageTitle>Termos de serviço e uso</PageTitle>
+			<a
+				href="/analise"
+				className=" absolute top-24 right-24 w-fit flex items-baseline justify-center gap-2 justify-between py-4 bold-not-active text-white subtitle"
+			>
+				<img
+					src="/icons/chevron-left.svg"
+					alt="chevron-left"
+				/>
+				<span>Voltar</span>
+			</a>
 			<p>
 				Ao baixar ou usar o aplicativo, esses termos serão aplicados automaticamente a você – portanto, certifique-se de lê-los cuidadosamente antes de usar o aplicativo. Você não tem permissão para copiar ou modificar o aplicativo, qualquer parte do aplicativo ou nossas marcas registradas de forma alguma. Você não tem permissão para tentar extrair o código-fonte do aplicativo e também não deve tentar traduzir o aplicativo para outros idiomas ou criar versões derivadas. O aplicativo em si e todas as marcas registradas, direitos autorais, direitos de banco de dados e outros direitos de propriedade intelectual relacionados a ele ainda pertencem à Turbo Partners.			</p>
 			<p>

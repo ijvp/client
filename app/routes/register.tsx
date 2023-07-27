@@ -99,8 +99,8 @@ export default function Register() {
 				</div>
 				<div className="flex flex-col gap-4">
 					<div className="flex gap-4">
-						<Link to="/terms-of-service">Termos de Uso</Link>
-						<Link to="/privacy-policy">Política de Privacidade</Link>
+						<Link to="/termos-de-uso">Termos de Uso</Link>
+						<Link to="/politica-de-privacidade">Política de Privacidade</Link>
 					</div>
 				</div>
 			</form>
