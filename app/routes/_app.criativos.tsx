@@ -113,7 +113,7 @@ export default function CreativesPage() {
 				Aqui você tem uma visualização geral de todos os seus criativos pertencentes a campanhas do Facebook Ads. Você pode buscar e agrupar por nome para ter uma visão melhor da performance de criativos duplicados!
 			</p>
 			<IntervalSelect />
-			<Suspense>
+			<Suspense fallback={<p>Carregando...</p>}>
 				<div className="subtitle flex items-center justify-start gap-2">
 					<Await resolve={ttl} errorElement={
 						<>
@@ -161,7 +161,7 @@ export default function CreativesPage() {
 				</tbody>
 			</table>
 
-			<Suspense>
+			<Suspense fallback={<ChartsSkeleton />}>
 				<Await resolve={ads} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
 					{() =>
 						navigation.state === "idle" ? (
