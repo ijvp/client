@@ -78,8 +78,8 @@ export default function CreativesPage() {
 		});
 	}, [selectedColumns, tableHeaders]);
 	const tableBodyCells = useMemo(() => {
-		return selectedColumns.filter(header => header !== "name").map(header => {
-			return (
+		return tableHeaders.map(header => {
+			return header !== "name" && selectedColumns.includes(header) && (
 				<td key={header} className="p-2 border border-purple text-center">
 					<b>
 						{header === 'spend' ? totalSpend.toFixed(2) :
@@ -88,10 +88,10 @@ export default function CreativesPage() {
 									header === 'pageViews' ? totalPageViews :
 										header === 'purchases' ? totalPurchases :
 											header === 'purchasesConversionValue' ? totalPurchasesConversions :
-												header === 'CTR' ? (totalClicks / totalImpressions * 100).toFixed(2) :
+												header === 'CTR' ? (totalImpressions !== 0 ? totalClicks / totalImpressions * 100 : 0).toFixed(2) :
 													header === 'CPS' ? (totalPageViews !== 0 ? (totalSpend / totalPageViews) : 0).toFixed(2) :
 														header === 'CPA' ? (totalPurchases !== 0 ? (totalSpend / totalPurchases) : 0).toFixed(2) :
-															header === 'ROAS' ? (totalPurchasesConversions / totalSpend).toFixed(2) : ''
+															header === 'ROAS' ? (totalSpend !== 0 ? totalPurchasesConversions / totalSpend : 0).toFixed(2) : ''
 						}
 					</b>
 				</td>
