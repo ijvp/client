@@ -68,10 +68,10 @@ yesterday.setHours(0, 0, 0, 0);
 const options = [
 	{ label: 'Hoje', value: { start: today, end: today } },
 	{ label: 'Ontem', value: { start: yesterday, end: yesterday } },
-	{ label: 'Últimos 7 dias', value: { start: new Date(new Date(yesterday).setDate(yesterday.getDate() - 7)), end: yesterday } },
-	{ label: 'Ultimos 14 dias', value: { start: new Date(new Date(yesterday).setDate(yesterday.getDate() - 14)), end: yesterday } },
-	{ label: 'Últimos 30 dias', value: { start: new Date(new Date(yesterday).setDate(yesterday.getDate() - 30)), end: yesterday } },
-	{ label: 'Último ano', value: { start: new Date(new Date(yesterday).setDate(yesterday.getDate() - 365)), end: yesterday } },
+	{ label: 'Últimos 7 dias', value: { start: new Date(new Date(today).setDate(today.getDate() - 7)), end: yesterday } },
+	{ label: 'Ultimos 14 dias', value: { start: new Date(new Date(today).setDate(today.getDate() - 14)), end: yesterday } },
+	{ label: 'Últimos 30 dias', value: { start: new Date(new Date(today).setDate(today.getDate() - 30)), end: yesterday } },
+	{ label: 'Último ano', value: { start: new Date(new Date(today).setDate(today.getDate() - 365)), end: yesterday } },
 ];
 
 interface DateRange {
