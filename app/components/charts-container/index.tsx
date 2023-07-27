@@ -145,9 +145,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					},
 					valueFormatter: (value) => toLocalCurrency(value)
 				}}
@@ -162,7 +167,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 						const valueParams = value.split("T");
 						const dateStr = valueParams[0];
 						const timeStr = valueParams[1];
-						const date = new Date(dateStr);
+						const date = new Date(dateStr.replace(/-/g, '/'));
 						timeStr && date.setHours(timeStr);
 						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
@@ -196,9 +201,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				yAxisOptions={{ integersOnly: true }}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					}
 				}}
 			/>
@@ -208,9 +218,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				data={roasDataSeries}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					}
 				}}
 			/>
