@@ -46,7 +46,7 @@ export default function App() {
           <Links />
         </head>
         <body className="min-h-screen min-w-screen text-white">
-          <div className="w-full flex items-stretch">
+          <div className="w-full h-full flex items-stretch">
             <Outlet />
           </div>
           <ScrollRestoration />

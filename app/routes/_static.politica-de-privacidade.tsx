@@ -2,18 +2,8 @@ import PageTitle from "~/components/page-title";
 
 export default function PrivacyPolicy() {
 	return (
-		<div className="p-6 md:p-10 lg:p-16 xl:p-20 w-full text-lg relative">
+		<div className="p-6 mb-6 md:p-10 lg:p-16 xl:p-20 w-full text-lg relative">
 			<PageTitle>Política de Privacidade</PageTitle>
-			<a
-				href="/analise"
-				className=" absolute top-24 right-24 w-fit flex items-baseline justify-center gap-2 justify-between py-4 bold-not-active text-white subtitle"
-			>
-				<img
-					src="/icons/chevron-left.svg"
-					alt="chevron-left"
-				/>
-				<span>Voltar</span>
-			</a>
 			<p>
 				A Turbo Partners criou o aplicativo Turbo Dash como
 				um aplicativo comercial. Este SERVIÇO é fornecido pela
