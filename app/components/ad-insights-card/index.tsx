@@ -7,7 +7,7 @@ const AdInsightsCard = ({ ad, tableHeaders, selectedColumns }) => {
 			bg-black-bg
 			relative
 			border border-black-secondary 
-			rounded-lg 
+			rounded-md 
 			p-4 
 			flex flex-col items-center">
 			<div
@@ -27,7 +27,7 @@ const AdInsightsCard = ({ ad, tableHeaders, selectedColumns }) => {
 			{tableHeaders.map(header => header != 'id' && header !== 'name' && (
 				selectedColumns.includes(header) && (
 					<div key={header} className="flex items-center justify-between w-full mb-2 last:mb-0">
-						<div className="font-semibold tracking-tight">{Headers[header]}</div>
+						<div>{Headers[header]}</div>
 						<div className="font-semibold tracking-tight">{typeof ad[header] === 'number' ?
 							['impressions', 'outboundClicks', 'pageViews', 'purchases'].includes(header) ?
 								ad[header] :

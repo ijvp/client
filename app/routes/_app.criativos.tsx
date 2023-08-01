@@ -108,45 +108,66 @@ export default function CreativesPage() {
 
 	return (
 		<>
-			<PageTitle>Criativos</PageTitle>
-			<p className="subtitle">
-				Aqui você tem uma visualização geral de todos os seus criativos pertencentes a campanhas do Facebook Ads. Você pode buscar e agrupar por nome para ter uma visão melhor da performance de criativos duplicados!
-			</p>
-			<IntervalSelect />
-			<Suspense fallback={<p>Carregando...</p>}>
-				<div className="subtitle flex items-center justify-start gap-2">
-					<Await resolve={ttl} errorElement={
-						<>
-							<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
-							<p>Não foi possível atualizar</p>
-						</>
-					}>
-						{() =>
-							navigation.state === "idle" ? (
+			<PageTitle>
+				Criativos
+				<div className="absolute right-2 top-1/2 -translate-y-1/2">
+					<Suspense fallback={<p>Carregando...</p>}>
+						<div className="subtitle flex items-center justify-start gap-2">
+							<Await resolve={ttl} errorElement={
 								<>
-									<div className="w-4 h-4 aspect-square bg-green-light rounded-full" />
-									<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate > 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
+									<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
+									<p>Não foi possível atualizar</p>
 								</>
-							) : navigation.state === "loading" ? (
-								<p>Carregando...</p>
-							) : null}
-					</Await>
+							}>
+								{() =>
+									navigation.state === "idle" ? (
+										<>
+											<div className="w-4 h-4 aspect-square bg-green-light rounded-full" />
+											<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate > 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
+										</>
+									) : navigation.state === "loading" ? (
+										<p>Carregando...</p>
+									) : null}
+							</Await>
+						</div>
+					</Suspense>
 				</div>
-			</Suspense>
-			<div className="flex items-start gap-4 mb-8">
-				<Input
-					name="ad-name"
-					type="text"
-					placeholder="agrupar por nome de anuncio"
-					className="w-full my-8"
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
-				<AdInsightsControls
-					columnOptions={columnOptions}
-					selectedColumns={selectedColumns}
-					setSelectedColumns={setSelectedColumns}
-				/>
+			</PageTitle>
+
+			<IntervalSelect />
+			<div className="grid grid-cols-12 gap-6">
+				<div className="col-span-8">
+					<p className="text-xl">Agrupar por nome do anúncio</p>
+					<Input
+						name="ad-name"
+						type="text"
+						placeholder="Nome do anúncio"
+						className="w-full my-4"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+					<Suspense fallback={<ChartsSkeleton />}>
+						<Await resolve={ads} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
+							{() =>
+								navigation.state === "idle" ? (
+									<div className="w-full mb-12 grid grid-cols-3 gap-6">
+										{filteredAds?.map((ad: any, index: number) => (
+											<AdInsightsCard key={index} ad={ad} selectedColumns={selectedColumns} tableHeaders={tableHeaders} />
+										))}
+									</div>
+								) : navigation.state === "loading" ? (
+									<ChartsSkeleton />
+								) : null}
+						</Await>
+					</Suspense>
+				</div>
+				<div className="col-span-4">
+					<AdInsightsControls
+						columnOptions={columnOptions}
+						selectedColumns={selectedColumns}
+						setSelectedColumns={setSelectedColumns}
+					/>
+				</div>
 			</div>
 			<table className="w-full border border-purple mb-8">
 				<thead>
@@ -160,21 +181,6 @@ export default function CreativesPage() {
 					</tr>
 				</tbody>
 			</table>
-
-			<Suspense fallback={<ChartsSkeleton />}>
-				<Await resolve={ads} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
-					{() =>
-						navigation.state === "idle" ? (
-							<div className="w-full mb-12 grid grid-cols-4 gap-8">
-								{filteredAds?.map((ad: any, index: number) => (
-									<AdInsightsCard key={index} ad={ad} selectedColumns={selectedColumns} tableHeaders={tableHeaders} />
-								))}
-							</div>
-						) : navigation.state === "loading" ? (
-							<ChartsSkeleton />
-						) : null}
-				</Await>
-			</Suspense>
 		</>
 	);
 };

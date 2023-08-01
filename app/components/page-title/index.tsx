@@ -7,6 +7,7 @@ interface PageTitleProps {
 export default function PageTitle({ children }: PageTitleProps) {
 	return (
 		<h2 className="
+				relative
 				h2
 				mb-6 pb-6
 				border-b border-solid border-black-secondary
