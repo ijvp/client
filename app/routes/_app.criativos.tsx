@@ -1,5 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { defer, json, redirect } from "@remix-run/node";
+import { defer, redirect } from "@remix-run/node";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { useEffect, useState, useMemo, Suspense } from "react";
 import { fetchActiveConnections } from "~/api";
@@ -72,15 +72,17 @@ export default function CreativesPage() {
 	const [selectedColumns, setSelectedColumns] = useState(Array.from(Object.keys(Headers)));
 
 	const tableHeaders = useMemo(() => Object.keys(Headers), []);
-	const tableHeaderCells = useMemo(() => {
-		return tableHeaders.map((header) => {
-			return header !== "name" && selectedColumns.includes(header) && <th key={header} className="p-2 border border-purple">{Headers[header]}</th>;
-		});
-	}, [selectedColumns, tableHeaders]);
-	const tableBodyCells = useMemo(() => {
+
+	const selectedColumnCells = useMemo(() => {
 		return tableHeaders.map(header => {
 			return header !== "name" && selectedColumns.includes(header) && (
-				<td key={header} className="p-2 border border-purple text-center">
+				<div key={header} className="
+				py-4 
+				flex items-center justify-between 
+				text-center 
+				border-b border-black-secondary last:border-0
+				">
+					<span>{Headers[header]}:</span>
 					<b>
 						{header === 'spend' ? totalSpend.toFixed(2) :
 							header === 'impressions' ? totalImpressions :
@@ -94,10 +96,10 @@ export default function CreativesPage() {
 															header === 'ROAS' ? (totalSpend !== 0 ? totalPurchasesConversions / totalSpend : 0).toFixed(2) : ''
 						}
 					</b>
-				</td>
+				</div>
 			);
 		});
-	}, [selectedColumns, totalClicks, totalImpressions, totalPageViews, totalPurchases, totalPurchasesConversions, totalSpend]);
+	}, [selectedColumns, tableHeaders, totalClicks, totalImpressions, totalPageViews, totalPurchases, totalPurchasesConversions, totalSpend]);
 
 	useEffect(() => {
 		const filteredData = ads.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -137,7 +139,7 @@ export default function CreativesPage() {
 			<IntervalSelect />
 			<div className="grid grid-cols-12 gap-6">
 				<div className="col-span-8">
-					<p className="text-xl">Agrupar por nome do anúncio</p>
+					<p className="text-xl text-[#FFF]">Agrupar por nome do anúncio</p>
 					<Input
 						name="ad-name"
 						type="text"
@@ -167,20 +169,10 @@ export default function CreativesPage() {
 						selectedColumns={selectedColumns}
 						setSelectedColumns={setSelectedColumns}
 					/>
+					<p className="text-xl mt-6 mb-2 text-[#FFF]">Análise geral</p>
+					{selectedColumnCells}
 				</div>
 			</div>
-			<table className="w-full border border-purple mb-8">
-				<thead>
-					<tr>
-						{tableHeaderCells}
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						{tableBodyCells}
-					</tr>
-				</tbody>
-			</table>
 		</>
 	);
 };
