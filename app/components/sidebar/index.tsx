@@ -132,8 +132,8 @@ export default function Sidebar() {
 						<SettingsButton />
 					</div>
 					<div className="w-full flex flex-col items-center justify-center gap-1 border-t-2 pt-2 border-black-secondary">
-						<a className={`${open ? 'text-show' : 'text-hide'}`} href="/termos-de-uso">Termos de Uso</a>
-						<a className={`${open ? 'text-show' : 'text-hide'}`} href="/politica-de-privacidade">Política de privacidade</a>
+						<a className={`text-white ${open ? 'text-show' : 'text-hide'}`} href="/termos-de-uso">Termos de Uso</a>
+						<a className={`text-white ${open ? 'text-show' : 'text-hide'}`} href="/politica-de-privacidade">Política de privacidade</a>
 						<button onClick={handleClick} className={`${open ? 'text-hide' : 'text-show'}`}>...</button>
 					</div>
 				</div>

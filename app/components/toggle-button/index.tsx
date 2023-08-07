@@ -17,6 +17,7 @@ export default function ToggleButton({ open, onClick }: ToggleButtonProps) {
 	return (
 		<button
 			onClick={onClick}
+			aria-label="toggle menu"
 			id="toggle-button"
 			className="
 			h-11 w-11
