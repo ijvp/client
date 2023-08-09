@@ -19,7 +19,8 @@ export const action = async ({ request }: ActionArgs) => {
 	try {
 		return await registerUser(request);
 	} catch (error) {
-		return json({ success: false, message: "Erro interno do servidor" });
+		const { message } = error?.response?.data;
+		return json({ success: false, message: message ?? "Erro interno do servidor" });
 	}
 };
 
