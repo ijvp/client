@@ -45,7 +45,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 		if (!store) {
 			const stores = await fetchUserStores(request);
 			if (stores) {
-				store = stores[0]
+				store = stores[0];
+			} else {
+				return null;
 			}
 		};
 

@@ -98,8 +98,8 @@ export default function Login() {
 				<div className="flex flex-col gap-4">
 					<p>Ainda não tem uma conta?&nbsp;<Link to="/register">Registre aqui</Link></p>
 					<div className="flex gap-4">
-						<Link to="/terms-of-service">Termos de Uso</Link>
-						<Link to="/privacy-policy">Política de Privacidade</Link>
+						<Link to="/termos-de-uso">Termos de Uso</Link>
+						<Link to="/politica-de-privacide">Política de Privacidade</Link>
 					</div>
 				</div>
 			</form>

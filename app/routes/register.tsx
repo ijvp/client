@@ -19,7 +19,8 @@ export const action = async ({ request }: ActionArgs) => {
 	try {
 		return await registerUser(request);
 	} catch (error) {
-		return json({ success: false, message: "Erro interno do servidor" });
+		const { message } = error?.response?.data;
+		return json({ success: false, message: message ?? "Erro interno do servidor" });
 	}
 };
 
@@ -99,8 +100,8 @@ export default function Register() {
 				</div>
 				<div className="flex flex-col gap-4">
 					<div className="flex gap-4">
-						<Link to="/terms-of-service">Termos de Uso</Link>
-						<Link to="/privacy-policy">Política de Privacidade</Link>
+						<Link to="/termos-de-uso">Termos de Uso</Link>
+						<Link to="/politica-de-privacidade">Política de Privacidade</Link>
 					</div>
 				</div>
 			</form>

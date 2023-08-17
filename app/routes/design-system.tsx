@@ -1,6 +1,6 @@
 export default function DesignSystem() {
 	return (
-		<>
+		<div className="w-full flex flex-col">
 			<h1 className="bg-black h1 text-white p-4">
 				The quick brown fox jumps over the lazy dog.
 			</h1>
@@ -30,6 +30,6 @@ export default function DesignSystem() {
 					branco
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }

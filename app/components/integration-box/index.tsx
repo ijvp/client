@@ -15,7 +15,7 @@ export default function IntegrationBox({ name, validation, id, locked, connected
                 </div>
                 <span className="text-xl font-normal leading-[30px] h-[30px]">{name}</span>
                 <div className={`w-4 h-4 aspect-square ${connected ? 'bg-green-light' : 'bg-red-light'} rounded-full`}></div>
-                {connectionId && <p>{id === "facebook" ? connectionId.slice(4) : connectionId}&nbsp;/&nbsp;{connectionName} </p>}
+                {connectionId && <p>{id === "facebook-ads" ? connectionId.slice(4) : connectionId}&nbsp;/&nbsp;{connectionName} </p>}
             </div>
             <IntegrationButton
                 connected={connected}

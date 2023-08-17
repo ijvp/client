@@ -109,14 +109,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const totalInvested = getTotalValue(investmentsDataSeries);
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
-	const roasDataSeries = investmentsDataSeries.map(investment => {
+	const roasDataSeries = orders.length ? investmentsDataSeries.map(investment => {
 		let order = orders?.find(item => item.date === investment.key);
 		let ratio = (order ? order.value : 0) / investment.value;
 		return {
 			key: investment.key,
 			value: parseFloat(ratio.toFixed(2))
 		}
-	});
+	}) : ordersDataSeries;
 
 	const renderDonutLabel = (innerValueContents: InnerValueContents) => {
 		return innerValueContents?.activeValue ? toLocalCurrency(innerValueContents.activeValue) : toLocalCurrency(innerValueContents.totalValue);
@@ -145,9 +145,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					},
 					valueFormatter: (value) => toLocalCurrency(value)
 				}}
@@ -159,9 +164,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				yAxisOptions={{ labelFormatter: (y) => `R$${y}` }}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})} ${!daysInterval ? new Date(value).toLocaleTimeString().slice(0, -3) : ""}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					},
 					valueFormatter: (value) => toLocalCurrency(value)
 				}}
@@ -191,9 +201,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				yAxisOptions={{ integersOnly: true }}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					}
 				}}
 			/>
@@ -203,9 +218,14 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				data={roasDataSeries}
 				tooltipOptions={{
 					titleFormatter: (value) => {
-						return `🗓 ${new Date(value).toLocaleDateString(undefined, {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
 							dateStyle: 'long',
-						})}`;
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
 					}
 				}}
 			/>
