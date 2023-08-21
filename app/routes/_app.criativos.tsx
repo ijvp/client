@@ -25,18 +25,16 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	if (!store) {
 		const stores = await fetchUserStores(request);
-
 		if (stores.length) {
 			store = stores[0];
-			const connections = await fetchActiveConnections({ request });
-			const adInsightsData = connections?.facebook_ads && await fetchFacebookAdsInsights(request, user, store);
-			return defer(adInsightsData);
 		} else {
 			return null;
 		}
 	};
 
-	return null;
+	const connections = await fetchActiveConnections({ request });
+	const adInsightsData = connections?.facebook_ads && await fetchFacebookAdsInsights(request, user, store);
+	return defer(adInsightsData);
 }
 
 export function ErrorBoundary() {
