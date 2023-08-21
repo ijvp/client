@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
-import { Form } from "@remix-run/react";
+import { Form, useSearchParams } from "@remix-run/react";
 import Overlay from "../overlay";
 import SubmitButton from "../submit-button";
 import styles from "./styles.css";
@@ -20,6 +20,8 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [client, setClient] = useState<AccountConnection>();
   const [open, setOpen] = useState(true);
+
+  const [searchParams] = useSearchParams();
 
   const handleAccountSelect = (index: number) => {
     setSelectedIndex(index);
@@ -44,7 +46,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             "
             method="post"
             onClick={(e) => e.stopPropagation()}
-            action="/integracoes"
+            action={`/integracoes?store=${searchParams.get("store")}`}
           >
             <h2 className="h h5">Selecione uma conta</h2>
             <input type="hidden" name="action" value="connect" />
