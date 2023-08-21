@@ -35,6 +35,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 			return null;
 		}
 	};
+
+	return null;
 }
 
 export function ErrorBoundary() {
