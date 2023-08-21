@@ -1,7 +1,7 @@
 import type { LinksFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import styles from "./styles.css";
-import { Form } from "@remix-run/react";
+import { Form, useSearchParams } from "@remix-run/react";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
@@ -16,6 +16,7 @@ interface IIntegrationButton {
 
 export default function IntegrationButton({ connected, locked, platform, storeIntegrationId, storeName, service }: IIntegrationButton) {
   const [isConnected, setIsConnected] = useState(false)
+  const [searchParams] = useSearchParams();
 
   const action = isConnected ? 'disconnect' : 'authorize';
 
@@ -24,7 +25,10 @@ export default function IntegrationButton({ connected, locked, platform, storeIn
   }, [connected]);
 
   return (
-    <Form method="post" action="/integracoes">
+    <Form
+      method="post"
+      action={`/integracoes?store=${searchParams.get("store")}`}
+    >
       <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />
       <input type="hidden" name="platform" value={platform} />
