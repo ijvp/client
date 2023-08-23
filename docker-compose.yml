@@ -1,0 +1,16 @@
+version: "3"
+services:
+  client:
+    build:
+      dockerfile: Dockerfile
+    environment:
+      - API_URL=http://dashboard-api-js:8080
+    networks:
+      - dashboard-network
+    restart: on-failure
+    ports:
+      - 3000:3000
+
+networks:
+  dashboard-network:
+    name: dashboard-network
