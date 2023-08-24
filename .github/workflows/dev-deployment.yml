@@ -50,7 +50,7 @@ jobs:
       - name: SSH into EC2 instance and deploy container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_SSH_HOST }}
+          host: ${{ secrets.EC2_DEV_SSH_HOST }}
           username: ${{ secrets.EC2_SSH_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: 22
