@@ -45,7 +45,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 		if (!store) {
 			const stores = await fetchUserStores(request);
 			if (stores) {
-				store = stores[0];
+				store = stores[0].myshopify_domain;
 			} else {
 				return null;
 			}
@@ -83,7 +83,7 @@ export default function Analysis() {
 	return (
 		<>
 			<PageTitle>
-				{formatStoreName(stores[selectedIndex])}
+				{formatStoreName(stores[selectedIndex].myshopify_domain)}
 			</PageTitle>
 			<IntervalSelect />
 			<Suspense fallback={<ChartsSkeleton />}>

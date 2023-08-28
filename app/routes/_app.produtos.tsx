@@ -1,14 +1,17 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { fetchShopifyProducts } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import PageTitle from "~/components/page-title";
-import ProductList from "~/components/product-list";
+import diacritics from "diacritics";
 import { links as sidebarLinks } from "~/components/sidebar";
 import { fetchUserStores } from "~/api/user";
 import { useAtom } from "jotai";
-import { storesAtom } from "~/utils/atoms";
+import { storeIndexAtom, storesAtom } from "~/utils/atoms";
+import IntervalSelect from "~/components/interval-select";
+import { useState } from "react";
+import Input from "~/components/input";
 
 export const meta: V2_MetaFunction = () => {
 	return [{ title: "Turbo Dash | Produtos" }];
@@ -31,7 +34,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 		const stores = await fetchUserStores(request);
 
 		if (stores.length) {
-			store = stores[0]
+			store = stores[0].myshopify_domain;
 		} else {
 			return null;
 		}
@@ -53,6 +56,14 @@ export function ErrorBoundary() {
 export default function ProductsPage() {
 	const products = useLoaderData();
 	const [stores] = useAtom(storesAtom);
+	const [selectedIndex] = useAtom(storeIndexAtom);
+	const [searchValue, setSearchValue] = useState("");
+
+	const normalizedSearchValue = diacritics.remove(searchValue.toLowerCase());
+	const filteredProducts = products.filter(product => {
+		const normalizedProductName = diacritics.remove(product.title.toLowerCase());
+		return normalizedProductName.includes(normalizedSearchValue);
+	});
 
 	if (!stores?.length) {
 		return (
@@ -74,23 +85,44 @@ export default function ProductsPage() {
 		)
 	}
 
+
 	return (
 		<>
 			<PageTitle>Produtos</PageTitle>
-			<div className="flex gap-16">
+			<IntervalSelect />
+			<div className="flex gap-8">
 				{products.length > 0 &&
-					<div className="flex flex-col items-start justify-center gap-4">
-						{
-							products.map((product: any, index: number) => {
-								return (
-									<div key={index} className="w-full flex items-center gap-2">
-										<img src={product.featuredImage?.url} alt={product.featuredImage?.altText} className="w-[100px] aspect-square" />
-										<span>{product.title}</span>
-										<span>{product.handle}</span>
-									</div>
-								)
-							})
-						}
+					<div className="w-full">
+						<Input
+							type="text"
+							name="product-name"
+							placeholder="Buscar"
+							value={searchValue}
+							onChange={e => setSearchValue(e.target.value)}
+							className="px-2 py-1 border rounded w-full"
+						/>
+						<div className="mt-6 flex flex-col items-start justify-center gap-4 w-full">
+							{
+								filteredProducts.map((product: any, index: number) => {
+									const productId = String(product.id).split("/").slice(-1);
+
+									return (
+										<div key={index} className="w-full flex items-center justify-between gap-2">
+											<div className="flex items-center gap-4">
+												<div className="rounded-md overflow-clip">
+													<img
+														src={product.featuredImage?.url}
+														alt={product.featuredImage?.altText} className="w-[100px] aspect-square" />
+												</div>
+												<p className="subtitle h6">{product.title} ({productId})</p>
+											</div>
+											<Link to={`/produtos/${productId}?store=${stores[selectedIndex].myshopify_domain}`}
+												className="bg-purple py-3 px-12 text-center flex items-center font-semibold text-white rounded-md">Ver detalhes</Link>
+										</div>
+									)
+								})
+							}
+						</div>
 					</div>
 				}
 				{/* <ProductList products={products} /> */}

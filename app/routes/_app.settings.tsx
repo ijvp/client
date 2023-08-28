@@ -93,7 +93,7 @@ export default function Settings() {
 	const handleDeleteStore = async (index: number) => {
 		try {
 			const data = new FormData();
-			data.append("store", accounts[index]);
+			data.append("store", accounts[index].myshopify_domain);
 			const response = await fetch("/settings/delete", {
 				method: "POST",
 				body: data
@@ -204,7 +204,7 @@ export default function Settings() {
 									return (
 										<div key={index} className="w-full border-b border-black-secondary pb-4 last:border-0 last:pb-0">
 											<div className="w-full flex items-center justify-between">
-												<p>{formatStoreName(account)}</p>
+												<p>{formatStoreName(account.myshopify_domain)}</p>
 												<button
 													className="rounded hover:bg-red-500 p-2"
 													onClick={() => handleDeleteStore(index)}

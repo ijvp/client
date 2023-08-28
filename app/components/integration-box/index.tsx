@@ -20,7 +20,7 @@ export default function IntegrationBox({ name, validation, id, locked, connected
             <IntegrationButton
                 connected={connected}
                 locked={locked}
-                storeName={stores[selectedIndex]}
+                storeName={stores[selectedIndex].myshopify_domain}
                 storeIntegrationId={id}
                 service={service}
                 platform={platform}

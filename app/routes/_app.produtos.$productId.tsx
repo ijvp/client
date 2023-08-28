@@ -5,6 +5,8 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { fetchShopifyProductById } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import { toLocalCurrency } from "~/utils/numbers";
+import { useAtom } from "jotai";
+import { storesAtom, storeIndexAtom } from "~/utils/atoms";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
 	const user = await checkAuth(request);
@@ -17,42 +19,49 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 export default function SelectedProduct() {
 	const product = useLoaderData();
+	const [stores] = useAtom(storesAtom);
+	const [selectedIndex] = useAtom(storeIndexAtom);
 
-	const pricesAreDifferent = product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount;
+	const pricesAreDifferent = product.priceRangeV2.minVariantPrice?.amount !== product.priceRangeV2.maxVariantPrice?.amount;
 
 	return (
 		<div
 			className="
 			relative
+			h-fit
 			p-4
 			text-lg
 			flex flex-col gap-4
-			flex-grow max-w-md
+			flex-grow max-w-sm
 			border border-solid border-black-border rounded-lg
 		">
-			<Link to="/products" className="absolute top-4 right-4 w-[42px] aspect-square bg-black-bg border border-solid border-black-secondary rounded-[4px] flex justify-center items-center hover:border-purple">
-				<img src="/x.svg" alt="sair" />
+			<Link to={`/produtos?store=${stores[selectedIndex].myshopify_domain}`} className="absolute top-4 right-4 w-[42px] aspect-square bg-black-bg border border-solid border-black-secondary rounded-[4px] flex justify-center items-center hover:border-purple">
+				<img src="/icons/x.svg" alt="sair" />
 			</Link>
 			<h2 className="h5 self-start">{product.title}</h2>
 			<div className="bg-white rounded-lg overflow-clip">
-				<img src={product.featuredImage.url} alt={product.featuredImage.altText} />
+				<img
+					src={product.featuredImage.url}
+					alt={product.featuredImage.altText}
+				/>
 			</div>
 
 			<p className="font-semibold">{product.description}</p>
 			{pricesAreDifferent ?
 				(
 					<>
-						<p className="text-gray"><span className="font-semibold text-white">Preço mínimo: </span>{toLocalCurrency(product.priceRange.minVariantPrice.amount)}</p>
-						<p className="text-gray"><span className="font-semibold text-white">Preço máximo: </span>{toLocalCurrency(product.priceRange.maxVariantPrice.amount)}</p>
+						<p className="text-gray"><span className="font-semibold text-white">Preço mínimo: </span>{toLocalCurrency(product.priceRangeV2.minVariantPrice.amount)}</p>
+						<p className="text-gray"><span className="font-semibold text-white">Preço máximo: </span>{toLocalCurrency(product.priceRangeV2.maxVariantPrice.amount)}</p>
 					</>
 				) : (
-					<p className="text-gray"><span className="font-semibold text-white">Preço: </span>{toLocalCurrency(product.priceRange.minVariantPrice.amount)}</p>
+					<p className="text-gray"><span className="font-semibold text-white">Preço: </span>{toLocalCurrency(product.priceRangeV2.minVariantPrice.amount)}</p>
 				)
 			}
 			<a
 				target="_blank"
 				rel="noreferrer"
-				href={product.onlineStoreUrl}
+				href={`https://${stores[selectedIndex].myshopify_domain}/products/${product.handle}`}
+
 				className="
 				w-full h-[45px]
 				border-box 
@@ -62,7 +71,8 @@ export default function SelectedProduct() {
 				text-purple--dark text-center p-3
 			">
 				<img src="/icons/exit-top-right.svg" alt="exit icon" />
-				Ver produto</a>
+				Visualizar
+			</a>
 		</div>
 	)
 }

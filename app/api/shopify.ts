@@ -90,7 +90,6 @@ export const fetchShopifyProducts = async (request, user, store) => {
 			},
 		});
 
-		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		if (isAxiosError(error)) {
@@ -108,11 +107,15 @@ export const fetchShopifyProductById = async (request, user, productId) => {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const store = searchParams.get("store") || user.shops[0].name;
-		const response = await api.post("/shopify/product", {
-			store: store,
-			productId: `gid://shopify/Product/${productId}`
-		}, { headers: { Cookie: cookie } });
+		const store = searchParams.get("store") || await fetchUserStores(request).then(stores => stores[0].myshopify_domain)
+		const response = await api.get("/shopify/product",
+			{
+				headers: { Cookie: cookie },
+				params: {
+					store: store,
+					productId: productId
+				}
+			});
 
 		return response.data;
 	} catch (error) {

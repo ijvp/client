@@ -26,7 +26,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	if (!store) {
 		const stores = await fetchUserStores(request);
 		if (stores.length) {
-			store = stores[0];
+			store = stores[0].myshopify_domain;
 		} else {
 			return null;
 		}

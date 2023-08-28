@@ -62,7 +62,7 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
             <h2 className="h h5">Selecione uma conta</h2>
             {!!accounts.length && (<Input
               type="text"
-              name="accountName"
+              name="account-name"
               placeholder="Buscar"
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
