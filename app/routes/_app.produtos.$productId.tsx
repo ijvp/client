@@ -22,7 +22,7 @@ export default function SelectedProduct() {
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
-	const pricesAreDifferent = product.priceRangeV2.minVariantPrice?.amount !== product.priceRangeV2.maxVariantPrice?.amount;
+	const pricesAreDifferent = product.priceRangeV2?.minVariantPrice?.amount !== product.priceRangeV2?.maxVariantPrice?.amount;
 
 	return (
 		<div
@@ -41,8 +41,8 @@ export default function SelectedProduct() {
 			<h2 className="h5 self-start">{product.title}</h2>
 			<div className="bg-white rounded-lg overflow-clip">
 				<img
-					src={product.featuredImage.url}
-					alt={product.featuredImage.altText}
+					src={product.featuredImage?.url ?? product.image?.src}
+					alt={product.featuredImage?.altText ?? product.image?.alt}
 				/>
 			</div>
 
@@ -50,11 +50,11 @@ export default function SelectedProduct() {
 			{pricesAreDifferent ?
 				(
 					<>
-						<p className="text-gray"><span className="font-semibold text-white">Preço mínimo: </span>{toLocalCurrency(product.priceRangeV2.minVariantPrice.amount)}</p>
-						<p className="text-gray"><span className="font-semibold text-white">Preço máximo: </span>{toLocalCurrency(product.priceRangeV2.maxVariantPrice.amount)}</p>
+						<p className="text-gray"><span className="font-semibold text-white">Preço mínimo: </span>{toLocalCurrency(product.priceRangeV2?.minVariantPrice.amount)}</p>
+						<p className="text-gray"><span className="font-semibold text-white">Preço máximo: </span>{toLocalCurrency(product.priceRangeV2?.maxVariantPrice.amount)}</p>
 					</>
 				) : (
-					<p className="text-gray"><span className="font-semibold text-white">Preço: </span>{toLocalCurrency(product.priceRangeV2.minVariantPrice.amount)}</p>
+					<p className="text-gray"><span className="font-semibold text-white">Preço: </span>{toLocalCurrency(product.priceRangeV2?.minVariantPrice?.amount)}</p>
 				)
 			}
 			<a

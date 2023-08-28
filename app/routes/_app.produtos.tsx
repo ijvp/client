@@ -60,8 +60,8 @@ export default function ProductsPage() {
 	const [searchValue, setSearchValue] = useState("");
 
 	const normalizedSearchValue = diacritics.remove(searchValue.toLowerCase());
-	const filteredProducts = products.filter(product => {
-		const normalizedProductName = diacritics.remove(product.title.toLowerCase());
+	const filteredProducts = products?.filter(product => {
+		const normalizedProductName = diacritics.remove(product.title?.toLowerCase());
 		return normalizedProductName.includes(normalizedSearchValue);
 	});
 
@@ -112,7 +112,8 @@ export default function ProductsPage() {
 												<div className="rounded-md overflow-clip">
 													<img
 														src={product.featuredImage?.url}
-														alt={product.featuredImage?.altText} className="w-[100px] aspect-square" />
+														alt={product.featuredImage?.altText}
+														className="max-w-[100px]" />
 												</div>
 												<p className="subtitle h6">{product.title} ({productId})</p>
 											</div>
