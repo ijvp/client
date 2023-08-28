@@ -1,8 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { fetchShopifyProductById } from "~/api/shopify";
+import { fetchShopifyProductById, fetchProductSessionsById, fetchProductOrders } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import { toLocalCurrency } from "~/utils/numbers";
 import { useAtom } from "jotai";
@@ -14,11 +13,14 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 		return redirect("/login");
 	}
 	const product = await fetchShopifyProductById(request, user, params.productId);
-	return json(product);
+	const productSessions = await fetchProductSessionsById(request, user, params.productId);
+	const productOrders = await fetchProductOrders(request, user, params.productId);
+	console.log(productOrders);
+	return json({ product, productSessions, productOrders });
 }
 
 export default function SelectedProduct() {
-	const product = useLoaderData();
+	const { product, productSessions } = useLoaderData();
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 
@@ -57,6 +59,7 @@ export default function SelectedProduct() {
 					<p className="text-gray"><span className="font-semibold text-white">Preço: </span>{toLocalCurrency(product.priceRangeV2?.minVariantPrice?.amount)}</p>
 				)
 			}
+			<p className="text-gray"><span className="font-semibold text-white">Sessões:</span> {productSessions?.sessions ?? 0}</p>
 			<a
 				target="_blank"
 				rel="noreferrer"

@@ -1,7 +1,7 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
-import { fetchShopifyProducts } from "~/api/shopify";
+import { Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
+import { fetchProductsSessions, fetchShopifyProducts } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
 import PageTitle from "~/components/page-title";
 import diacritics from "diacritics";
@@ -21,7 +21,7 @@ export const links: LinksFunction = () => [
 	...sidebarLinks()
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
 	const user = await checkAuth(request);
 	if (!user) {
 		return redirect("/login");
@@ -58,6 +58,8 @@ export default function ProductsPage() {
 	const [stores] = useAtom(storesAtom);
 	const [selectedIndex] = useAtom(storeIndexAtom);
 	const [searchValue, setSearchValue] = useState("");
+	const [searchParams] = useSearchParams();
+	const searchParamsObj = Object.fromEntries(searchParams);
 
 	const normalizedSearchValue = diacritics.remove(searchValue.toLowerCase());
 	const filteredProducts = products?.filter(product => {
@@ -84,7 +86,6 @@ export default function ProductsPage() {
 
 		)
 	}
-
 
 	return (
 		<>
@@ -117,7 +118,11 @@ export default function ProductsPage() {
 												</div>
 												<p className="subtitle h6">{product.title} ({productId})</p>
 											</div>
-											<Link to={`/produtos/${productId}?store=${stores[selectedIndex].myshopify_domain}`}
+											<Link to={
+												{
+													pathname: `/produtos/${productId}`,
+													search: new URLSearchParams(searchParamsObj).toString()
+												}}
 												className="bg-purple py-3 px-12 text-center flex items-center font-semibold text-white rounded-md">Ver detalhes</Link>
 										</div>
 									)
@@ -128,7 +133,7 @@ export default function ProductsPage() {
 				}
 				{/* <ProductList products={products} /> */}
 				<Outlet />
-			</div>
+			</div >
 		</>
 	)
 }
