@@ -54,19 +54,19 @@ export default function IntegrationContainer() {
       active: true,
       locked: true
     },
-    // {
-    //   id: "google-analytics",
-    //   name: "Google Analytics",
-    //   platform: "google",
-    //   service: "google-analytics",
-    //   type: "analise",
-    //   active: true,
-    //   validation: 'google_client',
-    //   locked: false,
-    //   connected: !!connections?.google_analytics,
-    //   connectionId: connections?.google_analytics?.id,
-    //   connectionName: connections?.google_analytics?.name
-    // },
+    {
+      id: "google-analytics",
+      name: "Google Analytics",
+      platform: "google",
+      service: "google-analytics",
+      type: "analise",
+      active: true,
+      validation: 'google_client',
+      locked: false,
+      connected: !!connections?.google_analytics,
+      connectionId: connections?.google_analytics?.id,
+      connectionName: connections?.google_analytics?.name
+    },
     {
       id: "pinterest-ads",
       name: "Pinterest Ads",

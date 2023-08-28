@@ -103,13 +103,13 @@ export default function Sidebar() {
 							alt="Análise"
 							open={open}
 						/>
-						{/* <SidebarLink
+						<SidebarLink
 							label="Produtos"
 							link="/produtos"
 							src="/icons/products-icon.svg"
 							alt="Produtos"
 							open={open}
-						/> */}
+						/>
 						<SidebarLink
 							label="Criativos"
 							link="/criativos"

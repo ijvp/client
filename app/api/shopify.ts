@@ -83,10 +83,14 @@ export const fetchShopifyProducts = async (request, user, store) => {
 		const cookie = request.headers.get("cookie");
 
 		const searchParams = new URL(request.url).searchParams;
-		const response = await api.post("/shopify/products", {
-			store: store
-		}, { headers: { Cookie: cookie } });
+		const response = await api.get("/shopify/products", {
+			headers: { Cookie: cookie },
+			params: {
+				store
+			},
+		});
 
+		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		if (isAxiosError(error)) {

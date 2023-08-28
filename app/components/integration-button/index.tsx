@@ -17,8 +17,11 @@ interface IIntegrationButton {
 export default function IntegrationButton({ connected, locked, platform, storeIntegrationId, storeName, service }: IIntegrationButton) {
   const [isConnected, setIsConnected] = useState(false)
   const [searchParams] = useSearchParams();
+  const store = searchParams.get("store");
 
   const action = isConnected ? 'disconnect' : 'authorize';
+
+  const actionEndpoint = store ? `/integracoes?store=${searchParams.get("store")}` : "/integracoes";
 
   useEffect(() => {
     setIsConnected(connected)
@@ -27,7 +30,7 @@ export default function IntegrationButton({ connected, locked, platform, storeIn
   return (
     <Form
       method="post"
-      action={`/integracoes?store=${searchParams.get("store")}`}
+      action={actionEndpoint}
     >
       <input type="hidden" name="action" value={action} />
       <input type="hidden" name="store" value={storeName} />

@@ -7,7 +7,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { QueryClient } from "@tanstack/react-query";
 import { PolarisVizProvider } from "@shopify/polaris-viz";
 import globalStyles from "~/styles/global.css";
 import tailwind from "~/styles/tailwind.css";

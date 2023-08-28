@@ -1,6 +1,5 @@
 import type { V2_MetaFunction, LinksFunction, LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { fetchShopifyProducts } from "~/api/shopify";
 import { checkAuth } from "~/api/helpers";
@@ -33,14 +32,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 		if (stores.length) {
 			store = stores[0]
-			const products = await fetchShopifyProducts(request, user, store);
-			return json(products);
+		} else {
+			return null;
 		}
-	};
-};
+	}
 
-// 	return null;
-// };
+	const products = await fetchShopifyProducts(request, user, store);
+	return json(products);
+};
 
 export function ErrorBoundary() {
 	return (
@@ -49,7 +48,7 @@ export function ErrorBoundary() {
 			<p className="subtitle">Algo deu errado, verifique se ja adicionou alguma loja ou então tente novamente mais tarde</p>
 		</>
 	)
-};
+}
 
 export default function ProductsPage() {
 	const products = useLoaderData();
@@ -63,7 +62,7 @@ export default function ProductsPage() {
 			</>
 
 		)
-	};
+	}
 
 	if (!products?.length) {
 		return (
@@ -73,7 +72,8 @@ export default function ProductsPage() {
 			</>
 
 		)
-	};
+	}
+
 	return (
 		<>
 			<PageTitle>Produtos</PageTitle>
