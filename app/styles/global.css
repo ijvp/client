@@ -66,7 +66,7 @@ h6 {
 
 .subtitle {
 	font-size: 1.25rem;
-	font-weight: 600;
+	font-weight: 400;
 }
 
 .button {
@@ -163,4 +163,67 @@ a:hover {
 .nodge:hover::after {
 	top: 50%;
 	opacity: 1;
+}
+
+input {
+	color-scheme: dark;
+  }
+
+.arrow-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  margin-left: 16px;
+  border-left: 1px solid #F7F1FC;
+  height: 28px;
+  width: fit-content;
+  transition: 0.5s all ease-out;
+}
+
+.arrow-icon div {
+    background-color: #F7F1FC;
+    width: 19px;
+    height: 2px;
+    border-radius: 2px;
+    transition: 0.5s all ease-out;
+}
+
+.arrow-icon::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    right: 0px;
+    transform: rotate(45deg);
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    border-top: 2px solid #F7F1FC;
+    border-right: 2px solid #F7F1FC;
+    transition: 0.5s all ease-out;
+}
+
+.submit-button:hover > .arrow-icon {
+    padding-left: 8px;
+    margin-left: 8px;
+}
+
+.submit-button:hover > .arrow-icon div {
+	width: 35px;
+	transition: 0.5s all ease-out;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
+	width: 0 !important;
+}
+  
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
+
+.gradient-filter {
+	background: linear-gradient(0deg, #080512 0%, rgba(8, 5, 18, 0.00) 100%);
 }

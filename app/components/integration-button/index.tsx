@@ -40,20 +40,13 @@ export default function IntegrationButton({ connected, locked, platform, storeIn
         disabled={locked}
         type="submit"
         // onClick={isConnected === false ? handleConnect : handleDisconnect}
-        className={`
-        flex justify-center items-center
-        min-w-[145px] h-[60px] 
-        p-4 rounded-lg 
-        ${isConnected === false ? 'bg-purple text-white border-0' : 'bg-transparent hover:bg-black-secondary text-purple border border-purple box-border'} 
-        hover:transition-colors ease-in-out duration-300 
-        ${isConnected === false && locked === false ? 'hover:bg-dark-purple' : ''}
-        `}>
-        {locked === false ?
-          <span className="h text-base font-bold">
-            {isConnected === true ? "Desconectar" : "Conectar"}
-          </span>
-          :
+        className={`flex items-center p-1.5 w-14 h-8 rounded-full menu-transition ${locked === true ? 'justify-center' : (isConnected ? 'bg-purple justify-end' : 'bg-gray justify-start')}`}>
+        {locked === true ?
           <img src="/images/block.png" alt="blocked" />
+          :
+          <div className="w-5 h-5 bg-white rounded-full">
+            
+          </div>
         }
       </button>
     </Form >

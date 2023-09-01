@@ -12,7 +12,7 @@ export const links: LinksFunction = () => [
 	...addShopModalLinks()
 ];
 
-export default function StoreSelect({ openAddStoreModal, openSidebar }) {
+export default function StoreSelect({ openAddStoreModal, openSidebar, onclick }) {
 	const location = useLocation();
 	const [searchParams] = useSearchParams();
 	const storeId = searchParams.get("store");
@@ -80,7 +80,7 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 		} else {
 			path = location.pathname
 		}
-
+		
 		return `${path}?${sortedParams.toString()}`;
 	};
 
@@ -113,7 +113,7 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 				if (store !== stores[selectedIndex]) {
 					return (
 						<div key={index} className="w-full last:border-b last:border-black-secondary">
-							<Link to={handleStoreSelect(store.myshopify_domain)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
+							<Link onClick={(e) => onclick(e)} to={handleStoreSelect(store.myshopify_domain)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
 								{formatStoreName(store?.myshopify_domain)}
 							</Link>
 						</div>

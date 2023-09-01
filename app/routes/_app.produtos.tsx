@@ -108,23 +108,28 @@ export default function ProductsPage() {
 									const productId = String(product.id).split("/").slice(-1);
 
 									return (
-										<div key={index} className="w-full flex items-center justify-between gap-2">
-											<div className="flex items-center gap-4">
-												<div className="rounded-md overflow-clip">
+										<Link to={
+											{
+												pathname: `/produtos/${productId}`,
+												search: new URLSearchParams(searchParamsObj).toString()
+											}}
+											key={index} className="w-full flex items-center justify-between md:p-4 gap-2 rounded border border-black-secondary bg-black-bg text-white">
+											<div className="flex items-center gap-2 md:gap-4 max-md:pl-2 max-md:py-2">
+												<div className="w-20 h-20">
 													<img
 														src={product.featuredImage?.url}
 														alt={product.featuredImage?.altText}
-														className="max-w-[100px]" />
+														className="h-full w-full object-contain rounded-sm" />
 												</div>
-												<p className="subtitle h6">{product.title} ({productId})</p>
+												<p className="text-md md:text-xl font-medium w-min"><span>{product.title}</span> ({productId})</p>
 											</div>
-											<Link to={
-												{
-													pathname: `/produtos/${productId}`,
-													search: new URLSearchParams(searchParamsObj).toString()
-												}}
-												className="bg-purple py-3 px-12 text-center flex items-center font-semibold text-white rounded-md">Ver detalhes</Link>
-										</div>
+											<div className="max-md:hidden bg-purple px-6 py-4 text-center flex items-center justify-center font-bold text-white rounded-md">
+												<span>Ver detalhes</span>
+											</div>
+											<div className="md:hidden bg-purple px-4 self-stretch text-center flex items-center justify-center font-bold text-white rounded-r-md">
+												<img src="/icons/eye.svg"/>
+											</div>
+										</Link>
 									)
 								})
 							}

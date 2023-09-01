@@ -60,17 +60,17 @@ export default function Login() {
 					absolute
 					z-0
 					top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-					w-[350px]
+					w-[134px]
 					aspect-square
 					bg-purple
-					blur-[331px]
+					blur-[126px]
 					rounded-full
 				" />
 				<div className="flex flex-col items-center">
 					<div className="flex items-center gap-2 mb-4">
-						<img src="/images/logo.png" alt="logo" /><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
+						<img src="/images/logo.png" alt="logo" className="w-8"/><p className="h6 font-semibold">Turbo <span className="text-purple">Dash</span></p>
 					</div>
-					<h2 className="h3 font-bold">Acesse sua conta</h2>
+					<h2 className="h3 font-bold text-center">Acesse sua conta</h2>
 				</div>
 				<div className="flex flex-col items-center gap-6 w-full relative z-10">
 					<Input
@@ -95,7 +95,7 @@ export default function Login() {
 							</p>)}
 					</div>
 				</div>
-				<div className="flex flex-col gap-4">
+				<div className="flex flex-col gap-4 text-center">
 					<p>Ainda não tem uma conta?&nbsp;<Link to="/register">Registre aqui</Link></p>
 					<div className="flex gap-4">
 						<Link to="/termos-de-uso">Termos de Uso</Link>

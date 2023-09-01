@@ -33,17 +33,13 @@ export default function SubmitButton({ label, disabled = false, onClick }: Submi
 				hover:transition-colors
 			"
 		>
-			<span className="bg-purple px-4 z-[2] relative">
+			<span className="bg-purple z-[2] relative">
 				{label}
 			</span>
 			<div className="
 				arrow-icon
-				w-12 
-				absolute left-1/2 top-1/2 
-				-translate-y-1/2 translate-x-[20px]
-				z-0
 			">
-				<img src="/icons/arrow-large.svg" alt="Large arrow" />
+				<div></div>
 			</div>
 		</button>
 	)

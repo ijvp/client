@@ -50,6 +50,7 @@ export default function CreativesPage() {
 	const { adInsights: ads, ttl } = useLoaderData();
 	const navigation = useNavigation();
 	const [searchTerm, setSearchTerm] = useState("");
+	const [open, setOpen] = useState(false);
 	const [filteredAds, setFilteredAds] = useState(ads);
 
 	const totalSpend = filteredAds?.reduce((acc, item) => acc + item.spend, 0);
@@ -79,7 +80,7 @@ export default function CreativesPage() {
 				<div key={header} className="
 				py-4 
 				flex items-center justify-between 
-				text-center 
+				text-left 
 				border-b border-black-secondary last:border-0
 				">
 					<span>{Headers[header]}:</span>
@@ -111,48 +112,48 @@ export default function CreativesPage() {
 	return (
 		<>
 			<PageTitle>
-				Criativos
-				<div className="absolute right-2 top-1/2 -translate-y-1/2">
-					<Suspense fallback={<p>Carregando...</p>}>
-						<div className="subtitle flex items-center justify-start gap-2">
-							<Await resolve={ttl} errorElement={
-								<>
-									<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
-									<p>Não foi possível atualizar</p>
-								</>
-							}>
-								{() =>
-									navigation.state === "idle" ? (
-										<>
-											<div className="w-4 h-4 aspect-square bg-green-light rounded-full" />
-											<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate > 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
-										</>
-									) : navigation.state === "loading" ? (
-										<p>Carregando...</p>
-									) : null}
-							</Await>
-						</div>
-					</Suspense>
-				</div>
+				<span>Criativos</span>
+				<Suspense fallback={<p>Carregando...</p>}>
+					<div className="text-sm md:text-lg flex items-center justify-start gap-2">
+						<Await resolve={ttl} errorElement={
+							<>
+								<div className="w-4 h-4 aspect-square bg-red-light rounded-full" />
+								<p>Não foi possível atualizar</p>
+							</>
+						}>
+							{() =>
+								navigation.state === "idle" ? (
+									<>
+										<div className="w-2 md:w-4 h-2 md:h-4 aspect-square bg-green-light rounded-full" />
+										<p>{lastUpdate > 0 ? `Atualizado há ${lastUpdate > 1 ? lastUpdate + ' minutos' : lastUpdate + ' minuto'} ` : "Atualizado há menos de 1 minuto"}</p>
+									</>
+								) : navigation.state === "loading" ? (
+									<p>Carregando...</p>
+								) : null}
+						</Await>
+					</div>
+				</Suspense>
 			</PageTitle>
 
 			<IntervalSelect />
-			<div className="grid grid-cols-12 gap-6">
-				<div className="col-span-8">
+			<div className="grid grid-cols-4 gap-6">
+				<div className="flex flex-col col-start-1 col-end-5 xl:col-end-4 row-start-1">
 					<p className="text-xl text-[#FFF]">Agrupar por nome do anúncio</p>
 					<Input
 						name="ad-name"
 						type="text"
 						placeholder="Nome do anúncio"
-						className="w-full my-4"
+						className="w-full mt-4"
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
+				</div>
+				<div className="flex col-start-1 col-end-5 xl:col-end-4 row-start-3 xl:row-start-2">
 					<Suspense fallback={<ChartsSkeleton />}>
 						<Await resolve={ads} errorElement={<h2 className="h4 my-12">Parece que algo deu errado, tente buscar dados de outro periodo ou recarregue a página</h2>}>
 							{() =>
 								navigation.state === "idle" ? (
-									<div className="w-full mb-12 grid grid-cols-3 gap-6">
+									<div className="w-full mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
 										{filteredAds?.map((ad: any, index: number) => (
 											<AdInsightsCard key={index} ad={ad} selectedColumns={selectedColumns} tableHeaders={tableHeaders} />
 										))}
@@ -163,14 +164,26 @@ export default function CreativesPage() {
 						</Await>
 					</Suspense>
 				</div>
-				<div className="col-span-4">
+				<div className="flex flex-col col-start-1 col-end-5 xl:col-start-4 row-start-2 xl:row-start-1 row-end-3">
 					<AdInsightsControls
 						columnOptions={columnOptions}
 						selectedColumns={selectedColumns}
 						setSelectedColumns={setSelectedColumns}
 					/>
-					<p className="text-xl mt-6 mb-2 text-[#FFF]">Análise geral</p>
-					{selectedColumnCells}
+					<div className={`flex flex-col relative ${open ? 'h-fit' : 'h-[232px] xl:h-fit overflow-hidden'}`}>
+						{!open && (
+							<div className="xl:hidden gradient-filter absolute bottom-0 left-0 w-full h-[180px]"></div>
+						)}
+						<p className="text-xl mt-6 mb-2 text-[#FFF]">Análise geral</p>
+						{selectedColumnCells}
+					</div>
+					<div className="flex xl:hidden w-full max-w-[350px] self-center h-15 px-6 py-4 justify-center items-center border border-purple rounded-lg text-purple font-bold leading-normal cursor-pointer" onClick={() => setOpen(!open)}>
+						{open ? (
+							<span>Visualizar menos</span>
+						) : (
+							<span>Visualizar por completo</span>
+						)}
+					</div>
 				</div>
 			</div>
 		</>

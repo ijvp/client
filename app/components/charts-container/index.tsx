@@ -193,7 +193,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	}).filter(data => !!data)
 
 	return (
-		<div className="flex flex-wrap gap-4">
+		<div className="flex flex-col md:flex-row flex-wrap gap-4">
 			<SimpleChart
 				title="Faturamento"
 				value={toLocalCurrency(totalRevenue)}

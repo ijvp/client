@@ -143,9 +143,9 @@ export default function IntegrationContainer() {
       {stores.length > 0 ?
         <div>
           <div>
-            <div className="mt-16">
-              {anunciosIntegrations.length > 0 && (<h2 id="anuncios" className="h5 pb-8">Anúncios:</h2>)}
-              <div className="grid grid-cols-2 gap-6">
+            <div className="mt-2 md:mt-16">
+              {anunciosIntegrations.length > 0 && (<h2 id="anuncios" className="font-semibold text-xl md:text-3xl pb-8">Anúncios:</h2>)}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {anunciosIntegrations.map((integration, index) => (
                   <IntegrationBox
                     key={index}
@@ -162,9 +162,9 @@ export default function IntegrationContainer() {
                 ))}
               </div>
             </div>
-            <div className="mt-8">
-              {analiseIntegrations.length > 0 && (<h2 id="analise" className="h5 pb-8">Análise:</h2>)}
-              <div className="grid grid-cols-2 gap-6">
+            <div className={`${analiseIntegrations.length > 0 && 'mt-8'}`}>
+              {analiseIntegrations.length > 0 && (<h2 id="analise" className="font-semibold text-xl md:text-3xl pb-8">Análise:</h2>)}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {analiseIntegrations.map((integration, index) => (
                   <IntegrationBox
                     key={index}
@@ -182,8 +182,8 @@ export default function IntegrationContainer() {
               </div>
             </div>
             {emailIntegrations.length > 0 && <div className="mt-16">
-              <h2 id="eMailMarketing" className="h5 pb-8">E-Mail Marketing:</h2>
-              <div className="grid grid-cols-2 gap-6">
+              <h2 id="eMailMarketing" className="font-semibold text-xl md:text-3xl pb-8">E-Mail Marketing:</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {emailIntegrations.map(integration => (
                   <IntegrationBox
                     key={integration.id}
@@ -198,8 +198,8 @@ export default function IntegrationContainer() {
               </div>
             </div>}
             <div className="mt-16">
-              {planilhasIntegrations.length > 0 && (<h2 id="planilhas" className="h5 pb-8">Planilhas:</h2>)}
-              <div className="grid grid-cols-2 gap-6">
+              {planilhasIntegrations.length > 0 && (<h2 id="planilhas" className="font-semibold text-xl md:text-3xl pb-8">Planilhas:</h2>)}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {planilhasIntegrations.map(integration => (
                   <IntegrationBox
                     key={integration.id}

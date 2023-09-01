@@ -119,12 +119,12 @@ export default function Settings() {
 			<PageTitle>
 				Olá, {user.username}
 			</PageTitle>
-			<div className="w-full flex gap-8 items-start justify-center">
+			<div className="w-full flex flex-col md:flex-row gap-8 items-start justify-center">
 				<form
 					method="post"
 					className="
-					w-1/2
-					my-14
+					w-full md:w-1/2
+					mt-2 md:my-14
 					flex flex-col items-start justify-center gap-8
 				">
 					<div className="w-full flex flex-col items-start justify-center gap-4">
@@ -191,8 +191,8 @@ export default function Settings() {
 					</div>
 				</form>
 				<div className="
-					w-1/2
-					my-14
+					w-full md:w-1/2
+					mb-6 md:my-14
 					flex flex-col items-start justify-start gap-8
 					">
 					{!accounts.length ?

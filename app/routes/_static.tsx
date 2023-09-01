@@ -5,9 +5,9 @@ export default function Static() {
 		<div className="
 		relative
 		flex flex-col flex-grow
-		mx-5
-		my-auto
-		md:m-auto
+		mx-4
+		md:mx-auto
+		my-[7.5vh]
 		max-h-[85vh]
 		border 
 		border-black-secondary

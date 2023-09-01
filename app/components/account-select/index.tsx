@@ -48,18 +48,25 @@ export default function AccountSelect({ accounts, store, platform }: AccountSele
         ? <Overlay onClick={() => setOpen(false)}>
           <Form
             className="
-              fixed animated-form
+              animated-form
               bg-black-bg backdrop-blur-[120px] 
-              max-w-2xl w-full min-h-[489px] max-h-[720px]
+              max-w-4xl w-full min-h-[489px] max-h-[720px]
               border border-black-secondary rounded-2xl
-              p-14 
+              p-5 md:p-14
               flex flex-col gap-8
             "
             method="post"
             onClick={(e) => e.stopPropagation()}
             action={`/integracoes?store=${searchParams.get("store")}`}
           >
-            <h2 className="h h5">Selecione uma conta</h2>
+            <div className="flex w-full justify-between items-center">
+              <h2 className="text-2xl md:text-3xl font-semibold max-md:max-w-[218px]">Selecione uma conta</h2>
+              <div className="p-4 bg-black-border rounded border-black-secondary" onClick={() => setOpen(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                  <path d="M17.4801 6.76987L6.51992 17.73M17.4801 17.73L13.4142 13.6642M6.51992 6.76987L10.5858 10.8357" stroke="#EFEFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
             {!!accounts.length && (<Input
               type="text"
               name="account-name"

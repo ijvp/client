@@ -17,3 +17,8 @@
 .sidebar--closed {
   min-width: 140px;
 }
+
+.blur-menu {
+  background: rgba(8, 5, 18, 0.60);
+  backdrop-filter: blur(12px);
+}

@@ -8,6 +8,13 @@
 @font-face {
 	font-family: "Graphik";
 	src: url("/fonts/Graphik-Medium.otf") format("opentype");
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Graphik";
+	src: url("/fonts/Graphik-Medium.otf") format("opentype");
 	font-weight: 600;
 	font-style: normal;
 }
