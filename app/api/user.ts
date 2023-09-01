@@ -12,6 +12,7 @@ export const fetchUserStores = async (request: Request) => {
 			}
 		})
 
+		console.log("USER STORES", response.data);
 		return response.data;
 	} catch (error) {
 		if (isAxiosError(error)) {
