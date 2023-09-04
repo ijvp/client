@@ -3,6 +3,46 @@ import { useEffect, useState } from "react";
 import { storeIndexAtom, storesAtom } from "~/utils/atoms";
 import IntegrationButton from "../integration-button";
 
+export function InfoButton({ accountId }) {
+    const [openModal, setOpenModal] = useState(false);
+    
+    const handleInfoClicked = () => {
+        setOpenModal(!openModal);
+    };
+    
+    const handleCloseModal = (event: MouseEvent<HTMLElement>) => {
+        if (event.target.id !== 'info-modal' && event.target.id !== 'info-button') {
+            setOpenModal(false);
+        }
+    };
+
+    useEffect(() => {
+		document.body.addEventListener("click", handleCloseModal);
+		return () => {
+			document.body.removeEventListener("click", handleCloseModal);
+		};
+	}, [openModal]);
+
+    return (
+        <div className="relative">
+            {openModal && (
+                <div
+                    className="
+                    absolute top-0 right-0 -translate-y-[125%] translate-x-[72px]
+                    w-max
+                    max-w-[100vw]
+                    bg-white 
+                    text-black text-center 
+                    rounded-md
+                ">
+                    <p className="w-full p-2 text-sm" id="info-modal">{ accountId }</p>
+                </div>
+            )}
+            <img onClick={() => handleInfoClicked()} id="info-button" src="/icons/info.svg" alt="Informação de conta"/>
+        </div>
+    )
+};
+
 export default function IntegrationBox({ name, validation, id, locked, connected, platform, connectionId, connectionName, service }: { name: string, validation: string, id: string, locked: boolean, connected: boolean }) {
     const [stores] = useAtom(storesAtom);
     const [selectedIndex] = useAtom(storeIndexAtom);
@@ -48,23 +88,7 @@ export default function IntegrationBox({ name, validation, id, locked, connected
                 </div>
                 <div className="flex gap-4 items-center">
                     {connectionId && (
-                        <div className="relative">
-                            {openModal && (
-                                <div
-                                    className="
-                                    absolute top-0 right-0 -translate-y-[125%] translate-x-[72px]
-                                    w-max
-                                    max-w-[100vw]
-                                    p-2
-                                    bg-white 
-                                    text-black text-center 
-                                    rounded-md 
-                                ">
-                                    <p className="w-full text-sm">{id === "facebook-ads" ? connectionId.slice(4) : connectionId} / {connectionName} </p>
-                                </div>
-                            )}
-                            <img id="info-button" src="/icons/info.svg" alt="Informação de conta"/>
-                        </div>
+                        <InfoButton accountId={`${id === "facebook-ads" ? connectionId.slice(4) : connectionId} / ${connectionName}`}/>
                     )}
                     <IntegrationButton
                         connected={connected}
