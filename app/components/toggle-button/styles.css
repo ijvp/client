@@ -29,14 +29,30 @@
 	transform-origin: 7px 1px;
 }
 
-.chevron--flip .chevron__box--left {
-	transform: rotate(-90deg) translateY(0);
+@media screen and (min-width: 768px) {
+	.chevron--flip .chevron__box--left {
+		transform: rotate(-90deg) translateY(0);
+	}
+
+	.chevron--flip .chevron__box--right {
+		transform: rotate(90deg) translateY(0);
+	}
+
+	.chevron--flip .chevron__group {
+		transform: translateY(3px);
+	}
 }
 
-.chevron--flip .chevron__box--right {
-	transform: rotate(90deg) translateY(0);
-}
+@media screen and (max-width: 768px) {
+	.chevron .chevron__box--left {
+		transform: rotate(-90deg) translateY(0);
+	}
 
-.chevron--flip .chevron__group {
-	transform: translateY(3px);
+	.chevron .chevron__box--right {
+		transform: rotate(90deg) translateY(0);
+	}
+
+	.chevron .chevron__group {
+		transform: translateY(3px);
+	}
 }

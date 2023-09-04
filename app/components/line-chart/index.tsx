@@ -45,7 +45,7 @@ export default function SimpleChart({
 				onClick={() => setOpen(true)}
 				className={`
 				nodge
-				min-w-[354px] h-[165px] flex-grow
+				md:min-w-[354px] h-[165px] flex-grow
 				py-4 pb-24 rounded-lg
 				bg-black-bg
 				border border-black-secondary box-content

@@ -16,5 +16,5 @@ export const action = async ({ request }: ActionArgs) => {
 		return json({ success: true, message: "Loja deletada" });
 	} catch (error) {
 		return json({ success: false, error: "Erro ao tentar deletar loja" });
-	};
+	}
 };

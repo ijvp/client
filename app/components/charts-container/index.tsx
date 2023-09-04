@@ -97,6 +97,24 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		return (isNaN(ratio) || !isFinite(ratio) || ratio < 0) ? 0 : ratio.toFixed(2);
 	};
 
+	interface IOrders {
+		data: string,
+		count: number,
+		value: number
+	}
+
+	// const calculateAOV = (orders: IOrders[]) => {
+	// 	let totalFaturado = 0;
+	// 	let totalPedidos = 0;
+
+	// 	orders.forEach((order) => {
+	// 		totalFaturado = totalFaturado + order.value
+	// 		totalPedidos++
+	// 	})
+
+	// 	return totalFaturado/totalPedidos
+	// }
+
 	const revenueData = getRevenueFromOrderMetrics(orders);
 	const revenueDataSeries = daysInterval ? revenueData : fillMissingHours(revenueData);
 	const totalRevenue = getTotalValue(revenueDataSeries);
@@ -109,6 +127,10 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	const totalInvested = getTotalValue(investmentsDataSeries);
 
 	const roas = calculateTotalROAs(parseFloat(totalRevenue), parseFloat(totalInvested));
+	const mer = (parseFloat(totalRevenue) === 0 ? 0 : ((parseFloat(totalInvested) / parseFloat(totalRevenue))*100).toFixed(2).replace(".", ","));
+	const aov = (parseFloat(totalOrders) === 0 ? '0,00' : ((parseFloat(totalRevenue)) / totalOrders).toFixed(2).replace(".", ","));
+	const cpa = (parseFloat(totalOrders) === 0 ? '0,00' : (parseFloat(totalInvested) / totalOrders).toFixed(2).replace(".", ","));
+
 	const roasDataSeries = orders.length ? investmentsDataSeries.map(investment => {
 		let order = orders?.find(item => item.date === investment.key);
 		let ratio = (order ? order.value : 0) / investment.value;
@@ -118,9 +140,43 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 		}
 	}) : ordersDataSeries;
 
+	const aovDataSeries = orders.length ? investmentsDataSeries.map(investment => {
+		let order = orders?.find(item => item.date === investment.key);
+		let aov = (order ? order.value / order.count : 0)
+		return {
+			key: investment.key,
+			value: parseFloat(aov.toFixed(2))
+		}
+	}) : ordersDataSeries;
+
+	const cpaDataSeries = orders.length ? investmentsDataSeries.map(investment => {
+		let order = orders?.find(item => item.date === investment.key);
+
+		let cpa = (order ? investment.value / order.count : 0 )
+		cpa = parseFloat(cpa.toFixed(2))
+		cpa = (cpa === Infinity ? 0 : cpa)
+		return {
+			key: investment.key,
+			value: cpa
+		}
+	}) : ordersDataSeries;
+
 	const renderDonutLabel = (innerValueContents: InnerValueContents) => {
 		return innerValueContents?.activeValue ? toLocalCurrency(innerValueContents.activeValue) : toLocalCurrency(innerValueContents.totalValue);
 	};
+
+	const merDataSeries = orders.length ? investmentsDataSeries.map(investment => {
+		let order = orders?.find(item => item.date === investment.key);
+
+		let mer = investment.value / (order ? order.value : 0 )
+		mer = (mer === Infinity ? 0 : mer)
+		mer = parseFloat((mer*100).toFixed(2))
+		return {
+			key: investment.key,
+			value: mer
+		}
+
+	}) : ordersDataSeries;
 
 	const donutData = [facebookAds, googleAds].map(adMetrics => {
 		if (adMetrics?.id) {
@@ -137,7 +193,7 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 	}).filter(data => !!data)
 
 	return (
-		<div className="flex flex-wrap gap-4">
+		<div className="flex flex-col md:flex-row flex-wrap gap-4">
 			<SimpleChart
 				title="Faturamento"
 				value={toLocalCurrency(totalRevenue)}
@@ -216,6 +272,57 @@ export default function ChartsContainer({ orders, googleAds, facebookAds }) {
 				title="ROAs"
 				value={toLocalNumber(roas)}
 				data={roasDataSeries}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
+					}
+				}}
+			/>
+			<SimpleChart
+				title="CPA"
+				value={`R$ ${cpa}`}
+				data={cpaDataSeries}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
+					}
+				}}
+			/>
+			<SimpleChart
+				title="AOV"
+				value={`R$ ${aov}`}
+				data={aovDataSeries}
+				tooltipOptions={{
+					titleFormatter: (value) => {
+						const valueParams = value.split("T");
+						const dateStr = valueParams[0];
+						const timeStr = valueParams[1];
+						const date = new Date(dateStr.replace(/-/g, '/'));
+						timeStr && date.setHours(timeStr);
+						return `🗓 ${date.toLocaleDateString(undefined, {
+							dateStyle: 'long',
+						})} ${timeStr ? date.toLocaleTimeString().slice(0, -3) : ""}`;
+					}
+				}}
+			/>
+			<SimpleChart
+				title="MER"
+				value={`${mer}% `}
+				data={merDataSeries}
 				tooltipOptions={{
 					titleFormatter: (value) => {
 						const valueParams = value.split("T");

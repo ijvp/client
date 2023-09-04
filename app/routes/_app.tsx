@@ -10,7 +10,7 @@ import Sidebar, {
 import { checkAuth } from "~/api/helpers";
 import { useAtom } from "jotai";
 import { storesAtom, userAtom } from "~/utils/atoms";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchUserStores } from "~/api/user";
 import PageTitle from "~/components/page-title";
 
@@ -66,10 +66,25 @@ export default function App() {
 		}
 	}, [data, setStores, setUser]);
 
+	const [active, setActive] = useState(false);
+
+	const handleScroll = () => {
+		if(window.scrollY > 80) {
+		  setActive(true);
+		} else {
+		  setActive(false);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	});
+
 	return (
 		<AppProvider i18n={{ ...en, ...ptBR }}>
-			<Sidebar />
-			<div className="p-6 pb-0 md:p-10 md:pb-0 lg:p-16 lg:pb-0 xl:p-20 xl:pb-0 w-full">
+			<Sidebar active={active}/>
+			<div className="p-4 pt-32 md:p-8 lg:p-16 xl:p-20 w-full h-fit overflow-x-hidden">
 				<Outlet />
 			</div>
 		</AppProvider>

@@ -93,7 +93,7 @@ export default function Settings() {
 	const handleDeleteStore = async (index: number) => {
 		try {
 			const data = new FormData();
-			data.append("store", accounts[index]);
+			data.append("store", accounts[index].myshopify_domain);
 			const response = await fetch("/settings/delete", {
 				method: "POST",
 				body: data
@@ -119,12 +119,12 @@ export default function Settings() {
 			<PageTitle>
 				Olá, {user.username}
 			</PageTitle>
-			<div className="w-full flex gap-8 items-start justify-center">
+			<div className="w-full flex flex-col md:flex-row gap-8 items-start justify-center">
 				<form
 					method="post"
 					className="
-					w-1/2
-					my-14
+					w-full md:w-1/2
+					mt-2 md:my-14
 					flex flex-col items-start justify-center gap-8
 				">
 					<div className="w-full flex flex-col items-start justify-center gap-4">
@@ -191,8 +191,8 @@ export default function Settings() {
 					</div>
 				</form>
 				<div className="
-					w-1/2
-					my-14
+					w-full md:w-1/2
+					mb-6 md:my-14
 					flex flex-col items-start justify-start gap-8
 					">
 					{!accounts.length ?
@@ -204,7 +204,7 @@ export default function Settings() {
 									return (
 										<div key={index} className="w-full border-b border-black-secondary pb-4 last:border-0 last:pb-0">
 											<div className="w-full flex items-center justify-between">
-												<p>{formatStoreName(account)}</p>
+												<p>{formatStoreName(account.myshopify_domain)}</p>
 												<button
 													className="rounded hover:bg-red-500 p-2"
 													onClick={() => handleDeleteStore(index)}

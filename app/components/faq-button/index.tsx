@@ -6,17 +6,17 @@ export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: styles }
 ];
 
-export default function SettingsButton({ onclick }) {
+export default function FAQButton({ onclick }) {
 	return (
 		<div
 			className="
-					settings-button
+					faq-button
 					w-[60px] aspect-square 
 					flex items-center justify-center
 					bg-black-secondary rounded-md
 				">
-			<Link to="/settings" onClick={(e) => onclick(e)}>
-				<img src="/icons/settings-icon.svg" alt="Configurações" />
+			<Link to="/faq" onClick={(e) => onclick(e)}>
+				<img src="/icons/help.svg" className="h-6" alt="Dúvidas frequentes" />
 			</Link>
 		</div>
 	);

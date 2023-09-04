@@ -26,7 +26,8 @@ export const authorizeIntegration = async ({ cookie, platform, store, service })
 export const fetchActiveConnections = async ({ request }) => {
 	const cookie = request.headers.get("cookie");
 	const searchParams = new URL(request.url).searchParams;
-	const store = searchParams.get("store") || await fetchUserStores(request).then(stores => stores[0])
+	const store = searchParams.get("store") || await fetchUserStores(request).then(stores => stores[0].myshopify_domain);
+
 	try {
 		const response = await api.get("/user/store/connections", {
 			params: { store: store },

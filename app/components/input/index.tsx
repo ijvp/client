@@ -62,6 +62,7 @@ export default function Input({
 					rounded-lg 
 					px-6 py-4
 					box-border
+					border-none
 					bg-black-secondary 
 					focus:border 
 					focus:border-solid 

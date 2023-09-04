@@ -3,24 +3,6 @@
 	transition: transform 300ms;
 }
 
-#login-form .submit-button span:after,
-#add-store-form .submit-button span:after {
-	content: "";
-	display: block;
-	position: absolute;
-	right: 7%;
-	top: 50%;
-	transform: translateY(-50%);
-	height: 125%;
-	width: 1px;
-	background-color: var(--gray);
-}
-
-.submit-button .arrow-icon {
-	transform: translate(30px, -50%);
-	transition: transform 300ms;
-}
-
 .submit-button:hover span {
 	background-color: var(--dark-purple);
 	transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 150ms;
@@ -33,9 +15,4 @@
 	see: https://tailwindcss.com/docs/transition-property
 	*/
 	transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 150ms, transform 300ms;
-}
-
-.submit-button:hover .arrow-icon {
-	transform: translate(40px, -50%);
-	transition: transform 300ms;
 }

@@ -34,7 +34,7 @@ function IntervalOptionButton({ selected, children, onClick, start, end }: Inter
 				<div
 					onClick={onClick}
 					className={`
-					px-4 py-2 min-w-[170px] w-fit
+					px-6 py-2.5 min-w-[120px] md:min-w-[170px] w-max md:w-fit
 					rounded-md border border-solid
 					text-white text-center
 					${selected ? "bg-purple border-purple" : "border-black-secondary"}
@@ -48,7 +48,7 @@ function IntervalOptionButton({ selected, children, onClick, start, end }: Inter
 			<div
 				onClick={onClick}
 				className={`
-					px-4 py-2 min-w-[170px] w-fit
+					px-4 py-2 md:min-w-[170px] w-max md:w-fit
 					rounded-md border border-solid
 					text-white text-center
 					${selected ? "bg-purple border-purple" : "border-black-secondary"}
@@ -160,44 +160,46 @@ export default function IntervalSelect() {
 	);
 
 	return (
-		<div className="flex flex-wrap gap-4 my-6 interval-options">
-			{intervalPredeterminedOptions}
-			<div className="relative">
-				<IntervalOptionButton onClick={handleDatePickerToggle} selected={selectedIndex === options.length}>
-					{dateRangeLabel}
-				</IntervalOptionButton>
-				{datePickerOpen && (
-					<div
-						className="
-						absolute z-30 top-12 left-1/2 -translate-x-1/2
-						flex flex-col items-center gap-2
-						bg-black-bg
-						border border-solid border-black-border rounded-md
-						p-2
-						w-full min-w-fit
-						">
-						<DatePicker
-							month={month}
-							year={year}
-							onChange={handleDateRangeChange}
-							onMonthChange={handleMonthChange}
-							selected={selectedDateRange}
-							allowRange
-							disableDatesAfter={new Date()}
-						/>
-						<button
-							onClick={handleDateRangeSubmit}
+		<div className="w-[100vw] md:w-full ml-[-16px] md:ml-0 px-4 md:px-0 overflow-auto hide-scrollbar">
+			<div className="flex w-fit md:flex-wrap gap-4 my-6 mt-2 interval-options">
+				{intervalPredeterminedOptions}
+				<div className="relative">
+					<IntervalOptionButton onClick={handleDatePickerToggle} selected={selectedIndex === options.length}>
+						{dateRangeLabel}
+					</IntervalOptionButton>
+					{datePickerOpen && (
+						<div
 							className="
-							button
-							w-full
-							mb-2 py-2
-							bg-purple 
-							rounded-md
-						">
-							Aplicar
-						</button>
-					</div>
-				)}
+							absolute z-30 top-12 left-1/2 -translate-x-1/2
+							flex flex-col items-center gap-2
+							bg-black-bg
+							border border-solid border-black-border rounded-md
+							p-2
+							w-full min-w-fit
+							">
+							<DatePicker
+								month={month}
+								year={year}
+								onChange={handleDateRangeChange}
+								onMonthChange={handleMonthChange}
+								selected={selectedDateRange}
+								allowRange
+								disableDatesAfter={new Date()}
+							/>
+							<button
+								onClick={handleDateRangeSubmit}
+								className="
+								button
+								w-full
+								mb-2 py-2
+								bg-purple 
+								rounded-md
+							">
+								Aplicar
+							</button>
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	)

@@ -7,7 +7,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { QueryClient } from "@tanstack/react-query";
 import { PolarisVizProvider } from "@shopify/polaris-viz";
 import globalStyles from "~/styles/global.css";
 import tailwind from "~/styles/tailwind.css";
@@ -46,7 +45,7 @@ export default function App() {
           <Links />
         </head>
         <body className="min-h-screen min-w-screen text-white">
-          <div className="w-full h-full flex items-stretch">
+          <div className="w-full h-fit flex items-stretch">
             <Outlet />
           </div>
           <ScrollRestoration />

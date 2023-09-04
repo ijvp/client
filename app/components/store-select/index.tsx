@@ -12,7 +12,7 @@ export const links: LinksFunction = () => [
 	...addShopModalLinks()
 ];
 
-export default function StoreSelect({ openAddStoreModal, openSidebar }) {
+export default function StoreSelect({ openAddStoreModal, openSidebar, onclick }) {
 	const location = useLocation();
 	const [searchParams] = useSearchParams();
 	const storeId = searchParams.get("store");
@@ -24,7 +24,7 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 		if (!openSidebar) {
 			const toggleButton = document.getElementById('toggle-button');
 			toggleButton.click();
-		};
+		}
 
 		setOpen(!open);
 
@@ -64,7 +64,7 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 			className="w-full py-4 flex items-center justify-center"
 		>
 			<span className={`${openSidebar ? 'text-show' : 'text-hide'}`}>Adicionar loja</span>
-			<img src="/icons/add.svg" alt="add-icon" className={`${openSidebar ? 'ml-5' : ''} menu-transition`}/>
+			<img src="/icons/add.svg" alt="add-icon" className={`${openSidebar ? 'ml-5' : ''} menu-transition`} />
 		</button>
 	);
 
@@ -80,14 +80,14 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 		} else {
 			path = location.pathname
 		}
-
+		
 		return `${path}?${sortedParams.toString()}`;
 	};
 
 	//Esse hook precisa ficar antes do if (!stores.length) para nao ser chamado condicionalmente
 	useEffect(() => {
 		if (stores?.length) {
-			const index = stores.findIndex(store => store === storeId);
+			const index = stores.findIndex(store => store?.myshopify_domain === storeId);
 			index > -1 ? setSelectedIndex(index) : setSelectedIndex(0);
 		}
 	}, [stores, storeId, setSelectedIndex]);
@@ -98,7 +98,7 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 			id="stores-dropdown"
 			className={`w-full flex items-center justify-between py-4 bold-not-active ${open && "bold-active"}`}
 		>
-			<span className={`${openSidebar ? 'text-show' : 'text-hide'}`}>{formatStoreName(stores[selectedIndex])}</span>
+			<span className={`${openSidebar ? 'text-show' : 'text-hide'}`}>{formatStoreName(stores[selectedIndex]?.myshopify_domain)}</span>
 			<img
 				src="/icons/chevron-right.svg"
 				alt="chevron-right"
@@ -113,8 +113,8 @@ export default function StoreSelect({ openAddStoreModal, openSidebar }) {
 				if (store !== stores[selectedIndex]) {
 					return (
 						<div key={index} className="w-full last:border-b last:border-black-secondary">
-							<Link to={handleStoreSelect(store)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
-								{formatStoreName(store)}
+							<Link onClick={(e) => onclick(e)} to={handleStoreSelect(store.myshopify_domain)} style={{ display: "block", padding: "1rem 0", color: "#F2EDF9" }}>
+								{formatStoreName(store?.myshopify_domain)}
 							</Link>
 						</div>
 					);
